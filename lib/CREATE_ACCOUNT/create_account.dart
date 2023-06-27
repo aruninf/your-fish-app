@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/CREATE_ACCOUNT/upload_profile_picture.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_field.dart';
-import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 import 'create_password.dart';
-import 'get_start.dart';
 
 class CreateAccountScreen extends StatelessWidget {
   const CreateAccountScreen({super.key});
@@ -36,14 +33,14 @@ class CreateAccountScreen extends StatelessWidget {
         child: SizedBox(
           width: Get.width,
           height: Get.height,
-          child: Stack  (
+          child: Stack(
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomAppBar(heading: 'Create Your Account',
-                  logoColor: btnColor),
+                  const CustomAppBar(
+                      heading: 'Create\nYour Account', logoColor: btnColor),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -73,23 +70,22 @@ class CreateAccountScreen extends StatelessWidget {
                           direction: Axis.horizontal,
                           children: [
                             SizedBox(
-                              width: Get.width*0.44,
+                              width: Get.width * 0.44,
                               child: const CommonTextField(
                                 hintText: 'DOB',
                               ),
                             ),
                             SizedBox(
-                              width: Get.width*0.03,
+                              width: Get.width * 0.03,
                             ),
                             SizedBox(
-                              width: Get.width*0.44,
+                              width: Get.width * 0.44,
                               child: const CommonTextField(
                                 hintText: 'Gender',
                               ),
                             ),
                           ],
                         ),
-
                         const SizedBox(
                           height: 12,
                         ),
@@ -99,7 +95,6 @@ class CreateAccountScreen extends StatelessWidget {
                         const SizedBox(
                           height: 16,
                         ),
-
                       ],
                     ),
                   )
@@ -109,11 +104,11 @@ class CreateAccountScreen extends StatelessWidget {
                 bottom: 0,
                 left: 0,
                 child: Image.asset(
-                  fishSignImage,
+                  fishUpdateImg,
                   height: Get.width * 0.35,
                   width: Get.width * 0.5,
                   fit: BoxFit.fill,
-                  color: Colors.white30,
+                  color: Colors.white70,
                 ),
               ),
             ],
@@ -128,7 +123,7 @@ class CreateAccountScreen extends StatelessWidget {
           btnBgColor: fishColor,
           btnTextColor: primaryColor,
           btnText: "NEXT",
-          onClick: () => Get.to(()=>const CreatePasswordScreen(),
+          onClick: () => Get.to(() => const CreatePasswordScreen(),
               transition: Transition.rightToLeft),
         ),
       ),

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/PROFILE/notificatios_screen.dart';
 import 'package:yourfish/PROFILE/terms_privacy_screen.dart';
-import 'package:yourfish/UTILS/app_strings.dart';
-import '../CUSTOM_WIDGETS/common_button.dart';
+
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
@@ -22,9 +20,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool isLocationOn = false;
   var selectedCategories = [];
   late List<String> listOfSettings = [
-    "Notifications", "Invite Friends",
-    "Terms & Conditions", "Privacy Policy",
-    "FAQ'S", "Contact Us"
+    "Notifications",
+    "Invite Friends",
+    "Terms & Conditions",
+    "Privacy Policy",
+    "FAQ's",
+    "Contact Us"
   ];
 
   @override
@@ -58,7 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               textColor: secondaryColor,
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16,vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: CustomText(
                 text: 'Public Feed Content',
                 color: btnColor,
@@ -76,113 +77,127 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.white, width: 0.67)
-                    ),
+                        border: Border.all(color: Colors.white, width: 0.67)),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: const LinearProgressIndicator(
                         backgroundColor: Colors.transparent,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          Colors.redAccent,),
-                        value: 0.67,
+                          Colors.redAccent,
+                        ),
+                        value: 0.40,
                       ),
                     ),
                   ),
                   const CustomText(
-                    text: "67 km", color: Colors.white, weight: FontWeight.w600,)
+                    text: "25 km",
+                    color: btnColor,
+                    weight: FontWeight.w800,
+                    sizeOfFont: 15,
+                  )
                 ],
               ),
             ),
             Expanded(
               child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 itemCount: listOfSettings.length,
-                itemBuilder: (context, index) =>
-                    Container(
-                      margin: const EdgeInsets.only(top: 16),
-                      decoration: BoxDecoration(
-                          color: btnColor,
-                          borderRadius: BorderRadius.circular(16)
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          index == 0 ?
-                          Get.to(const NotificationScreen(),
+                itemBuilder: (context, index) => Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  decoration: BoxDecoration(
+                      color: btnColor, borderRadius: BorderRadius.circular(16)),
+                  child: ListTile(
+                    onTap: () {
+                      index == 0
+                          ? Get.to(const NotificationScreen(),
                               transition: Transition.rightToLeft)
-                              : index == 1 ? shareApp()
-                              : index == 2 ? Get.to(const PrivacyAndTermsScreen(
-                            title: "Terms & Conditions",
-                          ), transition: Transition.rightToLeft)
-                              : index == 3 ?
-                          Get.to(const PrivacyAndTermsScreen(
-                            title: "Privacy Policy",
-                          ), transition: Transition.rightToLeft)
-                              : index == 4 ?
-                          Get.to(const FAQScreen(),
-                              transition: Transition.rightToLeft)
-                              : Get.to( const HelpSupportScreen(),
-                              transition: Transition.rightToLeft);
-                        },
-                        dense: true,
-                        title: CustomText(
-                          text: listOfSettings[index], color: primaryColor,
-                          sizeOfFont: 16, weight: FontWeight.w700,
-                        ),
-                        trailing: const Icon(
-                          Icons.arrow_forward_ios_rounded, color: primaryColor,),
-
-
-                      ),
-                    ),),
+                          : index == 1
+                              ? shareApp()
+                              : index == 2
+                                  ? Get.to(
+                                      const PrivacyAndTermsScreen(
+                                        title: "Terms & Conditions",
+                                      ),
+                                      transition: Transition.rightToLeft)
+                                  : index == 3
+                                      ? Get.to(
+                                          const PrivacyAndTermsScreen(
+                                            title: "Privacy Policy",
+                                          ),
+                                          transition: Transition.rightToLeft)
+                                      : index == 4
+                                          ? Get.to(const FAQScreen(),
+                                              transition:
+                                                  Transition.rightToLeft)
+                                          : Get.to(const HelpSupportScreen(),
+                                              transition:
+                                                  Transition.rightToLeft);
+                    },
+                    dense: true,
+                    title: CustomText(
+                      text: listOfSettings[index],
+                      color: primaryColor,
+                      sizeOfFont: 16,
+                      weight: FontWeight.w700,
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: primaryColor,
+                    ),
+                  ),
+                ),
+              ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
                   Expanded(
-                    child: TextButton(onPressed: () {
-                      customDialog(
-                          title: "Logout",
-                          confirmBtnText: "Logout",
-                          message: "Are you sure want to logout?"
-                      );
-                    },
+                    child: TextButton(
+                        onPressed: () {
+                          customDialog(
+                              title: "Logout",
+                              confirmBtnText: "Logout",
+                              message: "Are you sure want to logout?");
+                        },
                         style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                    width: 1.5, color: secondaryColor),
-                                borderRadius: BorderRadius.circular(4)
-                            )
-                        ),
+                            // shape: RoundedRectangleBorder(
+                            //     side: const BorderSide(
+                            //         width: 1.5, color: secondaryColor),
+                            //     borderRadius: BorderRadius.circular(4)
+                            // )
+                            alignment: Alignment.centerLeft),
                         child: const CustomText(
-                          text: "Logout",
+                          text: "Log out",
                           color: secondaryColor,
                           weight: FontWeight.w700,
-                          sizeOfFont: 16,
+                          sizeOfFont: 18,
                         )),
                   ),
-                  const SizedBox(width: 8,),
+                  const SizedBox(
+                    width: 8,
+                  ),
                   Expanded(
-                    child: TextButton(onPressed: () {
-                      customDialog(
-                        title: "Delete Account",
-                        confirmBtnText: "Delete",
-                        message: "Are you sure want to delete account?"
-                      );
-                    },
+                    child: TextButton(
+                        onPressed: () {
+                          customDialog(
+                              title: "Delete Account",
+                              confirmBtnText: "Delete",
+                              message: "Are you sure want to delete account?");
+                        },
                         style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                    width: 1.5, color: secondaryColor),
-                                borderRadius: BorderRadius.circular(4)
-                            )
-                        ),
+                            // shape: RoundedRectangleBorder(
+                            //     side: const BorderSide(
+                            //         width: 1.5, color: secondaryColor),
+                            //     borderRadius: BorderRadius.circular(4)
+                            // )
+                            alignment: Alignment.centerRight),
                         child: const CustomText(
                           text: "Delete Account",
                           color: secondaryColor,
-                          weight: FontWeight.w700,
-                          sizeOfFont: 16,
+                          weight: FontWeight.w600,
+                          sizeOfFont: 13,
                         )),
                   )
                 ],
@@ -191,18 +206,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
       ),
-
     );
   }
 
-  shareApp  () {}
+  shareApp() {}
 }
 
-
-
-
-
-customDialog({String? title,String? message,String? confirmBtnText}) {
+customDialog({String? title, String? message, String? confirmBtnText}) {
   Get.dialog(
     Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -211,7 +221,7 @@ customDialog({String? title,String? message,String? confirmBtnText}) {
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Container(
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: primaryColor,
               borderRadius: BorderRadius.all(
                 Radius.circular(20),
               ),
@@ -219,17 +229,20 @@ customDialog({String? title,String? message,String? confirmBtnText}) {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Material(
+                color: primaryColor,
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
-                     Text(
+                    Text(
                       "$title",
                       textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                     const SizedBox(height: 15),
                     Text(
                       "$message",
                       textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 20),
                     //Buttons
@@ -239,14 +252,16 @@ customDialog({String? title,String? message,String? confirmBtnText}) {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               foregroundColor: const Color(0xFFFFFFFF),
-                              backgroundColor: Colors.grey, minimumSize: const Size(0, 45),
+                              backgroundColor: Colors.grey,
+                              minimumSize: const Size(0, 45),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                             onPressed: () => Get.back(),
                             child: const Text(
-                              'Cancel',style: TextStyle(color: Colors.black38),
+                              'Cancel',
+                              style: TextStyle(color: Colors.black38),
                             ),
                           ),
                         ),
@@ -254,15 +269,17 @@ customDialog({String? title,String? message,String? confirmBtnText}) {
                         Expanded(
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              foregroundColor: const Color(0xFFFFFFFF),
-                              backgroundColor: primaryColor, minimumSize: const Size(0, 45),
+                              foregroundColor: fishColor,
+                              backgroundColor: fishColor,
+                              minimumSize: const Size(0, 45),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            onPressed: ()=> Get.back(),
-                            child:  Text(
-                              '$confirmBtnText',style: const TextStyle(color: Colors.white),
+                            onPressed: () => Get.back(),
+                            child: Text(
+                              '$confirmBtnText',
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                         ),

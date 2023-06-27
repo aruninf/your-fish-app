@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/CREATE_ACCOUNT/select_fish_you_experience.dart';
 import 'package:yourfish/CREATE_ACCOUNT/select_fishing_location.dart';
-import 'package:yourfish/CREATE_ACCOUNT/upload_profile_picture.dart';
-import 'package:yourfish/UTILS/app_images.dart';
 
 import '../CUSTOM_WIDGETS/common_button.dart';
+import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
-import '../CUSTOM_WIDGETS/custom_text_field.dart';
-import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
-import 'get_start.dart';
+import '../UTILS/consts.dart';
 
 class SelectFishYouExperience extends StatefulWidget {
   const SelectFishYouExperience({super.key});
 
   @override
-  State<SelectFishYouExperience> createState() => _SelectFishYouExperienceState();
+  State<SelectFishYouExperience> createState() =>
+      _SelectFishYouExperienceState();
 }
 
 class _SelectFishYouExperienceState extends State<SelectFishYouExperience> {
-
-  Widget appBarTitle =  const Text("Search Fish",
-    style:  TextStyle(color: Colors.white,fontSize: 12),);
-  Icon actionIcon =  const Icon(Icons.search, color: Colors.white,);
-  final key =  GlobalKey<ScaffoldState>();
-  final TextEditingController _searchQuery =  TextEditingController();
+  Widget appBarTitle = const Text(
+    "Search",
+    style: TextStyle(color: Colors.white, fontSize: 12),
+  );
+  Icon actionIcon = const Icon(
+    Icons.search,
+    color: Colors.white,
+  );
+  final key = GlobalKey<ScaffoldState>();
+  final TextEditingController _searchQuery = TextEditingController();
   late List<String> _list;
   String _searchText = "";
 
@@ -35,8 +36,7 @@ class _SelectFishYouExperienceState extends State<SelectFishYouExperience> {
         setState(() {
           _searchText = "";
         });
-      }
-      else {
+      } else {
         setState(() {
           _searchText = _searchQuery.text;
         });
@@ -48,19 +48,22 @@ class _SelectFishYouExperienceState extends State<SelectFishYouExperience> {
   void initState() {
     super.initState();
     //init();
-
   }
 
   void _handleSearchStart() {
-    setState(() {
-    });
+    setState(() {});
   }
 
   void _handleSearchEnd() {
     setState(() {
-      actionIcon =  const Icon(Icons.search, color: Colors.white,);
-      appBarTitle = const Text("Search Fish",
-        style:  TextStyle(color: Colors.white,fontSize: 12),);
+      actionIcon = const Icon(
+        Icons.search,
+        color: Colors.white,
+      );
+      appBarTitle = const Text(
+        "Search",
+        style: TextStyle(color: Colors.white, fontSize: 12),
+      );
       _searchQuery.clear();
     });
   }
@@ -70,83 +73,80 @@ class _SelectFishYouExperienceState extends State<SelectFishYouExperience> {
     return Scaffold(
       extendBody: false,
       backgroundColor: primaryColor,
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        centerTitle: true,
-        title: Image.asset(fishTextImage,height: 50,width: 100,color: secondaryColor,),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: fishColor,
-          ),
-          onPressed: () => Get.back(),
+      // appBar: AppBar(
+      //   backgroundColor: primaryColor,
+      //   centerTitle: true,
+      //   title: Image.asset(fishTextImage,height: 60,width: 100,color: secondaryColor,),
+      //   leading: IconButton(
+      //     icon: const Icon(
+      //       Icons.arrow_back_ios_new_rounded,
+      //       color: fishColor,
+      //     ),
+      //     onPressed: () => Get.back(),
+      //   ),
+      // ),
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CustomAppBar(
+              heading: 'Select Fish you have\nExperience in catching',
+              textColor: fishColor,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 14),
+              child: CustomSearchField(
+                hintText: 'Search',
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Expanded(
+                child: GridView.builder(
+              itemCount: fishData.length,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 5 / 4),
+              itemBuilder: (context, index) => Container(
+                decoration: BoxDecoration(
+                  border: Border.all(width: 0.67, color: Colors.white),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.asset(
+                          fishData[index].fishImage ?? '',
+                          height: Get.width * 0.25,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        fishData[index].fishName ?? '',
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w700),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ))
+          ],
         ),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 16,
-          ),
-          const Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 16),
-            child:  Text( 'Select Fish you have\nExperience in catching',
-              style: TextStyle(
-                  color: fishColor,
-                  fontFamily: "Rodetta",
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600
-              ),),
-          ),
-
-          const SizedBox(
-            height: 16,
-          ),
-          const Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 14),
-            child: CustomSearchField(
-              hintText: 'Search Fish',
-            ),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Expanded(child: GridView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
-            gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,crossAxisSpacing: 16
-            ),
-            itemCount: 10,
-            itemBuilder: (context, index) => Container(
-              decoration: BoxDecoration(
-                border: Border.all(width: 0.67,color: Colors.white),
-                borderRadius: BorderRadius.circular(16),
-
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.asset(fishPlaceHolder,
-                        height: Get.width*0.33,fit: BoxFit.cover,width: double.infinity,)
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Text("Broadbill Swordfish",
-                      maxLines: 1,
-                      textAlign:TextAlign.center,style: TextStyle(
-                        color: Colors.white,
-
-                      ),),
-                  )
-                ],
-              ),
-            ),
-          ))
-        ],
       ),
       bottomNavigationBar: Container(
         width: Get.width,
@@ -156,10 +156,10 @@ class _SelectFishYouExperienceState extends State<SelectFishYouExperience> {
           btnBgColor: fishColor,
           btnTextColor: primaryColor,
           btnText: "NEXT",
-          onClick: () => Get.to(()=>const SelectFishingLocation(), transition: Transition.rightToLeft),
+          onClick: () => Get.to(() => const SelectFishingLocation(),
+              transition: Transition.rightToLeft),
         ),
       ),
     );
   }
 }
-

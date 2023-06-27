@@ -39,8 +39,6 @@ class CommonTextField extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 hintStyle:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
-                hintText: hintText)
-        )
-    );
+                hintText: hintText)));
   }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/CREATE_ACCOUNT/get_start.dart';
-import 'package:yourfish/CREATE_ACCOUNT/create_password.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
 import '../CUSTOM_WIDGETS/common_button.dart';
@@ -9,6 +7,7 @@ import '../CUSTOM_WIDGETS/custom_text_field.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../HOME/main_home.dart';
 import '../UTILS/app_color.dart';
+import 'forget_password.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -32,7 +31,7 @@ class SignInScreen extends StatelessWidget {
       body: SizedBox(
         width: Get.width,
         height: Get.height,
-        child: Stack  (
+        child: Stack(
           children: [
             SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -44,22 +43,20 @@ class SignInScreen extends StatelessWidget {
                     width: Get.width * 0.6,
                   ),
                   SizedBox(
-                    height: Get.height*0.04,
+                    height: Get.height * 0.04,
                   ),
                   const CommonTextField(
                     hintText: 'Email',
                   ),
-
                   SizedBox(
-                    height: Get.height*0.03,
+                    height: Get.height * 0.03,
                   ),
                   const CommonTextField(
                     hintText: 'Password',
                     isPassword: true,
                   ),
-
                   SizedBox(
-                    height: Get.height*0.03,
+                    height: Get.height * 0.03,
                   ),
                   SizedBox(
                     width: Get.width,
@@ -68,25 +65,30 @@ class SignInScreen extends StatelessWidget {
                       btnBgColor: fishColor,
                       btnTextColor: primaryColor,
                       btnText: "Log In",
-                      onClick: ()=> Get.to(()=> const MainHome(),
+                      onClick: () => Get.to(() => const MainHome(),
                           transition: Transition.rightToLeft),
                     ),
                   ),
-
                   SizedBox(
-                    height: Get.height*0.03,
+                    height: Get.height * 0.03,
                   ),
                   Align(
                     alignment: Alignment.center,
-                    child: TextButton(onPressed: (){
-
-                    }, child:
-                    const SizedBox(
-                      child: CustomText(text: 'Forgot Password?',
-                        color: secondaryColor,sizeOfFont: 16,weight: FontWeight.w800,),
-                    ),),
+                    child: TextButton(
+                      onPressed: () => (
+                        Get.to(() => const ForgotPasswordScreen(),
+                            transition: Transition.rightToLeft),
+                      ),
+                      child: const SizedBox(
+                        child: CustomText(
+                          text: 'Forgot Password?',
+                          color: secondaryColor,
+                          sizeOfFont: 16,
+                          weight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
                   ),
-
                 ],
               ),
             ),

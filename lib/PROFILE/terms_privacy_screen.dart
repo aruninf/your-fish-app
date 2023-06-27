@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
-import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 import '../UTILS/app_strings.dart';
 
@@ -41,8 +41,10 @@ class PrivacyAndTermsScreen extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   border: Border.all(width: 0.78, color: Colors.white),
                   borderRadius: BorderRadius.circular(16),
@@ -54,10 +56,11 @@ class PrivacyAndTermsScreen extends StatelessWidget {
                       width: Get.width,
                       child: const Text(
                         privacyText,
+                        textAlign: TextAlign.justify,
                         style: TextStyle(
-                            height: 1.4,
-                            fontSize: 16,
-                            color: Colors.white
+                          height: 1.4,
+                          fontSize: 13,
+                          color: Colors.white,
                         ),
                       ),
                     ),

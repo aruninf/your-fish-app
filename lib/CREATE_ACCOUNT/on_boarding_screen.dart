@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:page_indicator/page_indicator.dart';
 import 'package:yourfish/CREATE_ACCOUNT/get_start.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/common_button.dart';
 import 'package:yourfish/UTILS/app_color.dart';
-import 'package:get/get.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 import 'package:yourfish/UTILS/app_strings.dart';
-import 'package:page_indicator/page_indicator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -84,10 +84,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                                   headingColor: fishColor,
                                 )
                               : index == 1
-                                  ?  SliderWidget(
+                                  ? SliderWidget(
                                       title: textTitle2,
                                       description: textText2,
-                                      headingColor: index == 1 ? secondaryColor : fishColor,
+                                      headingColor: index == 1
+                                          ? secondaryColor
+                                          : fishColor,
                                     )
                                   : const SliderWidget(
                                       title: textTitle3,
@@ -131,6 +133,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                 height: Get.width * 0.3,
                 width: Get.width * 0.65,
                 fit: BoxFit.fill,
+                color: index == 1 ? secondaryColor : fishColor,
               ),
             ),
           ]),
@@ -157,9 +160,11 @@ class SliderWidget extends StatelessWidget {
       children: [
         Text(
           title,
-          style:   TextStyle(
+          style: TextStyle(
             fontFamily: "Rodetta",
-              fontSize: 22, color: headingColor,),
+            fontSize: 22,
+            color: headingColor,
+          ),
         ),
         const SizedBox(
           height: 16,
@@ -167,7 +172,8 @@ class SliderWidget extends StatelessWidget {
         SingleChildScrollView(
           child: Text(
             description,
-            style: const TextStyle(color: Colors.white, height: 1.4,fontSize: 15),
+            style:
+                const TextStyle(color: Colors.white, height: 1.4, fontSize: 15),
           ),
         ),
       ],

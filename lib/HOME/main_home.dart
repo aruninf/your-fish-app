@@ -11,8 +11,8 @@ import 'package:yourfish/UTILS/app_color.dart';
 
 import '../CHATS/chats_screen.dart';
 import '../CREATE_POST/add_fish_screen.dart';
-import '../USER_BLOGS/blog_screenn.dart';
 import '../PROFILE/my_map_screen.dart';
+import '../USER_BLOGS/blog_screenn.dart';
 import '../UTILS/app_images.dart';
 
 class MainHome extends StatefulWidget {
@@ -29,9 +29,13 @@ class _MainHomeState extends State<MainHome> {
   late List<String> address;
 
   void _onItemTapped(int index) async {
-    setState(() {
-      _page = index;
-    });
+    if (index == 2) {
+      Get.to(() => const AddFishScreen(), transition: Transition.rightToLeft);
+    } else {
+      setState(() {
+        _page = index;
+      });
+    }
   }
 
   @override
@@ -43,6 +47,7 @@ class _MainHomeState extends State<MainHome> {
       backgroundColor: primaryColor,
       endDrawer: Drawer(
         elevation: 3.0,
+        width: Get.width,
         child: RightDrawerMenuWidget(
           onClick: (index1) {
             print("========$index1");
@@ -50,7 +55,7 @@ class _MainHomeState extends State<MainHome> {
               setState(() {
                 _page = 0;
               });
-            }else if (index1 == 1) {
+            } else if (index1 == 1) {
               setState(() {
                 _page = 4;
               });
@@ -87,7 +92,12 @@ class _MainHomeState extends State<MainHome> {
         elevation: 0,
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: Image.asset(fishTextImage,height: 60,width: 100,color: secondaryColor,),
+        title: Image.asset(
+          fishTextImage,
+          height: 60,
+          width: 100,
+          color: secondaryColor,
+        ),
 
         // title: CustomText(
         //   text: _page == 0
@@ -125,22 +135,22 @@ class _MainHomeState extends State<MainHome> {
           ],
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(top: 30),
-        child: FloatingActionButton(
-          onPressed: () => Get.to(() => const AddFishScreen(),
-              transition: Transition.rightToLeft),
-          tooltip: 'Add Fish Button',
-          elevation: 0,
-          backgroundColor: fishColor,
-          shape: const CircleBorder(),
-          child: const Icon(
-            Icons.add,
-            color: secondaryColor,
-            size: 30,
-          ),
-        ),
-      ),
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(top: 30),
+      //   child: FloatingActionButton(
+      //     onPressed: () => Get.to(() => const AddFishScreen(),
+      //         transition: Transition.rightToLeft),
+      //     tooltip: 'Add Fish Button',
+      //     elevation: 0,
+      //     backgroundColor: fishColor,
+      //     shape: const CircleBorder(),
+      //     child: const Icon(
+      //       Icons.add,
+      //       color: secondaryColor,
+      //       size: 30,
+      //     ),
+      //   ),
+      // ),
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
@@ -149,7 +159,7 @@ class _MainHomeState extends State<MainHome> {
             child: BottomAppBar(
               padding: EdgeInsets.zero,
               color: fishColor,
-              height: 55,
+              height: 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -157,8 +167,9 @@ class _MainHomeState extends State<MainHome> {
                     child: IconButton(
                       icon: Image.asset(
                         fishImage,
-                        height: 34,width: 34,
-                        color: _page == 0 ? secondaryColor : Colors.white,
+                        height: 40,
+                        width: 40,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         _onItemTapped(0);
@@ -167,21 +178,36 @@ class _MainHomeState extends State<MainHome> {
                   ),
                   Expanded(
                     child: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         PhosphorIcons.chats,
-                        color: _page == 1 ? secondaryColor : Colors.white,
+                        size: 35,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         _onItemTapped(1);
                       },
                     ),
                   ),
-                  const Expanded(child: Text('')),
                   Expanded(
                     child: IconButton(
-                      icon: Icon(
-                        PhosphorIcons.magnifying_glass,
-                        color: _page == 3 ? secondaryColor : Colors.white,
+                      icon: Image.asset(
+                        'images/add_post.png',
+                        height: 40,
+                        width: 40,
+                        color: secondaryColor,
+                      ),
+                      onPressed: () {
+                        _onItemTapped(2);
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: IconButton(
+                      icon: Image.asset(
+                        'images/search_icon.png',
+                        height: 30,
+                        width: 30,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         _onItemTapped(3);
@@ -190,9 +216,11 @@ class _MainHomeState extends State<MainHome> {
                   ),
                   Expanded(
                     child: IconButton(
-                      icon: Icon(
-                        PhosphorIcons.user,
-                        color: _page == 4 ? secondaryColor : Colors.white,
+                      icon: Image.asset(
+                        'images/user_icon.png',
+                        height: 28,
+                        width: 28,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         _onItemTapped(4);
@@ -211,9 +239,7 @@ class _MainHomeState extends State<MainHome> {
 }
 
 class RightDrawerMenuWidget extends StatelessWidget {
-  RightDrawerMenuWidget({super.key,
-  required this.onClick
-  });
+  RightDrawerMenuWidget({super.key, required this.onClick});
 
   final Function(int index1) onClick;
 
@@ -221,8 +247,8 @@ class RightDrawerMenuWidget extends StatelessWidget {
     "Home",
     "My Profile",
     "Top Spots",
-    "Blogs",
-    "Chats",
+    "Blog",
+    "Chat",
     "Settings"
   ];
 
@@ -264,9 +290,9 @@ class RightDrawerMenuWidget extends StatelessWidget {
                             transition: Transition.leftToRight);
                       } else if (index1 == 0) {
                         onClick(0);
-                      }else if (index1 == 1) {
+                      } else if (index1 == 1) {
                         onClick(1);
-                      }else if (index1 == 3) {
+                      } else if (index1 == 3) {
                         Get.to(const BlogsScreen(),
                             transition: Transition.leftToRight);
                       } else if (index1 == 4) {
@@ -295,27 +321,29 @@ class RightDrawerMenuWidget extends StatelessWidget {
             right: 0,
             child: Image.asset(
               fishRightImage,
-              height: Get.width * 0.5,
-              width: Get.width * 0.5,
+              height: Get.width * 0.55,
+              width: Get.width * 0.70,
               fit: BoxFit.fill,
               color: Colors.white30,
             ),
           ),
           Positioned(
             bottom: Get.height * 0.009,
-            left: 0,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Image.asset(
                   fishSignImage,
-                  height: Get.width * 0.3,
-                  width: Get.width * 0.45,
+                  height: Get.width * 0.65,
+                  width: Get.width * 0.6,
                   color: fishColor,
                 ),
+                //Spacer(),
                 Image.asset(
                   fishTextImage,
                   height: Get.width * 0.3,
-                  width: Get.width * 0.3,
+                  width: Get.width * 0.35,
                   color: btnColor,
                 ),
               ],
