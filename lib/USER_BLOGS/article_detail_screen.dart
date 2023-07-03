@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 import 'package:yourfish/UTILS/app_strings.dart';
 
-import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 
 class ArticlesDetailScreen extends StatefulWidget {
@@ -13,7 +12,6 @@ class ArticlesDetailScreen extends StatefulWidget {
   @override
   State<ArticlesDetailScreen> createState() => _ArticlesDetailScreenState();
 }
-
 class _ArticlesDetailScreenState extends State<ArticlesDetailScreen> {
   @override
   Widget build(BuildContext context) {
@@ -23,9 +21,12 @@ class _ArticlesDetailScreenState extends State<ArticlesDetailScreen> {
         backgroundColor: primaryColor,
         titleSpacing: 0,
         centerTitle: true,
-        title: Image.asset(fishTextImage,height: 70,width: 120,
-          color:secondaryColor,),
-
+        title: Image.asset(
+          fishTextImage,
+          height: 70,
+          width: 120,
+          color: secondaryColor,
+        ),
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(
@@ -45,16 +46,22 @@ class _ArticlesDetailScreenState extends State<ArticlesDetailScreen> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.asset(fishingImage,
-                  height: Get.height*0.25,width: Get.width,fit: BoxFit.cover,),
+                child: Image.asset(
+                  fishingImage,
+                  height: Get.height * 0.25,
+                  width: Get.width,
+                  fit: BoxFit.cover,
+                ),
               ),
-               ListTile(
-                 dense: false,
+              ListTile(
+                dense: false,
                 contentPadding: EdgeInsets.zero,
                 title: const Text(
                   "Top Spots on the Gold Coast this summer",
                   style: TextStyle(
-                    fontSize: 18,fontWeight: FontWeight.w700,color: secondaryColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: secondaryColor,
                   ),
                 ),
                 trailing: InkWell(
@@ -68,13 +75,15 @@ class _ArticlesDetailScreenState extends State<ArticlesDetailScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8,),
-              const Text(privacyText,style: TextStyle(
-                color: Colors.white,
-                height: 1.5,fontSize: 15
-              ),)
-
-
+              const SizedBox(
+                height: 8,
+              ),
+              const Text(
+                privacyText,
+                textAlign: TextAlign.justify,
+                style:
+                    TextStyle(color: Colors.white, height: 1.5, fontSize: 14),
+              )
             ],
           ),
         ),

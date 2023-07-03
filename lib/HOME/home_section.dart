@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/UTILS/app_images.dart';
+import 'package:yourfish/UTILS/consts.dart';
 
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
@@ -9,6 +10,7 @@ import '../UTILS/app_color.dart';
 
 class HomeSection extends StatelessWidget {
   const HomeSection({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +20,11 @@ class HomeSection extends StatelessWidget {
       extendBody: true,
       body: Column(
         children: [
+          const SizedBox(
+            height: 25,
+          ),
           const Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 14,vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
             child: CustomSearchField(
               hintText: 'Search',
             ),
@@ -27,9 +32,11 @@ class HomeSection extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
-              itemCount: 4,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              itemBuilder: (context, index) => const SingleFishPostWidget(),
+              itemCount: postList.length,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+              itemBuilder: (context, index) => index == 0
+                  ? const NotificationItem()
+                  : SingleFishPostWidget(postModel: postList[index]),
             ),
           ),
         ],
@@ -38,8 +45,84 @@ class HomeSection extends StatelessWidget {
   }
 }
 
+class NotificationItem extends StatelessWidget {
+  const NotificationItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white70, width: .67)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Image.asset(
+                'images/chat_image2.png',
+                height: 35,
+                width: 35,
+                fit: BoxFit.cover,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              const Text(
+                "@Allie-W",
+                style: TextStyle(
+                    fontFamily: "Rodetta",
+                    fontWeight: FontWeight.w700,
+                    fontSize: 17,
+                    color: secondaryColor),
+              ),
+              const Spacer(),
+              SizedBox(
+                height: 30,
+                child: TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: const BorderSide(width: 1, color: fishColor))),
+                  child: const Text(
+                    "CHAT",
+                    style: TextStyle(
+                        fontFamily: "Rodetta",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10,
+                        color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          const CustomText(
+            text:
+                "Looking for a fishing buddy this weekend\nMessage e to plan!",
+            weight: FontWeight.w600,
+            sizeOfFont: 12,
+            maxLin: 2,
+            color: Colors.white,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class SingleFishPostWidget extends StatelessWidget {
-  const SingleFishPostWidget({super.key});
+  const SingleFishPostWidget({super.key, required this.postModel});
+
+  final PostModel postModel;
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +139,13 @@ class SingleFishPostWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Text(
-               "@yourfish",
-                style: TextStyle(fontFamily: "Rodetta",
-                  fontWeight: FontWeight.w700,
-                  fontSize: 17,
-                  color: secondaryColor
-                ),
+              Text(
+                "${postModel.userName}",
+                style: const TextStyle(
+                    fontFamily: "Rodetta",
+                    fontWeight: FontWeight.w700,
+                    fontSize: 17,
+                    color: secondaryColor),
               ),
               const Spacer(),
               TextButton.icon(
@@ -84,7 +167,7 @@ class SingleFishPostWidget extends StatelessWidget {
           ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.asset(
-                fishingImage,
+                "${postModel.fishingImage}",
                 width: double.infinity,
                 height: Get.height * 0.4,
                 fit: BoxFit.cover,

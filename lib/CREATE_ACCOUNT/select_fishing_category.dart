@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/CREATE_ACCOUNT/upload_profile_picture.dart';
-import 'package:yourfish/UTILS/app_images.dart';
 
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
-import '../CUSTOM_WIDGETS/custom_text_field.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 import 'add_your_gear.dart';
-import 'get_start.dart';
 
 class SelectFishingCategory extends StatefulWidget {
   const SelectFishingCategory({super.key});
@@ -43,6 +39,14 @@ class _SelectFishingCategoryState extends State<SelectFishingCategory> {
     "Line4",
     "Spear6",
     "Line Fishing4",
+    "Line3",
+    "Spear4",
+    "Line Fishing3",
+    "Spear5",
+    "Line4",
+    "Spear6",
+    "Line Fishing4",
+    "Spear"
   ];
   var selectedCategories = [];
   String _searchText = "";
@@ -123,47 +127,50 @@ class _SelectFishingCategoryState extends State<SelectFishingCategory> {
             const SizedBox(
               height: 16,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Wrap(
-                children: List.generate(
-                    listOfCategory.length,
-                    (index) => Container(
-                          margin: const EdgeInsets.only(top: 8, left: 5),
-                          decoration: BoxDecoration(
-                            color: selectedCategories
-                                    .contains(listOfCategory[index])
-                                ? secondaryColor
-                                : btnColor,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                if (selectedCategories
-                                    .contains(listOfCategory[index])) {
-                                  selectedCategories
-                                      .remove(listOfCategory[index]);
-                                } else {
-                                  selectedCategories.add(listOfCategory[index]);
-                                }
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 14, vertical: 12),
-                              child: CustomText(
-                                text: listOfCategory[index],
-                                sizeOfFont: 16,
-                                weight: FontWeight.bold,
-                                color: selectedCategories
-                                        .contains(listOfCategory[index])
-                                    ? fishColor
-                                    : primaryColor,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Wrap(
+                  children: List.generate(
+                      listOfCategory.length,
+                      (index) => Container(
+                            margin: const EdgeInsets.only(top: 12, left: 16),
+                            decoration: BoxDecoration(
+                              color: selectedCategories
+                                      .contains(listOfCategory[index])
+                                  ? secondaryColor
+                                  : btnColor,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (selectedCategories
+                                      .contains(listOfCategory[index])) {
+                                    selectedCategories
+                                        .remove(listOfCategory[index]);
+                                  } else {
+                                    selectedCategories
+                                        .add(listOfCategory[index]);
+                                  }
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 12),
+                                child: CustomText(
+                                  text: listOfCategory[index],
+                                  sizeOfFont: 16,
+                                  weight: FontWeight.bold,
+                                  color: selectedCategories
+                                          .contains(listOfCategory[index])
+                                      ? fishColor
+                                      : primaryColor,
+                                ),
                               ),
                             ),
-                          ),
-                        )),
+                          )),
+                ),
               ),
             )
           ],

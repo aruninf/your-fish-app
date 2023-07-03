@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:yourfish/UTILS/app_color.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/custom_search_field.dart';
+import 'package:yourfish/UTILS/app_color.dart';
+import 'package:yourfish/UTILS/consts.dart';
+
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import 'one_to_one_chat_screen.dart';
 
-class ChatsScreen extends StatelessWidget{
+class ChatsScreen extends StatelessWidget {
   const ChatsScreen({super.key});
 
   @override
@@ -29,48 +32,63 @@ class ChatsScreen extends StatelessWidget{
       //     onPressed: () => Get.back(),
       //   ),
       // ),
-      body:  SafeArea(
+      body: SafeArea(
         child: Column(
           children: [
             const CustomAppBar(
               heading: "Chats",
               textColor: secondaryColor,
             ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+              child: CustomSearchField(hintText: 'Search'),
+            ),
             Expanded(
               child: ListView.builder(
-                itemCount: 16,
+                itemCount: chatsList.length,
                 physics: const BouncingScrollPhysics(),
-                padding:
-                const EdgeInsets.only(top: 8,bottom: 8),
+                padding: const EdgeInsets.only(
+                    top: 8, bottom: 8, left: 12, right: 12),
                 itemBuilder: (context, index) => ListTile(
-                  onTap: ()=> Get.to(()=>const OneToOneChatScreen(),
+                  onTap: () => Get.to(() => const OneToOneChatScreen(),
                       transition: Transition.rightToLeft),
                   dense: true,
                   contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                  leading: const CircleAvatar(
-                    backgroundColor: Colors.white30,
-                    maxRadius: 25,
-                    child: CustomText(
-                      text: 'Photo',
-                      sizeOfFont: 11,
-                      color: Colors.white30,
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                  leading: ClipOval(
+                    child: Image.asset(
+                      chatsList[index].profileImage ?? '',
+                      height: 45,
+                      width: 45,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  title: const CustomText(
-                    text: 'Alex Brown',
+                  title: CustomText(
+                    text: chatsList[index].name ?? '',
                     color: Colors.white,
                   ),
-                  subtitle: const CustomText(
-                    text: '@a.brown',
+                  subtitle: CustomText(
+                    text: chatsList[index].username ?? '',
                     color: Colors.white,
                   ),
-                  trailing: const Column(
+                  trailing: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CustomText(text: "12:00 pm",color: Colors.white54,),
-                      Icon(Icons.more_horiz_rounded,color: Colors.white30,)
+                      const CustomText(
+                        text: "18:56",
+                        color: Colors.white54,
+                        sizeOfFont: 11,
+                      ),
+                      GestureDetector(
+                          onTapDown: (de) {
+                            showPopupMenu(context, de);
+                          },
+                          child: Icon(
+                            Icons.more_horiz_rounded,
+                            color: secondaryColor.withOpacity(0.6),
+                            size: 16,
+                          ))
                     ],
                   ),
                 ),
@@ -82,4 +100,28 @@ class ChatsScreen extends StatelessWidget{
     );
   }
 
+  showPopupMenu(BuildContext context, TapDownDetails details) {
+    showMenu<String>(
+      context: context,
+      color: fishColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+      ),
+      position: RelativeRect.fromLTRB(
+        details.globalPosition.dx,
+        details.globalPosition.dy,
+        details.globalPosition.dx,
+        details.globalPosition.dy,
+      ),
+      items: [
+        const PopupMenuItem<String>(
+            value: '1',
+            child: Text(
+              'Delete',
+              style: TextStyle(color: secondaryColor),
+            )),
+      ],
+      elevation: 8.0,
+    );
+  }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/UTILS/app_color.dart';
+
 import 'CREATE_ACCOUNT/on_boarding_screen.dart';
 import 'CREATE_ACCOUNT/splash_screen.dart';
 
@@ -26,10 +28,9 @@ class MyApp extends StatelessWidget {
       title: 'Your Fish',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-        fontFamily: "Mont"
-      ),
+          colorScheme: ColorScheme.fromSeed(seedColor: secondaryColor),
+          useMaterial3: true,
+          fontFamily: "Mont"),
       home: const AppRoot(),
     );
   }

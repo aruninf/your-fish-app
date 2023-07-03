@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 const String appName = "Your Fish";
 const String textTitle1 = "CONNECT WITH FISHING\nENTHUSIASTS";
 const String textText1 =
@@ -16,15 +14,16 @@ const String textText3 =
 
 const String next = "NEXT";
 
-const String privacyText="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+const String privacyText =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
     "Cras molestie felis vel tempus tincidunt. Phasellus quis posuere quam. "
     "Suspendisse eu porta nulla. Quisque congue quam non tristique maximus."
     " Vestibulum lobortis arcu eu rutrum aliquet. Mauris laoreet magna metus, "
     "eu pretium odio malesuada et. Praesent sollicitudin mattis eros sit amet "
     "rhoncus. Pellentesque aliquet elit sed nisi iaculis, sodales malesuada "
     "nulla dictum. Lorem ipsum dolor sit amet, consectetur adipiscing "
-    "elit. Cras molestie felis vel tempus tincidunt. Phasellus quis posuere"
-    " quam. Suspendisse eu porta nulla. Quisque congue quam non "
+    "elit. Cras molestie felis vel tempus tincidunt. Phasellus quis posuere\n\n\n"
+    "Quam. Suspendisse eu porta nulla. Quisque congue quam non "
     "tristique maximus. Vestibulum lobortis arcu eu rutrum aliquet."
     " Mauris laoreet magna metus, eu pretium odio malesuada et."
     " Praesent sollicitudin mattis eros sit amet rhoncus. Pellentesque"
@@ -33,4 +32,4 @@ const String privacyText="Lorem ipsum dolor sit amet, consectetur adipiscing eli
     "Cras molestie felis vel tempus tincidunt. Phasellus quis posuere"
     " quam. Suspendisse eu porta nulla. Quisque congue quam non tristique maximus.";
 
-const String termsText="";
+const String termsText = "";

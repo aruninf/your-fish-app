@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/HOME/home_section.dart';
+import 'package:yourfish/UTILS/consts.dart';
+
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../UTILS/app_color.dart';
-import '../UTILS/app_images.dart';
 
 class MyFutureFishWidget extends StatelessWidget {
   const MyFutureFishWidget({super.key});
@@ -14,7 +14,11 @@ class MyFutureFishWidget extends StatelessWidget {
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, mainAxisSpacing: 16, crossAxisSpacing: 16),
+          crossAxisCount: 2,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: 5 / 4),
+      itemCount: fishData.length,
       itemBuilder: (context, index) => Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.67, color: Colors.white),
@@ -97,8 +101,8 @@ class MyFutureFishWidget extends StatelessWidget {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: Image.asset(
-                        fishPlaceHolder,
-                        height: Get.width * 0.33,
+                        fishData[index].fishImage ?? '',
+                        height: Get.width * 0.25,
                         fit: BoxFit.cover,
                         width: double.infinity,
                       )),
@@ -113,15 +117,14 @@ class MyFutureFishWidget extends StatelessWidget {
                       ))
                 ],
               ),
-              const Padding(
-                padding: EdgeInsets.all(5.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Broad-bill Swordfish",
+                  fishData[index].fishName ?? '',
                   maxLines: 1,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w700),
                 ),
               )
             ],

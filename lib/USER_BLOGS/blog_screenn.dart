@@ -6,7 +6,7 @@ import 'package:yourfish/USER_BLOGS/blog_detail_screen.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
-import '../UTILS/app_images.dart';
+import '../UTILS/consts.dart';
 import 'article_detail_screen.dart';
 
 class BlogsScreen extends StatelessWidget {
@@ -38,40 +38,42 @@ class BlogsScreen extends StatelessWidget {
               heading: "Fish Blog",
               textColor: secondaryColor,
             ),
-
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: CustomSearchField(hintText: 'Search'),
             ),
-
             Expanded(
-              child : SingleChildScrollView(
+              child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child : Column(
+                child: Column(
                   children: [
                     Row(
                       children: [
                         const Text(
-                          "Top Fish",style: TextStyle(
-                            fontSize: 18,fontFamily: 'Rodetta',
-                            color: btnColor
-                        ),),
+                          "Top Fish",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Rodetta',
+                              color: btnColor),
+                        ),
                         const Spacer(),
                         TextButton(
                             onPressed: () {},
                             child: const Text(
                               "View All",
-                              style: TextStyle(color: secondaryColor,
-                                fontWeight:FontWeight.w700,
+                              style: TextStyle(
+                                color: secondaryColor,
+                                fontWeight: FontWeight.w700,
                               ),
                             ))
                       ],
                     ),
-                    Wrap (
+                    Wrap(
                       children: List.generate(
-                        4,
-                            (index) => InkWell(
-                          onTap: () => Get.to(()=> const BlogDetailScreen(),transition: Transition.rightToLeft),
+                        fishBlogData.length,
+                        (index) => InkWell(
+                          onTap: () => Get.to(() => const BlogDetailScreen(),
+                              transition: Transition.rightToLeft),
                           child: Container(
                             width: Get.width * 0.43,
                             margin: EdgeInsets.only(
@@ -81,7 +83,8 @@ class BlogsScreen extends StatelessWidget {
                               top: index > 2 ? 8 : 8,
                             ),
                             decoration: BoxDecoration(
-                              border: Border.all(width: 0.67, color: Colors.white),
+                              border:
+                                  Border.all(width: 0.67, color: Colors.white),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
@@ -90,22 +93,21 @@ class BlogsScreen extends StatelessWidget {
                                 ClipRRect(
                                     borderRadius: BorderRadius.circular(16),
                                     child: Image.asset(
-                                      fishPlaceHolder,
+                                      fishBlogData[index].fishImage ?? '',
                                       height: Get.width * 0.33,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.fill,
                                       width: double.infinity,
                                     )),
-                                const Padding(
-                                  padding: EdgeInsets.all(5.0),
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
                                   child: Text(
-                                    "Bieye Tuna",
+                                    fishBlogData[index].fishName ?? '',
                                     maxLines: 1,
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 12
-                                    ),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12),
                                   ),
                                 )
                               ],
@@ -117,18 +119,20 @@ class BlogsScreen extends StatelessWidget {
                     Row(
                       children: [
                         const Text(
-                          "Articles",style: TextStyle(
-                            fontSize: 18,fontFamily: 'Rodetta',
-                            color: btnColor
-                        ),),
-
+                          "Articles",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Rodetta',
+                              color: btnColor),
+                        ),
                         const Spacer(),
                         TextButton(
                             onPressed: () {},
                             child: const Text(
                               "View All",
-                              style: TextStyle(color: secondaryColor,
-                                fontWeight:FontWeight.w700,
+                              style: TextStyle(
+                                color: secondaryColor,
+                                fontWeight: FontWeight.w700,
                               ),
                             ))
                       ],
@@ -136,33 +140,35 @@ class BlogsScreen extends StatelessWidget {
                     Wrap(
                       children: List.generate(
                           10,
-                              (index) => InkWell(
-                            onTap: () => Get.to(()=> const ArticlesDetailScreen(),transition: Transition.rightToLeft),
-
-                            child: Container(
-                              width: Get.width,
-                              margin: const EdgeInsets.only(top: 12),
-                              decoration: BoxDecoration(
-                                //color: btnColor,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: btnColor, width: 0.78)),
-                              child: const Padding(
-                                padding: EdgeInsets.all(12),
-                                child: CustomText(
-                                  text: 'Top Spots on the Gold Coast this summer',
-                                  sizeOfFont: 16,
-                                  color: btnColor,
-                                  weight: FontWeight.w700,
+                          (index) => InkWell(
+                                onTap: () => Get.to(
+                                    () => const ArticlesDetailScreen(),
+                                    transition: Transition.rightToLeft),
+                                child: Container(
+                                  width: Get.width,
+                                  margin: const EdgeInsets.only(top: 12),
+                                  decoration: BoxDecoration(
+                                      //color: btnColor,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                          color: btnColor, width: 0.78)),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(12),
+                                    child: CustomText(
+                                      text:
+                                          'Top Spots on the Gold Coast this summer',
+                                      sizeOfFont: 16,
+                                      color: btnColor,
+                                      weight: FontWeight.w700,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          )),
+                              )),
                     )
                   ],
                 ),
               ),
             ),
-
           ],
         ),
       ),

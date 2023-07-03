@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CREATE_ACCOUNT/create_account.dart';
 import 'package:yourfish/CREATE_ACCOUNT/sign_in.dart';
-import 'package:yourfish/CREATE_ACCOUNT/create_password.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_text_style.dart';
 import 'package:yourfish/UTILS/app_color.dart';
 import 'package:yourfish/UTILS/app_images.dart';

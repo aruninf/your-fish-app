@@ -46,12 +46,12 @@ class OneToOneChatScreen extends StatelessWidget {
                     children: [
                       CustomText(
                         text: 'Alex Brown',
-                        color: Colors.white,
+                        color: fishColor,
                         sizeOfFont: 16,
                         weight: FontWeight.w700,
                       ),
                       CustomText(
-                        text: 'online',
+                        text: 'Online',
                         color: Colors.green,
                         sizeOfFont: 12,
                       ),
@@ -62,75 +62,110 @@ class OneToOneChatScreen extends StatelessWidget {
             ),
             Expanded(
                 child: ListView.builder(
-                  reverse: true,
+              reverse: true,
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-              itemCount: 10,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              itemCount: 3,
               itemBuilder: (context, index) {
-                return  Container(
-                  width: Get.width*0.8,
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  margin: const EdgeInsets.only(top: 16),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 0.78, color: Colors.white),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8),
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(0),
-                      )
-                  ),
-                  child: const CustomText(
-                    text: 'Hello, How are you? Could you help me? Could you help me? Could you help me?',
-                    color: Colors.white,
-                    sizeOfFont: 12,
-                  ),
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: Get.width * 0.75,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      margin: const EdgeInsets.only(top: 16),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 0.56, color: Colors.white),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(0),
+                          )),
+                      child: CustomText(
+                        text: index == 2
+                            ? 'Good morning \nArun'
+                            : index == 1
+                                ? 'How are you? I hope your doing great job'
+                                : 'reply me please 😀 Its static chat for now only one side chat example',
+                        color: Colors.white,
+                        sizeOfFont: 12,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const CustomText(
+                          text: '12:00 pm',
+                          color: secondaryColor,
+                          sizeOfFont: 12,
+                        ),
+                        const SizedBox(
+                          width: 3,
+                        ),
+                        Image.asset(
+                          'images/double_tick.png',
+                          height: 16,
+                          width: 16,
+                          color: secondaryColor,
+                        )
+                      ],
+                    )
+                  ],
                 );
               },
             )),
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        padding: EdgeInsets.only(
-      bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: TextFormField(
-          style: const TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            suffixIcon: Container(
-              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-              child: SizedBox(
-                height: 20,
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                      backgroundColor: fishColor,
-                      padding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8))),
-                  child: const Text(
-                    "Send",
-                    style: TextStyle(color: Colors.white, fontSize: 12),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: TextFormField(
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              suffixIcon: Container(
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                child: SizedBox(
+                  height: 20,
+                  child: TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                        backgroundColor: fishColor,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                    child: const Text(
+                      "Send",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
                   ),
                 ),
               ),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16.0),
+                borderSide: const BorderSide(color: Colors.white),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16.0),
+                borderSide: const BorderSide(color: Colors.white),
+              ),
+              hintText: "Type a message...",
+              hintStyle: const TextStyle(color: Colors.white54),
+              labelStyle: const TextStyle(color: Colors.white),
             ),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide: const BorderSide(color: Colors.white),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide: const BorderSide(color: Colors.white),
-            ),
-            hintText: "Type a message...",
-            hintStyle: const TextStyle(color: Colors.white54),
-            labelStyle: const TextStyle(color: Colors.white),
           ),
         ),
       ),
