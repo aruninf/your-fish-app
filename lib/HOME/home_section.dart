@@ -11,6 +11,7 @@ import '../UTILS/app_color.dart';
 class HomeSection extends StatelessWidget {
   const HomeSection({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     //FocusScope.of(context).requestFocus(FocusNode());
@@ -106,7 +107,7 @@ class NotificationItem extends StatelessWidget {
           ),
           const CustomText(
             text:
-                "Looking for a fishing buddy this. weekend!\nMessage e to plan!",
+                "Looking for a fishing buddy this weekend\nMessage e to plan!",
             weight: FontWeight.w600,
             sizeOfFont: 12,
             maxLin: 2,

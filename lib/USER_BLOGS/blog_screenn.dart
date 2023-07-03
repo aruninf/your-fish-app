@@ -95,7 +95,7 @@ class BlogsScreen extends StatelessWidget {
                                     child: Image.asset(
                                       fishBlogData[index].fishImage ?? '',
                                       height: Get.width * 0.33,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.fill,
                                       width: double.infinity,
                                     )),
                                 Padding(

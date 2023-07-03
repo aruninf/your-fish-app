@@ -80,7 +80,7 @@ class _SearchSectionState extends State<SearchSection> {
                                           weight: FontWeight.w800,
                                           sizeOfFont: 13,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 16,
                                         ),
                                         const Icon(
@@ -163,8 +163,7 @@ class _SearchSectionState extends State<SearchSection> {
                   ),
                 )
               : Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -199,7 +198,7 @@ class _SearchSectionState extends State<SearchSection> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       ),
                       Expanded(

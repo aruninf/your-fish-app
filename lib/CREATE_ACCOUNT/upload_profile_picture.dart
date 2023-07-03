@@ -7,9 +7,14 @@ import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
+import '../UTILS/dialog_helper.dart';
 
 class UploadProfilePicture extends StatelessWidget {
   const UploadProfilePicture({super.key});
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,29 +48,38 @@ class UploadProfilePicture extends StatelessWidget {
                 Container(
                   height: Get.height * 0.32,
                   width: Get.width,
-                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(width: 1, color: Colors.white)),
-                  child: const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.add_circle_outline_rounded,
-                        size: 40,
-                        color: secondaryColor,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      CustomText(
-                        text: 'Upload Photo',
-                        color: btnColor,
-                        weight: FontWeight.w700,
-                      )
-                    ],
+                  child: GestureDetector(
+                    onTap: (){
+                      DialogHelper.selectImageFrom(
+                          onClick: (uri) async {
+
+                          },
+                          context: context);
+                    },
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.add_circle_outline_rounded,
+                          size: 40,
+                          color: secondaryColor,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        CustomText(
+                          text: 'Upload Photo',
+                          color: btnColor,
+                          weight: FontWeight.w700,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
