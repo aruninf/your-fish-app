@@ -5,14 +5,10 @@ import 'package:yourfish/UTILS/app_strings.dart';
 
 import '../UTILS/app_color.dart';
 
-class BlogDetailScreen extends StatefulWidget {
+
+class BlogDetailScreen extends StatelessWidget {
   const BlogDetailScreen({super.key});
 
-  @override
-  State<BlogDetailScreen> createState() => _BlogDetailScreenState();
-}
-
-class _BlogDetailScreenState extends State<BlogDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

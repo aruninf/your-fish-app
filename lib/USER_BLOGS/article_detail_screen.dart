@@ -6,13 +6,9 @@ import 'package:yourfish/UTILS/app_strings.dart';
 
 import '../UTILS/app_color.dart';
 
-class ArticlesDetailScreen extends StatefulWidget {
-  const ArticlesDetailScreen({super.key});
 
-  @override
-  State<ArticlesDetailScreen> createState() => _ArticlesDetailScreenState();
-}
-class _ArticlesDetailScreenState extends State<ArticlesDetailScreen> {
+class ArticlesDetailScreen extends StatelessWidget {
+  const ArticlesDetailScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

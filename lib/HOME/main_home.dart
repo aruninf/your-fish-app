@@ -30,12 +30,20 @@ class _MainHomeState extends State<MainHome> {
 
   void _onItemTapped(int index) async {
     if (index == 2) {
-      Get.to(() => const AddFishScreen(), transition: Transition.rightToLeft);
+      Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
     } else {
       setState(() {
         _page = index;
       });
     }
+  }
+
+  @override
+  void initState() {
+
+
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -50,7 +58,7 @@ class _MainHomeState extends State<MainHome> {
         width: Get.width,
         child: RightDrawerMenuWidget(
           onClick: (index1) {
-            print("========$index1");
+
             if (index1 == 0) {
               setState(() {
                 _page = 0;
@@ -299,7 +307,7 @@ class RightDrawerMenuWidget extends StatelessWidget {
                         Get.to(const ChatsScreen(),
                             transition: Transition.leftToRight);
                       } else if (index1 == 5) {
-                        Get.to(const SettingsScreen(),
+                        Get.to(SettingsScreen(),
                             transition: Transition.leftToRight);
                       }
                     },

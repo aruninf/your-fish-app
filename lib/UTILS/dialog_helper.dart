@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -11,7 +12,7 @@ class DialogHelper {
   //show error dialog
   static Future<void> showErrorDialog(
       {String title = 'Error',
-        String? description = 'Something went wrong'}) async {
+      String? description = 'Something went wrong'}) async {
     Get.dialog(
       Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -22,8 +23,8 @@ class DialogHelper {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                    fontSize: 15, fontWeight: FontWeight.w500),
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               ),
               const SizedBox(
                 height: 10,
@@ -57,8 +58,8 @@ class DialogHelper {
 
   static Future<void> showPermissionDialog(
       {String title = 'Permission',
-        String? description =
-        'You have permanently denied all permissions give permission in app setting'}) async {
+      String? description =
+          'You have permanently denied all permissions give permission in app setting'}) async {
     Get.dialog(
       Dialog(
         child: Padding(
@@ -147,12 +148,12 @@ class DialogHelper {
                   onTap: () async {
                     if (Platform.isAndroid) {
                       bool per =
-                      await PermissionService().requestPermissionPhotos();
+                          await PermissionService().requestPermissionPhotos();
                       if (!per) {
                         openAppSettings();
                       } else {
                         await Consts.imageFromCamera().then(
-                              (value) {
+                          (value) {
                             // print("imageFromGallery=======================$value");
                             return onClick(value);
                           },
@@ -160,7 +161,7 @@ class DialogHelper {
                       }
                     } else {
                       await Consts.imageFromCamera().then(
-                            (value) {
+                        (value) {
                           // print("imageFromGallery=======================$value");
                           return onClick(value);
                         },
@@ -193,7 +194,7 @@ class DialogHelper {
                   onTap: () async {
                     if (Platform.isAndroid) {
                       bool per =
-                      await PermissionService().requestPermissionPhotos();
+                          await PermissionService().requestPermissionPhotos();
                       if (!per) {
                         openAppSettings();
                       } else {

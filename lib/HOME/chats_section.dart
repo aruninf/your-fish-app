@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CHATS/chat_model.dart';
 
-import '../CHATS/one_to_one_chat_screen.dart';
+import '../CHATS/single_chat_page.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
@@ -35,7 +36,6 @@ class _ChatsSectionState extends State<ChatsSection>
     return Scaffold(
       backgroundColor: primaryColor,
       extendBody: false,
-
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -73,7 +73,14 @@ class _ChatsSectionState extends State<ChatsSection>
                 padding: const EdgeInsets.only(
                     top: 8, bottom: 8, left: 12, right: 12),
                 itemBuilder: (context, index) => ListTile(
-                  onTap: () => Get.to(() => const OneToOneChatScreen(),
+                  onTap: () => Get.to(
+                      () => SingleChatPage(
+                            receiver: ReceiverModel(
+                              matchRoomId: "00045$index",receiverId: "9989$index"
+                            ),
+                            image: "https://funylife.in/wp-content/uploads/2023/04/13_Cute-Girl-Pic-WWW.FUNYLIFE.IN_-1024x1024.jpg",
+                            matchName: "Shivani $index",
+                          ),
                       transition: Transition.rightToLeft),
                   dense: true,
                   contentPadding:

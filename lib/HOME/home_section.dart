@@ -11,10 +11,8 @@ import '../UTILS/app_color.dart';
 class HomeSection extends StatelessWidget {
   const HomeSection({super.key});
 
-
   @override
   Widget build(BuildContext context) {
-    //FocusScope.of(context).requestFocus(FocusNode());
     return Scaffold(
       backgroundColor: primaryColor,
       extendBody: true,

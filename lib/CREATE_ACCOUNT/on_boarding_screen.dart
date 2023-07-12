@@ -114,7 +114,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                           curve: Curves.linear,
                         );
                       } else {
-                        Get.to(() => const GetStartScreen(),
+                        Get.to(() =>  GetStartScreen(),
                             transition: Transition.rightToLeft);
                       }
                     },

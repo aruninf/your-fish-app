@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:yourfish/UTILS/app_color.dart';
 
 /// Static Data
 
@@ -183,7 +184,7 @@ List<PostModel> myPostList = [
   PostModel(userName: '@shopie', fishingImage: 'images/my_post_image5.png'),
 ];
 
-class Consts{
+class Consts {
   /// Image Picker ///
   static Future<File?> imageFromGallery() async {
     XFile? pickedFile = await ImagePicker().pickImage(
@@ -213,17 +214,18 @@ class Consts{
     final croppedFile = await ImageCropper().cropImage(
       sourcePath: file!.path,
       compressFormat: ImageCompressFormat.jpg,
-      compressQuality: 80,
+      compressQuality: 70,
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Image Cropper',
-          toolbarColor: Colors.blueAccent,
+          toolbarColor: primaryColor,
           toolbarWidgetColor: Colors.white,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false,
         ),
         IOSUiSettings(
           title: 'Image Cropper',
+
         ),
       ],
     );
@@ -234,7 +236,7 @@ class Consts{
   /// Date Formats //////////////////////////////////////
   static String parseTimeStamp(int value) {
     var date = DateTime.fromMillisecondsSinceEpoch(value).toLocal();
-    var d12 = DateFormat('MMM dd').format(date);
+    var d12 = DateFormat('hh:mm').format(date);
     return d12;
   }
 

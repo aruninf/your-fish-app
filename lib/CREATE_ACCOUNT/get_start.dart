@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CREATE_ACCOUNT/create_account.dart';
@@ -6,10 +8,13 @@ import 'package:yourfish/CUSTOM_WIDGETS/custom_text_style.dart';
 import 'package:yourfish/UTILS/app_color.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
+import '../CONTROLLERS/auth_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 
 class GetStartScreen extends StatelessWidget {
-  const GetStartScreen({super.key});
+  GetStartScreen({super.key});
+
+  final controller = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +47,7 @@ class GetStartScreen extends StatelessWidget {
                     btnBgColor: const Color(0xffC4DAF0),
                     btnTextColor: primaryColor,
                     btnText: "Log In",
-                    onClick: () => Get.to(() => const SignInScreen(),
+                    onClick: () => Get.to(() => SignInScreen(),
                         transition: Transition.rightToLeft),
                   ),
                 ),
@@ -56,7 +61,11 @@ class GetStartScreen extends StatelessWidget {
                     btnBgColor: const Color(0xffC4DAF0),
                     btnTextColor: primaryColor,
                     btnText: "Sign Up",
-                    onClick: () => Get.to(() => const CreateAccountScreen(),
+                    onClick: () => Get.to(
+                        () =>  CreateAccountScreen(
+                              socialId: '',
+                              socialType: 'email',
+                            ),
                         transition: Transition.rightToLeft),
                   ),
                 ),
@@ -76,31 +85,43 @@ class GetStartScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      backgroundColor: const Color(0xffC4DAF0),
-                      child: Image.asset(facebookImg,
-                          color: primaryColor, height: 24, width: 24),
-                    ),
-                    SizedBox(
-                      width: Get.width * 0.02,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: const Color(0xffC4DAF0),
-                      child: Image.asset(googleImg,
-                          color: primaryColor, height: 24, width: 24),
-                    ),
-                    SizedBox(
-                      width: Get.width * 0.02,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: const Color(0xffC4DAF0),
-                      child: Image.asset(
-                        appleImg,
-                        color: primaryColor,
-                        height: 24,
-                        width: 24,
+                    GestureDetector(
+                      onTap: () async => await controller.signInWithFaceBook(),
+                      child: CircleAvatar(
+                        backgroundColor: const Color(0xffC4DAF0),
+                        child: Image.asset(facebookImg,
+                            color: primaryColor, height: 24, width: 24),
                       ),
                     ),
+                    SizedBox(
+                      width: Get.width * 0.02,
+                    ),
+                    GestureDetector(
+                      onTap: () async => await controller.signInWithGoogle(),
+                      child: CircleAvatar(
+                        backgroundColor: const Color(0xffC4DAF0),
+                        child: Image.asset(googleImg,
+                            color: primaryColor, height: 24, width: 24),
+                      ),
+                    ),
+                    SizedBox(
+                      width: Platform.isIOS ? Get.width * 0.02 : 0,
+                    ),
+                    Platform.isIOS
+                        ? GestureDetector(
+                            onTap: () async =>
+                                await controller.signInWithApple(),
+                            child: CircleAvatar(
+                              backgroundColor: const Color(0xffC4DAF0),
+                              child: Image.asset(
+                                appleImg,
+                                color: primaryColor,
+                                height: 24,
+                                width: 24,
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
                 SizedBox(

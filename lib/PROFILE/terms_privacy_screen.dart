@@ -14,24 +14,6 @@ class PrivacyAndTermsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   titleSpacing: 0,
-      //   title:  Text(
-      //     title,style: const TextStyle(
-      //       fontSize: 16,fontFamily: 'Rodetta',
-      //       color: secondaryColor
-      //   ),),
-      //
-      //   leading: IconButton(
-      //     onPressed: () => Get.back(),
-      //     icon: const Icon(
-      //       Icons.arrow_back_ios_new_rounded,
-      //       color: fishColor,
-      //     ),
-      //   ),
-      // ),
-
       body: SafeArea(
         child: Column(
           children: [

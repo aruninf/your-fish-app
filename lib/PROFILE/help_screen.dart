@@ -5,34 +5,15 @@ import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../UTILS/app_color.dart';
 
-class HelpSupportScreen extends StatefulWidget {
+
+
+class HelpSupportScreen extends StatelessWidget {
   const HelpSupportScreen({super.key});
-
-  @override
-  State<HelpSupportScreen> createState() => _HelpSupportScreenState();
-}
-
-class _HelpSupportScreenState extends State<HelpSupportScreen> {
-  bool isLocationOn = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   titleSpacing: 0,
-      //   title: const Text(
-      //     "Help",style: TextStyle(
-      //       fontSize: 16,fontFamily: 'Rodetta',
-      //       color: secondaryColor
-      //   ),),
-      //   leading: IconButton(
-      //     onPressed: ()=> Get.back(),
-      //     icon: const Icon(   Icons.arrow_back_ios_new_rounded,
-      //       color: fishColor,),
-      //   ),
-      // ),
       body: SafeArea(
         child: Column(
           children: [

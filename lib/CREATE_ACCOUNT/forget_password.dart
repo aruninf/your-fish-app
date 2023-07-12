@@ -17,18 +17,6 @@ class ForgotPasswordScreen extends StatelessWidget {
       extendBody: true,
       resizeToAvoidBottomInset: false,
       backgroundColor: primaryColor,
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   centerTitle: true,
-      //   title: Image.asset(fishTextImage,height: 60,width: 100,color: btnColor,),
-      //   leading: IconButton(
-      //     icon: const Icon(
-      //       Icons.arrow_back_ios_new_rounded,
-      //       color: fishColor,
-      //     ),
-      //     onPressed: () => Get.back(),
-      //   ),
-      // ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -82,7 +70,7 @@ class ForgotPasswordScreen extends StatelessWidget {
           btnBgColor: fishColor,
           btnTextColor: primaryColor,
           btnText: "Confirm",
-          onClick: () => Get.to(() => const UploadProfilePicture(),
+          onClick: () => Get.to(() =>  UploadProfilePicture(data: null),
               transition: Transition.rightToLeft),
         ),
       ),

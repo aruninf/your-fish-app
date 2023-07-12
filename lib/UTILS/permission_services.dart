@@ -1,16 +1,10 @@
-import 'dart:io';
-
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionService {
-
   List<Permission> photos = [
     Permission.storage,
     Permission.camera,
   ];
-
-
-
 
   Future<void> askCamera() async {
     var activityRecognitionStatus = await Permission.camera.status;
@@ -36,7 +30,6 @@ class PermissionService {
     }
   }
 
-
   Future<bool> requestPermissionPhotos() async {
     bool permission = false;
     try {
@@ -46,11 +39,9 @@ class PermissionService {
           await photos.request();
           permission = false;
           //print('requestPermission=============isDenied');
-
         } else {
           permission = true;
           //print('requestPermission=============Granted');
-
         }
       }
     } catch (e) {
@@ -60,5 +51,4 @@ class PermissionService {
 
     return permission;
   }
-
 }

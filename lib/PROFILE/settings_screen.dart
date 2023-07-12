@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CONTROLLERS/auth_controller.dart';
+import 'package:yourfish/CONTROLLERS/setting_controller.dart';
+import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/PROFILE/notificatios_screen.dart';
 import 'package:yourfish/PROFILE/terms_privacy_screen.dart';
 
@@ -9,46 +12,16 @@ import '../UTILS/app_color.dart';
 import 'faq_screen.dart';
 import 'help_screen.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
 
-  @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
 
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool isLocationOn = false;
-  var selectedCategories = [];
-  late List<String> listOfSettings = [
-    "Notifications",
-    "Invite Friends",
-    "Terms & Conditions",
-    "Privacy Policy",
-    "FAQ's",
-    "Contact Us"
-  ];
+class SettingsScreen extends StatelessWidget {
+  SettingsScreen({super.key});
+  final controller=Get.put(SettingController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   titleSpacing: 0,
-      //   title: const Text(
-      //     "Settings",style: TextStyle(
-      //       fontSize: 16,fontFamily: 'Rodetta',
-      //       color: secondaryColor
-      //   ),),
-      //
-      //   leading: IconButton(
-      //     onPressed: () => Get.back(),
-      //     icon: const Icon(
-      //       Icons.arrow_back_ios_new_rounded,
-      //       color: fishColor,
-      //     ),
-      //   ),
-      // ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -101,8 +74,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Expanded(
               child: ListView.builder(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                itemCount: listOfSettings.length,
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                itemCount: controller.listOfSettings.length,
                 itemBuilder: (context, index) => Container(
                   margin: const EdgeInsets.only(top: 16),
                   decoration: BoxDecoration(
@@ -111,32 +84,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onTap: () {
                       index == 0
                           ? Get.to(const NotificationScreen(),
-                              transition: Transition.rightToLeft)
+                          transition: Transition.rightToLeft)
                           : index == 1
-                              ? shareApp()
-                              : index == 2
-                                  ? Get.to(
-                                      const PrivacyAndTermsScreen(
-                                        title: "Terms & Conditions",
-                                      ),
-                                      transition: Transition.rightToLeft)
-                                  : index == 3
-                                      ? Get.to(
-                                          const PrivacyAndTermsScreen(
-                                            title: "Privacy Policy",
-                                          ),
-                                          transition: Transition.rightToLeft)
-                                      : index == 4
-                                          ? Get.to(const FAQScreen(),
-                                              transition:
-                                                  Transition.rightToLeft)
-                                          : Get.to(const HelpSupportScreen(),
-                                              transition:
-                                                  Transition.rightToLeft);
+                          ? shareApp()
+                          : index == 2
+                          ? Get.to(
+                          const PrivacyAndTermsScreen(
+                            title: "Terms & Conditions",
+                          ),
+                          transition: Transition.rightToLeft)
+                          : index == 3
+                          ? Get.to(
+                          const PrivacyAndTermsScreen(
+                            title: "Privacy Policy",
+                          ),
+                          transition: Transition.rightToLeft)
+                          : index == 4
+                          ? Get.to( FAQScreen(),
+                          transition:
+                          Transition.rightToLeft)
+                          : Get.to(const HelpSupportScreen(),
+                          transition:
+                          Transition.rightToLeft);
                     },
                     dense: true,
                     title: CustomText(
-                      text: listOfSettings[index],
+                      text: controller.listOfSettings[index],
                       color: primaryColor,
                       sizeOfFont: 16,
                       weight: FontWeight.w700,
@@ -162,11 +135,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               message: "Are you sure want to logout?");
                         },
                         style: TextButton.styleFrom(
-                            // shape: RoundedRectangleBorder(
-                            //     side: const BorderSide(
-                            //         width: 1.5, color: secondaryColor),
-                            //     borderRadius: BorderRadius.circular(4)
-                            // )
+                          // shape: RoundedRectangleBorder(
+                          //     side: const BorderSide(
+                          //         width: 1.5, color: secondaryColor),
+                          //     borderRadius: BorderRadius.circular(4)
+                          // )
                             alignment: Alignment.centerLeft),
                         child: const CustomText(
                           text: "Log out",
@@ -187,11 +160,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               message: "Are you sure want to delete account?");
                         },
                         style: TextButton.styleFrom(
-                            // shape: RoundedRectangleBorder(
-                            //     side: const BorderSide(
-                            //         width: 1.5, color: secondaryColor),
-                            //     borderRadius: BorderRadius.circular(4)
-                            // )
+                          // shape: RoundedRectangleBorder(
+                          //     side: const BorderSide(
+                          //         width: 1.5, color: secondaryColor),
+                          //     borderRadius: BorderRadius.circular(4)
+                          // )
                             alignment: Alignment.centerRight),
                         child: const CustomText(
                           text: "Delete Account",
@@ -276,7 +249,7 @@ customDialog({String? title, String? message, String? confirmBtnText}) {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            onPressed: () => Get.back(),
+                            onPressed: () =>Get.find<AuthController>().logoutUser(),
                             child: Text(
                               '$confirmBtnText',
                               style: const TextStyle(color: Colors.white),

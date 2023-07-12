@@ -139,7 +139,7 @@ class _SelectFishingLocationState extends State<SelectFishingLocation> {
           btnBgColor: fishColor,
           btnTextColor: primaryColor,
           btnText: "NEXT",
-          onClick: () => Get.to(() => const SelectFishingCategory(),
+          onClick: () => Get.to(() =>  SelectFishingCategory(),
               transition: Transition.rightToLeft),
         ),
       ),

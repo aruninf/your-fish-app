@@ -8,83 +8,15 @@ import '../CUSTOM_WIDGETS/custom_search_field.dart';
 import '../UTILS/app_color.dart';
 import '../UTILS/consts.dart';
 
-class SelectFishYouExperience extends StatefulWidget {
+
+class SelectFishYouExperience extends StatelessWidget {
   const SelectFishYouExperience({super.key});
-
-  @override
-  State<SelectFishYouExperience> createState() =>
-      _SelectFishYouExperienceState();
-}
-
-class _SelectFishYouExperienceState extends State<SelectFishYouExperience> {
-  Widget appBarTitle = const Text(
-    "Search",
-    style: TextStyle(color: Colors.white, fontSize: 12),
-  );
-  Icon actionIcon = const Icon(
-    Icons.search,
-    color: Colors.white,
-  );
-  final key = GlobalKey<ScaffoldState>();
-  final TextEditingController _searchQuery = TextEditingController();
-  late List<String> _list;
-  String _searchText = "";
-
-  _searchListState() {
-    _searchQuery.addListener(() {
-      if (_searchQuery.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-        });
-      } else {
-        setState(() {
-          _searchText = _searchQuery.text;
-        });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    //init();
-  }
-
-  void _handleSearchStart() {
-    setState(() {});
-  }
-
-  void _handleSearchEnd() {
-    setState(() {
-      actionIcon = const Icon(
-        Icons.search,
-        color: Colors.white,
-      );
-      appBarTitle = const Text(
-        "Search",
-        style: TextStyle(color: Colors.white, fontSize: 12),
-      );
-      _searchQuery.clear();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: false,
       backgroundColor: primaryColor,
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   centerTitle: true,
-      //   title: Image.asset(fishTextImage,height: 60,width: 100,color: secondaryColor,),
-      //   leading: IconButton(
-      //     icon: const Icon(
-      //       Icons.arrow_back_ios_new_rounded,
-      //       color: fishColor,
-      //     ),
-      //     onPressed: () => Get.back(),
-      //   ),
-      // ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

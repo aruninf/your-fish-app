@@ -27,23 +27,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   titleSpacing: 0,
-      //
-      //   title: const Text(
-      //     "Notifications",style: TextStyle(
-      //       fontSize: 16,fontFamily: 'Rodetta',
-      //       color: secondaryColor
-      //   ),),
-      //   leading: IconButton(
-      //     onPressed: ()=> Get.back(),
-      //     icon: const Icon(
-      //       Icons.arrow_back_ios_new_rounded,
-      //       color: fishColor,
-      //     ),
-      //   ),
-      // ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -59,7 +42,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 itemCount: listOfNotification.length,
                 itemBuilder: (context, index) {
-                  bool isNotificationOn = false;
                   return Container(
                     margin: const EdgeInsets.only(top: 16),
                     decoration: BoxDecoration(

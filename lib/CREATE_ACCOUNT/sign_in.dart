@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
 import '../CUSTOM_WIDGETS/common_button.dart';
@@ -10,8 +11,11 @@ import '../UTILS/app_color.dart';
 import 'forget_password.dart';
 
 class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
-
+  SignInScreen({super.key});
+  final _formKey = GlobalKey<FormState>();
+  final email=TextEditingController();
+  final password=TextEditingController();
+  final controller =Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,61 +39,74 @@ class SignInScreen extends StatelessWidget {
           children: [
             SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Column(
-                children: [
-                  Image.asset(
-                    fishTextImage,
-                    height: Get.width * 0.45,
-                    width: Get.width * 0.6,
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.04,
-                  ),
-                  const CommonTextField(
-                    hintText: 'Email',
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.03,
-                  ),
-                  const CommonTextField(
-                    hintText: 'Password',
-                    isPassword: true,
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.03,
-                  ),
-                  SizedBox(
-                    width: Get.width,
-                    height: 55,
-                    child: CommonButton(
-                      btnBgColor: fishColor,
-                      btnTextColor: primaryColor,
-                      btnText: "Log In",
-                      onClick: () => Get.to(() => const MainHome(),
-                          transition: Transition.rightToLeft),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      fishTextImage,
+                      height: Get.width * 0.45,
+                      width: Get.width * 0.6,
                     ),
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.03,
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: TextButton(
-                      onPressed: () => (
-                        Get.to(() => const ForgotPasswordScreen(),
-                            transition: Transition.rightToLeft),
+                    SizedBox(
+                      height: Get.height * 0.04,
+                    ),
+                    CommonTextField(
+                      controller: email,
+                      hintText: 'Email',
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.03,
+                    ),
+                     CommonTextField(
+                      controller: password,
+                      hintText: 'Password',
+                      isPassword: true,
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.03,
+                    ),
+                    SizedBox(
+                      width: Get.width,
+                      height: 55,
+                      child: CommonButton(
+                        btnBgColor: fishColor,
+                        btnTextColor: primaryColor,
+                        btnText: "Log In",
+                        onClick: () {
+                          if (_formKey.currentState!.validate()) {
+                            var data={
+                              "email":email.text.trim(),
+                              "password":password.text.trim()
+                            };
+                            controller.userLogin(data);
+                          }
+
+                        },
                       ),
-                      child: const SizedBox(
-                        child: CustomText(
-                          text: 'Forgot Password?',
-                          color: secondaryColor,
-                          sizeOfFont: 16,
-                          weight: FontWeight.w800,
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.03,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: TextButton(
+                        onPressed: () => (
+                          Get.to(() => const ForgotPasswordScreen(),
+                              transition: Transition.rightToLeft),
+                        ),
+                        child: const SizedBox(
+                          child: CustomText(
+                            text: 'Forgot Password?',
+                            color: secondaryColor,
+                            sizeOfFont: 16,
+                            weight: FontWeight.w800,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Align(

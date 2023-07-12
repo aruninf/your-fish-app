@@ -8,82 +8,14 @@ import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 
-class AddYourGear extends StatefulWidget {
+
+class AddYourGear extends StatelessWidget {
   const AddYourGear({super.key});
-
-  @override
-  State<AddYourGear> createState() => _AddYourGearState();
-}
-
-class _AddYourGearState extends State<AddYourGear> {
-  Widget appBarTitle = const Text(
-    "Search Fish",
-    style: TextStyle(color: Colors.white, fontSize: 12),
-  );
-  Icon actionIcon = const Icon(
-    Icons.search,
-    color: Colors.white,
-  );
-  final key = GlobalKey<ScaffoldState>();
-  final TextEditingController _searchQuery = TextEditingController();
-  late List<String> _list;
-  String _searchText = "";
-
-  _searchListState() {
-    _searchQuery.addListener(() {
-      if (_searchQuery.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-        });
-      } else {
-        setState(() {
-          _searchText = _searchQuery.text;
-        });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    //init();
-  }
-
-  void _handleSearchStart() {
-    setState(() {});
-  }
-
-  void _handleSearchEnd() {
-    setState(() {
-      actionIcon = const Icon(
-        Icons.search,
-        color: Colors.white,
-      );
-      appBarTitle = const Text(
-        "Search Fish",
-        style: TextStyle(color: Colors.white, fontSize: 12),
-      );
-      _searchQuery.clear();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: false,
       backgroundColor: primaryColor,
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   centerTitle: true,
-      //   title: Image.asset(fishTextImage,height: 50,width: 100,color: secondaryColor,),
-      //   leading: IconButton(
-      //     icon: const Icon(
-      //       Icons.arrow_back_ios_new_rounded,
-      //       color: fishColor,
-      //     ),
-      //     onPressed: () => Get.back(),
-      //   ),
-      // ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -98,12 +30,14 @@ class _AddYourGearState extends State<AddYourGear> {
             ),
 
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               child: SizedBox(
                 width: double.infinity,
                 height: 30,
                 child: CommonButton(
-                  onClick: () {},
+                  onClick: () {
+
+                  },
                   btnBgColor: btnColor,
                   btnText: 'Add',
                   btnTextColor: primaryColor,

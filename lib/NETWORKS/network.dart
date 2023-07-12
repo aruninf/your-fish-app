@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' as getx;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:yourfish/CREATE_ACCOUNT/sign_in.dart';
+
 import '../UTILS/dialog_helper.dart';
 import '../UTILS/utils.dart';
-import '../utils/network_strings.dart';
+import 'network_strings.dart';
+
+///💥💥💥Created By Arun Android💥💥💥💥
 
 class Network {
   static Dio? _dio;
@@ -38,23 +40,23 @@ class Network {
     return _cancelRequestToken ??= CancelToken();
   }
 
-  ////////////////// Get Request ///////////////////////
+  ///💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥 Get Request 💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥
 
   Future<Response?> getRequest(
-      {String baseUrl = NetworkStrings.API_BASE_URL,
+      {String baseUrl = API_BASE_URL,
       required String endPoint,
       Map<String, dynamic>? queryParameters}) async {
     Response? response;
-    String? token = await Utility.getStringValue(NetworkStrings.token);
+    String? token = await Utility.getStringValue(tokenKey);
     if (await InternetConnectionChecker().hasConnection) {
       try {
-        _dio?.options.connectTimeout =  Duration(milliseconds: connectTimeOut);
+        _dio?.options.connectTimeout = Duration(milliseconds: connectTimeOut);
         response = await _dio!.get(baseUrl + endPoint,
             queryParameters: queryParameters,
             cancelToken: _cancelRequestToken,
             options: Options(
               headers: {
-                'Accept': NetworkStrings.ACCEPT,
+                'Accept': ACCEPT,
                 'Authorization': token == null ? "" : "Bearer $token",
               },
               sendTimeout: Duration(milliseconds: receivingTimeOut),
@@ -62,10 +64,10 @@ class Network {
             ));
         //print(response);
       } on DioException catch (e) {
-        log("Error :${e.response.toString()}");
+        log("Error 💥💥💥💥💥💥💥💥 :${e.response.toString()}");
         if (e.response?.statusCode == 403) {
           Utility().clearAll();
-          getx.Get.offAll(const SignInScreen());
+          getx.Get.offAll(SignInScreen());
         }
         DialogHelper.showErrorDialog(
             title: "Server response", description: e.response?.data['message']);
@@ -74,12 +76,12 @@ class Network {
       _noInternetConnection();
     }
     print(
-        "API=======${NetworkStrings.API_BASE_URL + endPoint}\n\nrequest======$queryParameters\n\nresponse========== $response");
+        "➡️➡️➡️ API ➡️➡️➡️${API_BASE_URL + endPoint}\n\n➡️➡️➡️ Request ➡️➡️➡️$queryParameters\n\n✅✅✅ Response ✅✅✅$response");
 
     return response;
   }
 
-  ////////////////// Post Request /////////////////////////
+  ///💥💥💥💥💥💥💥💥💥💥💥💥 Post Request 💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥
 
   Future<Response?> postRequest({
     required String endPoint,
@@ -90,28 +92,28 @@ class Network {
       DialogHelper.showLoading();
     }
     Response? response;
-    String? token = await Utility.getStringValue(NetworkStrings.token);
+    String? token = await Utility.getStringValue(tokenKey);
 
     if (await InternetConnectionChecker().hasConnection) {
       try {
         _dio?.options.connectTimeout = Duration(seconds: connectTimeOut);
-        response = await _dio!.post(NetworkStrings.API_BASE_URL + endPoint,
+        response = await _dio!.post(API_BASE_URL + endPoint,
             data: formData,
             cancelToken: _cancelRequestToken,
             options: Options(
                 headers: {
-                  'Accept': NetworkStrings.ACCEPT,
+                  'Accept': ACCEPT,
                   'Authorization': token == null ? "" : "Bearer $token",
                 },
-                sendTimeout:  Duration(milliseconds: receivingTimeOut),
+                sendTimeout: Duration(milliseconds: receivingTimeOut),
                 receiveTimeout: Duration(milliseconds: receivingTimeOut)));
         DialogHelper.hideLoading();
       } on DioException catch (e) {
         DialogHelper.hideLoading();
-        print("$endPoint Dio: ${e.message}" );
+        print("$endPoint Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
         if (e.response?.statusCode == 403) {
           Utility().clearAll();
-          getx.Get.offAll(const SignInScreen());
+          getx.Get.offAll(SignInScreen());
         }
         DialogHelper.showErrorDialog(
             title: "Server response", description: e.response?.data['message']);
@@ -120,12 +122,13 @@ class Network {
       _noInternetConnection();
     }
     print(
-        "API=======${NetworkStrings.API_BASE_URL + endPoint}\n\nrequest======$formData\n\nresponse========== $response");
+        "➡️➡️➡️ API ➡️➡️➡️${API_BASE_URL + endPoint}\n\n➡️➡️➡️ Request ➡️➡️➡️$formData\n\n✅✅✅ Response ✅✅✅$response");
 
     return response;
   }
 
-  ////////////////// Delete Request /////////////////////////
+  ///💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥 Delete Request 💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥
+
   Future<Response?> deleteRequest({
     required String endPoint,
     Map<String, dynamic>? formData,
@@ -135,18 +138,18 @@ class Network {
       DialogHelper.showLoading();
     }
     Response? response;
-    String? token = await Utility.getStringValue(NetworkStrings.token);
+    String? token = await Utility.getStringValue(tokenKey);
 
     if (await InternetConnectionChecker().hasConnection) {
       try {
         _dio?.options.connectTimeout = Duration(milliseconds: connectTimeOut);
-        response = await _dio!.delete(NetworkStrings.API_BASE_URL + endPoint,
+        response = await _dio!.delete(API_BASE_URL + endPoint,
             data: formData,
             queryParameters: formData,
             cancelToken: _cancelRequestToken,
             options: Options(
                 headers: {
-                  'Accept': NetworkStrings.ACCEPT,
+                  'Accept': ACCEPT,
                   'Authorization': token == null ? "" : "Bearer $token",
                 },
                 sendTimeout: Duration(milliseconds: receivingTimeOut),
@@ -154,10 +157,10 @@ class Network {
         DialogHelper.hideLoading();
       } on DioException catch (e) {
         DialogHelper.hideLoading();
-        print("$endPoint Dio: ${e.message}" );
+        print("$endPoint Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
         if (e.response?.statusCode == 403) {
           Utility().clearAll();
-          getx.Get.offAll(const SignInScreen());
+          getx.Get.offAll(SignInScreen());
         }
         DialogHelper.showErrorDialog(
             title: "Server response", description: e.response?.data['message']);
@@ -166,37 +169,36 @@ class Network {
       _noInternetConnection();
     }
     print(
-        "API=======${NetworkStrings.API_BASE_URL + endPoint}\n\nrequest======$formData\n\nresponse========== $response");
-
+        "➡️➡️➡️ API ➡️➡️➡️${API_BASE_URL + endPoint}\n\n➡️➡️➡️ Request ➡️➡️➡️$formData\n\n✅✅✅ Response ✅✅✅$response");
     return response;
   }
 
-  ////////////////// Put Request /////////////////////////
+  ///💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥 Put Request 💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥
   Future<Response?> putRequest(
       {required String endPoint, Map<String, dynamic>? queryParameters}) async {
     Response? response;
-    String? token = await Utility.getStringValue(NetworkStrings.token);
+    String? token = await Utility.getStringValue(tokenKey);
 
     if (await InternetConnectionChecker().hasConnection) {
       try {
         _dio?.options.connectTimeout = Duration(milliseconds: connectTimeOut);
-        response = await _dio!.put(NetworkStrings.API_BASE_URL + endPoint,
+        response = await _dio!.put(API_BASE_URL + endPoint,
             //queryParameters: queryParameters,
             data: queryParameters,
             cancelToken: _cancelRequestToken,
             options: Options(
                 headers: {
-                  'Accept': NetworkStrings.ACCEPT,
+                  'Accept': ACCEPT,
                   'Authorization': token == null ? "" : "Bearer $token",
                 },
                 sendTimeout: Duration(milliseconds: receivingTimeOut),
                 receiveTimeout: Duration(milliseconds: receivingTimeOut)));
         //print(response);
       } on DioException catch (e) {
-        print("$endPoint Dio: ${e.message}" );
+        print("$endPoint Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
         if (e.response?.statusCode == 403) {
           Utility().clearAll();
-          getx.Get.offAll(const SignInScreen());
+          getx.Get.offAll(SignInScreen());
         }
         DialogHelper.showErrorDialog(
             title: "Error", description: e.response?.data['message']);
@@ -211,26 +213,27 @@ class Network {
     return response;
   }
 
+  ///💥💥💥💥💥💥💥💥💥💥💥💥 Upload File 💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥
+
   Future<String?> uploadFile(File file, String type) async {
     String fileName = file.path.split('/').last;
     FormData formData = FormData.fromMap({
-      "file": await MultipartFile.fromFile(file.path, filename: fileName),
+      "image": await MultipartFile.fromFile(file.path, filename: fileName),
       "type": type
     });
     DialogHelper.showLoading();
     Response? response;
-    String? token = await Utility.getStringValue(NetworkStrings.token);
+    String? token = await Utility.getStringValue(tokenKey);
 
     if (await InternetConnectionChecker().hasConnection) {
       try {
         _dio?.options.connectTimeout = Duration(milliseconds: connectTimeOut);
-        response = await _dio!.post(
-            NetworkStrings.API_BASE_URL + NetworkStrings.uploadFile,
+        response = await _dio!.post(API_BASE_URL + uploadFileApi,
             data: formData,
             cancelToken: _cancelRequestToken,
             options: Options(
               headers: {
-                'Accept': NetworkStrings.ACCEPT,
+                'Accept': ACCEPT,
                 'Authorization': token == null ? "" : "Bearer $token",
               },
               sendTimeout: Duration(milliseconds: receivingTimeOut),
@@ -238,10 +241,12 @@ class Network {
             ));
         DialogHelper.hideLoading();
       } on DioException catch (e) {
+        print("$uploadFileApi Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
+
         DialogHelper.hideLoading();
         if (e.response?.statusCode == 403) {
           Utility().clearAll();
-          getx.Get.offAll(const SignInScreen());
+          getx.Get.offAll(SignInScreen());
         }
         DialogHelper.showErrorDialog(
             title: "Server response", description: e.response?.data['message']);
@@ -249,57 +254,14 @@ class Network {
     } else {
       _noInternetConnection();
     }
-   // print('=====================${response?.data["data"]["url"]}');
-    return response?.data["data"]["url"];
+    print("$uploadFileApi Url: 💥💥💥💥💥💥💥💥💥💥💥💥 ${response?.data["data"]}");
+    return response?.data["data"];
   }
 
-  Future<void> createReel(File file, dynamic payload,Function(int a,int b) call) async {
-    String fileName = file.path.split('/').last;
-    FormData formData = FormData.fromMap({
-      "video_file": await MultipartFile.fromFile(file.path, filename: fileName),
-      /* "title": payload['title'],
-      "content": payload['content'],
-      "tag": payload['tag'],*/
-      ...payload
-    });
-    //DialogHelper.showLoading();
-    Response? response;
-    String? token = await Utility.getStringValue(NetworkStrings.token);
-
-    if (await InternetConnectionChecker().hasConnection) {
-      try {
-        _dio?.options.connectTimeout = Duration(milliseconds: connectTimeOut);
-        response = await _dio!.post(
-            NetworkStrings.API_BASE_URL + NetworkStrings.createReel,
-            data: formData,
-            cancelToken: _cancelRequestToken, onSendProgress:call ,
-            options: Options(
-              headers: {
-                'Accept': NetworkStrings.ACCEPT,
-                'Authorization': token == null ? "" : "Bearer $token",
-              },
-              sendTimeout: Duration(milliseconds: receivingTimeOut),
-              receiveTimeout: Duration(milliseconds: receivingTimeOut),
-            ));
-        //DialogHelper.hideLoading();
-      } on DioException catch (e) {
-        DialogHelper.hideLoading();
-        if (e.response?.statusCode == 403) {
-          Utility().clearAll();
-          getx.Get.offAll(const SignInScreen());
-        }
-        DialogHelper.showErrorDialog(
-            title: "Server response", description: e.response?.data['message']);
-      }
-    } else {
-      _noInternetConnection();
-    }
-    print('=====================${response?.data}');
-
-  }
-
-  ////////////////// No Internet Connection /////////////////////
+  /// 💥💥💥💥💥💥💥💥💥💥💥💥 No Internet Connection 💥💥💥💥💥💥💥💥💥💥💥💥
   void _noInternetConnection() {
-    DialogHelper.showErrorDialog( title : "Internet Connection!",description : NetworkStrings.NO_INTERNET_CONNECTION);
+    DialogHelper.showErrorDialog(
+        title: "Connection Error!",
+        description: '💥💥💥💥No Internet Connection!💥💥💥💥');
   }
 }

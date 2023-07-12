@@ -7,58 +7,58 @@ import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_field.dart';
 import '../UTILS/app_color.dart';
+import '../UTILS/dialog_helper.dart';
 
 class CreatePasswordScreen extends StatelessWidget {
-  const CreatePasswordScreen({super.key});
+  CreatePasswordScreen({super.key,required this.data});
+  final dynamic data;
+  final _formKey=GlobalKey<FormState>();
 
+  final password=TextEditingController();
+  final confirmPassword=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
       resizeToAvoidBottomInset: false,
       backgroundColor: primaryColor,
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   centerTitle: true,
-      //   title: Image.asset(fishTextImage,height: 60,width: 100,color: btnColor,),
-      //   leading: IconButton(
-      //     icon: const Icon(
-      //       Icons.arrow_back_ios_new_rounded,
-      //       color: fishColor,
-      //     ),
-      //     onPressed: () => Get.back(),
-      //   ),
-      // ),
       body: SafeArea(
         child: Stack(
           children: [
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomAppBar(heading: 'Set Your Password', logoColor: btnColor),
-                SizedBox(
-                  height: 16,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CommonTextField(
-                        hintText: 'Password',
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      CommonTextField(
-                        hintText: 'Confirm Password',
-                      ),
-                    ],
+            Form(
+              key: _formKey,
+              child:  Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CustomAppBar(heading: 'Set Your Password', logoColor: btnColor),
+                  const SizedBox(
+                    height: 16,
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonTextField(
+                          hintText: 'Password',
+                          controller: password,
+                          isPassword: true,
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        CommonTextField(
+                          hintText: 'Confirm Password',
+                          controller: confirmPassword,
+                          isPassword: true,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
             Positioned(
               bottom: Get.height * 0.10,
@@ -82,8 +82,21 @@ class CreatePasswordScreen extends StatelessWidget {
           btnBgColor: fishColor,
           btnTextColor: primaryColor,
           btnText: "NEXT",
-          onClick: () => Get.to(() => const UploadProfilePicture(),
-              transition: Transition.rightToLeft),
+          onClick: () {
+            if(_formKey.currentState!.validate()){
+              if((password.text??'')!=confirmPassword.text){
+                DialogHelper.showErrorDialog(description: "Confirm password not same",title: '');
+                return;
+              }
+              var  newData={
+                'password':confirmPassword.text.trim(),
+                ...data
+              };
+              Get.to(() =>  UploadProfilePicture(data: newData,),
+                  transition: Transition.rightToLeft);
+            }
+
+          },
         ),
       ),
     );

@@ -16,21 +16,6 @@ class BlogsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   title:  const Text(
-      //     "Fish Blog",style: TextStyle(
-      //       fontSize: 16,fontFamily: 'Rodetta',
-      //       color: secondaryColor
-      //   ),),
-      //   leading: IconButton(
-      //     icon: const Icon(
-      //       Icons.arrow_back_ios_new_rounded,
-      //       color: fishColor,
-      //     ),
-      //     onPressed: () => Get.back(),
-      //   ),
-      // ),
       body: SafeArea(
         child: Column(
           children: [
@@ -44,7 +29,7 @@ class BlogsScreen extends StatelessWidget {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
                     Row(

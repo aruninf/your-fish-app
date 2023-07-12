@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CONTROLLERS/user_controller.dart';
 
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
@@ -8,104 +9,15 @@ import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 import 'add_your_gear.dart';
 
-class SelectFishingCategory extends StatefulWidget {
-  const SelectFishingCategory({super.key});
+class SelectFishingCategory extends StatelessWidget {
+  SelectFishingCategory({super.key});
 
-  @override
-  State<SelectFishingCategory> createState() => _SelectFishingCategoryState();
-}
-
-class _SelectFishingCategoryState extends State<SelectFishingCategory> {
-  Widget appBarTitle = const Text(
-    "Search Category",
-    style: TextStyle(color: Colors.white, fontSize: 12),
-  );
-  Icon actionIcon = const Icon(
-    Icons.search,
-    color: Colors.white,
-  );
-  final key = GlobalKey<ScaffoldState>();
-  final TextEditingController _searchQuery = TextEditingController();
-  late List<String> listOfCategory = [
-    "Spear1",
-    "Line Fishing1",
-    "Spear2",
-    "Line Fishing2",
-    "Spear3",
-    "Line3",
-    "Spear4",
-    "Line Fishing3",
-    "Spear5",
-    "Line4",
-    "Spear6",
-    "Line Fishing4",
-    "Line3",
-    "Spear4",
-    "Line Fishing3",
-    "Spear5",
-    "Line4",
-    "Spear6",
-    "Line Fishing4",
-    "Spear"
-  ];
-  var selectedCategories = [];
-  String _searchText = "";
-
-  _searchListState() {
-    _searchQuery.addListener(() {
-      if (_searchQuery.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-        });
-      } else {
-        setState(() {
-          _searchText = _searchQuery.text;
-        });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    //init();
-  }
-
-  void _handleSearchStart() {
-    setState(() {});
-  }
-
-  void _handleSearchEnd() {
-    setState(() {
-      actionIcon = const Icon(
-        Icons.search,
-        color: Colors.white,
-      );
-      appBarTitle = const Text(
-        "Search Category",
-        style: TextStyle(color: Colors.white, fontSize: 12),
-      );
-      _searchQuery.clear();
-    });
-  }
-
+  final controller =Get.put(UserController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: false,
       backgroundColor: primaryColor,
-      // appBar: AppBar(
-      //   backgroundColor: primaryColor,
-      //   centerTitle: true,
-      //   title: Image.asset(fishTextImage,height: 50,width: 100,color: secondaryColor,),
-      //   leading: IconButton(
-      //     icon: const Icon(
-      //       Icons.arrow_back_ios_new_rounded,
-      //       color: fishColor,
-      //     ),
-      //     onPressed: () => Get.back(),
-      //   ),
-      // ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -132,38 +44,36 @@ class _SelectFishingCategoryState extends State<SelectFishingCategory> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Wrap(
                   children: List.generate(
-                      listOfCategory.length,
+                      controller.listOfCategory.length,
                       (index) => Container(
                             margin: const EdgeInsets.only(top: 12, left: 16),
                             decoration: BoxDecoration(
-                              color: selectedCategories
-                                      .contains(listOfCategory[index])
+                              color: controller.selectedCategories
+                                      .contains(controller.listOfCategory[index])
                                   ? secondaryColor
                                   : btnColor,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: InkWell(
                               onTap: () {
-                                setState(() {
-                                  if (selectedCategories
-                                      .contains(listOfCategory[index])) {
-                                    selectedCategories
-                                        .remove(listOfCategory[index]);
-                                  } else {
-                                    selectedCategories
-                                        .add(listOfCategory[index]);
-                                  }
-                                });
+                                if (controller.selectedCategories
+                                    .contains(controller.listOfCategory[index])) {
+                                  controller.selectedCategories
+                                      .remove(controller.listOfCategory[index]);
+                                } else {
+                                  controller.selectedCategories
+                                      .add(controller.listOfCategory[index]);
+                                }
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 14, vertical: 12),
                                 child: CustomText(
-                                  text: listOfCategory[index],
+                                  text: controller.listOfCategory[index],
                                   sizeOfFont: 16,
                                   weight: FontWeight.bold,
-                                  color: selectedCategories
-                                          .contains(listOfCategory[index])
+                                  color: controller.selectedCategories
+                                          .contains(controller.listOfCategory[index])
                                       ? fishColor
                                       : primaryColor,
                                 ),

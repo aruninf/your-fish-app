@@ -120,7 +120,7 @@ class MyFutureFishWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  fishData[index].fishName ?? '',
+                  fishData[index].fishName ?? 'Your fish name',
                   maxLines: 1,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
