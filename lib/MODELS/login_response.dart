@@ -1,18 +1,18 @@
-class LoginResponse {
+class UserResponse {
   bool? status;
   String? message;
   int? statusCode;
-  LoginData? data;
+  UserData? data;
   String? token;
 
-  LoginResponse(
+  UserResponse(
       {this.status, this.message, this.statusCode, this.data, this.token});
 
-  LoginResponse.fromJson(Map<String, dynamic> json) {
+  UserResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     statusCode = json['status_code'];
-    data = json['data'] != null ?  LoginData.fromJson(json['data']) : null;
+    data = json['data'] != null ?  UserData.fromJson(json['data']) : null;
     token = json['token'];
   }
 
@@ -29,7 +29,7 @@ class LoginResponse {
   }
 }
 
-class LoginData {
+class UserData {
   int? id;
   String? userType;
   String? name;
@@ -48,7 +48,7 @@ class LoginData {
   String? createdAt;
   String? updatedAt;
 
-  LoginData(
+  UserData(
       {this.id,
         this.userType,
         this.name,
@@ -67,7 +67,7 @@ class LoginData {
         this.createdAt,
         this.updatedAt});
 
-  LoginData.fromJson(Map<String, dynamic> json) {
+  UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userType = json['user_type'];
     name = json['name'];

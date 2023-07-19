@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CONTROLLERS/post_controller.dart';
+import 'package:yourfish/CONTROLLERS/setting_controller.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_text_style.dart';
 import 'package:yourfish/HOME/chats_section.dart';
 import 'package:yourfish/HOME/home_section.dart';
@@ -12,7 +14,7 @@ import 'package:yourfish/UTILS/app_color.dart';
 import '../CHATS/chats_screen.dart';
 import '../CREATE_POST/add_fish_screen.dart';
 import '../PROFILE/my_map_screen.dart';
-import '../USER_BLOGS/blog_screenn.dart';
+import '../USER_BLOGS/blog_screen.dart';
 import '../UTILS/app_images.dart';
 
 class MainHome extends StatefulWidget {
@@ -27,6 +29,8 @@ class _MainHomeState extends State<MainHome> {
 
   int _page = 0;
   late List<String> address;
+  var sController = Get.put(SettingController());
+  var postController = Get.put(PostController());
 
   void _onItemTapped(int index) async {
     if (index == 2) {
@@ -35,14 +39,23 @@ class _MainHomeState extends State<MainHome> {
       setState(() {
         _page = index;
       });
+      index == 1
+          ? postController.getPosts()
+          : index == 2
+              ? postController.getChatsUser()
+              : index == 4
+                  ? postController.getUserData()
+                  : postController.getUserData();
     }
   }
 
+
+
   @override
   void initState() {
-
-
-    // TODO: implement initState
+    Future.delayed(Duration.zero,() async {
+      postController.getPosts();
+    },);
     super.initState();
   }
 
@@ -50,7 +63,7 @@ class _MainHomeState extends State<MainHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      extendBody: true,
+      extendBody: false,
       resizeToAvoidBottomInset: false,
       backgroundColor: primaryColor,
       endDrawer: Drawer(
@@ -58,7 +71,6 @@ class _MainHomeState extends State<MainHome> {
         width: Get.width,
         child: RightDrawerMenuWidget(
           onClick: (index1) {
-
             if (index1 == 0) {
               setState(() {
                 _page = 0;
@@ -135,7 +147,7 @@ class _MainHomeState extends State<MainHome> {
         child: IndexedStack(
           index: _page,
           children: [
-            const HomeSection(),
+            HomeSection(),
             const ChatsSection(),
             const SizedBox(),
             const SearchSection(),
@@ -294,14 +306,14 @@ class RightDrawerMenuWidget extends StatelessWidget {
                     onTap: () {
                       Get.back();
                       if (index1 == 2) {
-                        Get.to(const MyProfileMapWidget(isTopSpots: true),
+                        Get.to( MyProfileMapWidget(isTopSpots: true),
                             transition: Transition.leftToRight);
                       } else if (index1 == 0) {
                         onClick(0);
                       } else if (index1 == 1) {
                         onClick(1);
                       } else if (index1 == 3) {
-                        Get.to(const BlogsScreen(),
+                        Get.to( BlogsScreen(),
                             transition: Transition.leftToRight);
                       } else if (index1 == 4) {
                         Get.to(const ChatsScreen(),

@@ -9,7 +9,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/CREATE_ACCOUNT/get_start.dart';
-import 'package:yourfish/CREATE_ACCOUNT/sign_in.dart';
+import 'package:yourfish/CREATE_ACCOUNT/select_fish_interest.dart';
 import 'package:yourfish/HOME/main_home.dart';
 
 import '../CREATE_ACCOUNT/create_account.dart';
@@ -25,21 +25,31 @@ class AuthController extends GetxController {
   late String? fcmToken;
   late String? socialType;
   late String? currentTimeZone;
+  var isPasswordVisible = true.obs;
+  var isPasswordVisible1 = true.obs;
 
   @override
   void onReady() async {
     bool? isLogin = await Utility().getBoolValue(isLoginKey);
-    if (isLogin != null && isLogin) {
-      Get.offAll(()=> const MainHome(), transition: Transition.rightToLeft);
+    String? token = await Utility.getStringValue(tokenKey);
+
+    if (token != null) {
+      if (isLogin != null && isLogin) {
+        Get.offAll(() => const MainHome(), transition: Transition.rightToLeft);
+      } else {
+        Get.offAll(() => SelectFishInterest(),
+            transition: Transition.rightToLeft);
+      }
     }
-    await getToken();
+    //await getToken();
+    //String? token = await Utility.getStringValue(tokenKey);
+    print("token==========$token");
     super.onReady();
   }
 
   Future<void> getToken() async {
     // Get firebase token
     mess.FirebaseMessaging.instance.getToken().then((token) {
-      Utility.setStringValue(tokenKey, token ?? "");
       fcmToken = token;
       print("fcmToken==============$fcmToken");
     });
@@ -75,7 +85,7 @@ class AuthController extends GetxController {
             await firebaseUser.updateDisplayName(displayName);
           }
 
-          userSocialLogin(userCredential.user,'apple');
+          userSocialLogin(userCredential.user, 'apple');
         } on FirebaseAuthException catch (error) {
           print(error.message);
           Get.snackbar('Error!', 'Apple authorization failed: ${error.message}',
@@ -97,33 +107,33 @@ class AuthController extends GetxController {
   ///💥💥💥💥💥💥💥💥💥💥💥 Sign In With FaceBook 💥💥💥💥💥💥💥💥💥💥💥💥💥
 
   Future<void> signInWithFaceBook() async {
-    try {
-      final LoginResult result = await FacebookAuth.instance.login();
-      if (result.status == LoginStatus.success) {
-        // you are logged in, get the access token.
-        final AccessToken accessToken = result.accessToken!;
-
-        // sign into Firebase Auth
-        var userCredential = await FirebaseAuth.instance.signInWithCredential(
-            FacebookAuthProvider.credential(accessToken.token));
-        userSocialLogin(userCredential.user,'facebook');
-      }
-      if (result.status == LoginStatus.cancelled) {
-        print('Login cancelled');
-        Get.snackbar('Error!', 'Login cancelled',
-            colorText: Colors.orange, snackPosition: SnackPosition.TOP);
-      }
-      if (result.status == LoginStatus.failed) {
-        print('💥 Login failed!');
-        print(result.message);
-        Get.snackbar('Error!', 'Login Failed',
-            colorText: Colors.orange, snackPosition: SnackPosition.TOP);
-      }
-    } catch (err) {
-      print(err.toString());
-      Get.snackbar('Error!', err.toString(),
-          colorText: Colors.orange, snackPosition: SnackPosition.TOP);
-    }
+    // try {
+    //   final LoginResult result = await FacebookAuth.instance.login();
+    //   if (result.status == LoginStatus.success) {
+    //     // you are logged in, get the access token.
+    //     final AccessToken accessToken = result.accessToken!;
+    //
+    //     // sign into Firebase Auth
+    //     var userCredential = await FirebaseAuth.instance.signInWithCredential(
+    //         FacebookAuthProvider.credential(accessToken.token));
+    //     userSocialLogin(userCredential.user, 'facebook');
+    //   }
+    //   if (result.status == LoginStatus.cancelled) {
+    //     print('Login cancelled');
+    //     Get.snackbar('Error!', 'Login cancelled',
+    //         colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+    //   }
+    //   if (result.status == LoginStatus.failed) {
+    //     print('💥 Login failed!');
+    //     print(result.message);
+    //     Get.snackbar('Error!', 'Login Failed',
+    //         colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+    //   }
+    // } catch (err) {
+    //   print(err.toString());
+    //   Get.snackbar('Error!', err.toString(),
+    //       colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+    // }
     Get.snackbar('Error!', 'Login Failed',
         colorText: Colors.orange, snackPosition: SnackPosition.TOP);
   }
@@ -148,7 +158,7 @@ class AuthController extends GetxController {
       // Once signed in, return the UserCredential
       var userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      userSocialLogin(userCredential.user,'google');
+      userSocialLogin(userCredential.user, 'google');
     } catch (e) {
       print(e.toString());
       Get.snackbar('Error!', 'Login Failed',
@@ -156,43 +166,62 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> userSocialLogin(User? user,String socialType) async {
+  Future<void> userSocialLogin(User? user, String socialType) async {
     if (user != null) {
       Utility.setStringValue(emailKey, user.email ?? "");
       Utility.setStringValue(nameKey, user.displayName ?? "");
-      dynamic data = {
-        "social_type": socialType,
-        "social_id": user.uid
-      };
+      dynamic data = {"social_type": socialType, "social_id": user.uid};
       var response =
           await Network().postRequest(endPoint: socialLoginApi, formData: data);
       if (response?.data != null) {
-        LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
+        UserResponse loginResponse = UserResponse.fromJson(response?.data);
         if (loginResponse.status ?? false) {
           Utility.setStringValue(tokenKey, loginResponse.token ?? "");
-          Utility().saveBoolValue(isLoginKey, true);
-          Get.off(()=> const MainHome());
-        }else{
-          Get.off(()=> CreateAccountScreen(
-            socialType: socialType,
-            socialId: user.uid,
-          ));
+          if (loginResponse.data?.gearId != null) {
+            Utility().saveBoolValue(isLoginKey, true);
+            Get.offAll(() => const MainHome());
+            Get.snackbar('Login Successfully', '',
+                colorText: Colors.green, snackPosition: SnackPosition.TOP);
+          } else {
+            Get.off(() => SelectFishInterest(),
+                transition: Transition.rightToLeft);
+          }
+        } else {
+          Get.off(() => CreateAccountScreen(
+                socialType: socialType,
+                socialId: user.uid,
+              ));
         }
       }
     }
   }
 
+  Future<void> forgotPassword(String email) async {
+    dynamic data = {
+      "email": email,
+    };
+    var response = await Network()
+        .postRequest(endPoint: forgotPasswordApi, formData: data);
+    if (response?.data != null) {
+      Get.snackbar(response?.data['message'], '',
+          colorText: Colors.green, snackPosition: SnackPosition.TOP);
+    } else {
+      Get.snackbar('Something went wrong!', '',
+          colorText: Colors.deepOrangeAccent, snackPosition: SnackPosition.TOP);
+    }
+  }
+
   Future<void> logoutUser() async {
-    FirebaseAuth.instance.signOut();
     Get.find<UserController>().userLogout();
     Utility().clearAll();
+    FirebaseAuth.instance.signOut();
     Get.offAll(() => GetStartScreen(), transition: Transition.leftToRight);
   }
 
   Future<void> deleteAccount(String reason) async {
-    FirebaseAuth.instance.signOut();
     var para = {"deleteReason": reason};
     Get.find<UserController>().deleteAccount(para);
+    FirebaseAuth.instance.signOut();
     Utility().clearAll();
     Get.offAll(() => GetStartScreen(), transition: Transition.leftToRight);
   }

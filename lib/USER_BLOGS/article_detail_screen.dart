@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/MODELS/article_response.dart';
 import 'package:yourfish/UTILS/app_images.dart';
-import 'package:yourfish/UTILS/app_strings.dart';
 
 import '../UTILS/app_color.dart';
 
-
 class ArticlesDetailScreen extends StatelessWidget {
-  const ArticlesDetailScreen({super.key});
+  const ArticlesDetailScreen({super.key, required this.articleData});
+
+  final ArticleData articleData;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,19 +44,25 @@ class ArticlesDetailScreen extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  fishingImage,
+                child: Image.network(
+                  articleData.title ?? '',
                   height: Get.height * 0.25,
                   width: Get.width,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Image.asset(
+                    fishingImage,
+                    height: Get.height * 0.25,
+                    width: Get.width,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               ListTile(
                 dense: false,
                 contentPadding: EdgeInsets.zero,
-                title: const Text(
-                  "Top Spots on the Gold Coast this summer",
-                  style: TextStyle(
+                title: Text(
+                  articleData.title ?? '',
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: secondaryColor,
@@ -74,11 +82,11 @@ class ArticlesDetailScreen extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              const Text(
-                privacyText,
+              Text(
+                articleData.article ?? '',
                 textAlign: TextAlign.justify,
                 style:
-                    TextStyle(color: Colors.white, height: 1.5, fontSize: 14),
+                    const TextStyle(color: Colors.white, height: 1.5, fontSize: 14),
               )
             ],
           ),

@@ -7,22 +7,18 @@ import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 
-class FaqModel {
-  String? title = "";
-  String? subTitle = "";
-
-  FaqModel({this.title, this.subTitle});
-}
-
-
 
 class FAQScreen extends StatelessWidget {
   FAQScreen({super.key});
-
-
   final controller=Get.put(SettingController());
+
+  void callApi()async {
+    Future.delayed(Duration.zero,() => controller.getFaq(),);
+  }
+
   @override
   Widget build(BuildContext context) {
+    callApi();
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
@@ -36,8 +32,12 @@ class FAQScreen extends StatelessWidget {
               height: 16,
             ),
             Obx(() => Expanded(
-              child: ListView.builder(
-                itemCount: controller.listOfFaq.length,
+              child: controller.isLoading.value ? const Center(
+                child: CircularProgressIndicator(),
+              ) : controller.faqData.isEmpty ? const Center(child:
+                Text('No data found!'),) :
+              ListView.builder(
+                itemCount: controller.faqData.length,
                 itemBuilder: (context, index) => Container(
                   margin:
                   const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
@@ -47,17 +47,17 @@ class FAQScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(width: 0.78, color: Colors.white),
                   ),
-                  child: ListTile(
+                  child: Obx(() => ListTile(
                     dense: true,
                     title: CustomText(
-                      text: "${controller.listOfFaq[index].title}".toUpperCase(),
+                      text: "${controller.faqData[index].question}".toUpperCase(),
                       color: fishColor,
                       sizeOfFont: 17,
                       weight: FontWeight.w800,
                     ),
                     subtitle: Text(
                       controller.listOfOpen.contains(index)
-                          ? "${controller.listOfFaq[index].subTitle}"
+                          ? "${controller.faqData[index].answer}"
                           : "",
                       style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
@@ -77,7 +77,7 @@ class FAQScreen extends StatelessWidget {
                             color: secondaryColor,
                           ),
                         )),
-                  ),
+                  )),
                 ),
               ),
             )),

@@ -11,7 +11,7 @@ import '../UTILS/dialog_helper.dart';
 import '../UTILS/utils.dart';
 import 'network_strings.dart';
 
-///💥💥💥Created By Arun Android💥💥💥💥
+///💥💥💥Created By Arun Android💥💥💥
 
 class Network {
   static Dio? _dio;
@@ -85,7 +85,7 @@ class Network {
 
   Future<Response?> postRequest({
     required String endPoint,
-    Map<String, dynamic>? formData,
+    Map<dynamic, dynamic>? formData,
     bool isLoader = true,
   }) async {
     if (isLoader) {

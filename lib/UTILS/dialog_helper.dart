@@ -15,17 +15,17 @@ class DialogHelper {
       String? description = 'Something went wrong'}) async {
     Get.dialog(
       Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-              ),
+              // Text(
+              //   title,
+              //   style:
+              //       const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              // ),
               const SizedBox(
                 height: 10,
               ),

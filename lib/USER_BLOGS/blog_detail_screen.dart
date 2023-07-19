@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/MODELS/blog_response.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 import 'package:yourfish/UTILS/app_strings.dart';
 
@@ -7,7 +8,8 @@ import '../UTILS/app_color.dart';
 
 
 class BlogDetailScreen extends StatelessWidget {
-  const BlogDetailScreen({super.key});
+  const BlogDetailScreen({super.key,required this.blogData});
+  final BlogData blogData;
 
   @override
   Widget build(BuildContext context) {
@@ -49,25 +51,27 @@ class BlogDetailScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Expanded(
+                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Bieye Tuna",
-                            style: TextStyle(
+                            blogData.heading ?? '',
+                            maxLines: 1,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                           Text(
-                            "Scientific Name",
-                            style: TextStyle(
+                            blogData.subHeading ?? '',
+                            maxLines: 3,
+                            style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                               color: Colors.white,
@@ -79,11 +83,17 @@ class BlogDetailScreen extends StatelessWidget {
                     Expanded(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          fishingImage,
+                        child: Image.network(
+                          blogData.image ?? '',
                           height: Get.height * 0.12,
                           width: Get.width * 0.45,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Image.asset(
+                            fishingImage,
+                            height: Get.height * 0.12,
+                            width: Get.width * 0.45,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     )
@@ -92,11 +102,11 @@ class BlogDetailScreen extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                const Text(
-                  privacyText,
+                 Text(
+                    blogData.description ?? '',
                   textAlign: TextAlign.justify,
                   style:
-                      TextStyle(color: Colors.white, height: 1.5, fontSize: 14),
+                      const TextStyle(color: Colors.white, height: 1.5, fontSize: 14),
                 )
               ],
             ),

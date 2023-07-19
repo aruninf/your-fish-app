@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/CONTROLLERS/auth_controller.dart';
 import 'package:yourfish/CONTROLLERS/user_controller.dart';
-import 'package:yourfish/CREATE_ACCOUNT/select_fish_interest.dart';
 import 'package:yourfish/NETWORKS/network.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
@@ -13,9 +11,10 @@ import '../UTILS/app_color.dart';
 import '../UTILS/dialog_helper.dart';
 
 class UploadProfilePicture extends StatelessWidget {
-  UploadProfilePicture({super.key,required this.data});
+  UploadProfilePicture({super.key, required this.data});
+
   final dynamic data;
-  final imageUrl=''.obs;
+  final imageUrl = ''.obs;
   final userController = Get.put(UserController());
 
   @override
@@ -48,22 +47,20 @@ class UploadProfilePicture extends StatelessWidget {
                       onTap: () {
                         DialogHelper.selectImageFrom(
                             onClick: (uri) async {
-                              imageUrl.value= await Network().uploadFile(uri!, 'profile') ?? '';
-                              Get.find<UserController>().uploadFile.value =
-                                  uri;
-                              Get.back();
+                              imageUrl.value =
+                                  await Network().uploadFile(uri!, 'profile') ??
+                                      '';
+                              Get.find<UserController>().uploadFile.value = uri;
+                              //Get.back();
                             },
                             context: context);
                       },
-                      child: (Get.find<UserController>()
-                              .uploadFile
-                              .value
-                              .path
+                      child: (imageUrl.value
                               .isNotEmpty)
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(16),
-                              child: Image.file(
-                                Get.find<UserController>().uploadFile.value,
+                              child: Image.network(
+                                imageUrl.value,
                                 fit: BoxFit.cover,
                               ))
                           : const Column(
@@ -114,18 +111,12 @@ class UploadProfilePicture extends StatelessWidget {
           btnTextColor: primaryColor,
           btnText: "NEXT",
           onClick: () {
-
-            print("=============${imageUrl.value}");
-            print("=============${data}");
-
-            if(imageUrl.value.isEmpty){
-              DialogHelper.showErrorDialog(description: "Select Profile Picture",title: '');
+            if (imageUrl.value.isEmpty) {
+              Get.snackbar('Required!', 'Select Profile Picture',
+                  colorText: Colors.orange, snackPosition: SnackPosition.TOP);
               return;
             }
-            var finalData={
-              'profile_pic':imageUrl.value,
-              ...data
-            };
+            var finalData = {'profile_pic': imageUrl.value, ...data};
             userController.userRegister(finalData);
 
           },

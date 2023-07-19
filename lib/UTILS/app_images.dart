@@ -11,3 +11,4 @@ const String googleImg = "images/google.png";
 const String facebookImg = "images/facebook.png";
 const String appleImg = "images/apple.png";
 const String fishUpdateImg = 'images/fish_updated.png';
+const String locationImage="images/location_image.png";

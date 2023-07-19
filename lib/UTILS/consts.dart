@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:yourfish/UTILS/app_color.dart';
 
 /// Static Data
+
 
 class ChatModel {
   String? name;
@@ -191,7 +192,7 @@ class Consts {
         source: ImageSource.gallery,
         maxHeight: 600,
         maxWidth: 800,
-        imageQuality: 25);
+        imageQuality: 50);
     if (pickedFile != null) {
       return cropFile(pickedFile);
     }
@@ -203,7 +204,7 @@ class Consts {
         source: ImageSource.camera,
         maxHeight: 600,
         maxWidth: 800,
-        imageQuality: 25);
+        imageQuality: 50);
     if (pickedFile != null) {
       return cropFile(pickedFile);
     }
@@ -233,7 +234,19 @@ class Consts {
     return File(croppedFile!.path);
   }
 
-  /// Date Formats //////////////////////////////////////
+
+  static showSnackBarError(String? title,String? message){
+    Get.snackbar(title ?? '', message ?? '',
+        colorText: Colors.deepOrangeAccent, snackPosition: SnackPosition.TOP);
+  }
+
+  static showSnackBarSuccess(String? title,String? message){
+    Get.snackbar(title ?? '', message ?? '',
+        colorText: Colors.green, snackPosition: SnackPosition.TOP);
+  }
+
+
+/// Date Formats //////////////////////////////////////
   static String parseTimeStamp(int value) {
     var date = DateTime.fromMillisecondsSinceEpoch(value).toLocal();
     var d12 = DateFormat('hh:mm').format(date);

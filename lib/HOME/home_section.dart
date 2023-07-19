@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CONTROLLERS/post_controller.dart';
+import 'package:yourfish/MODELS/post_response.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 import 'package:yourfish/UTILS/consts.dart';
 
@@ -9,7 +11,9 @@ import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 
 class HomeSection extends StatelessWidget {
-  const HomeSection({super.key});
+  HomeSection({super.key});
+
+  final postController = Get.find<PostController>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +32,23 @@ class HomeSection extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: Obx(() => postController.isLoading.value
+                ? const Center(
+              child: CircularProgressIndicator(),
+            )
+                : postController.postData.isEmpty
+                ? const Center(
+              child: Text("No Post yet!",style: TextStyle(color: Colors.white),),
+            )
+                : ListView.builder(
               physics: const BouncingScrollPhysics(),
-              itemCount: postList.length,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-              itemBuilder: (context, index) => index == 0
-                  ? const NotificationItem()
-                  : SingleFishPostWidget(postModel: postList[index]),
-            ),
+              itemCount: postController.postData.length,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 12, vertical: 0),
+              itemBuilder: (context, index) => /*index == 0
+                            ? const NotificationItem()
+                            :*/ SingleFishPostWidget(postModel: postController.postData[index]),
+            ),)
           ),
         ],
       ),
@@ -120,7 +133,7 @@ class NotificationItem extends StatelessWidget {
 class SingleFishPostWidget extends StatelessWidget {
   const SingleFishPostWidget({super.key, required this.postModel});
 
-  final PostModel postModel;
+  final PostData postModel;
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +167,8 @@ class SingleFishPostWidget extends StatelessWidget {
                     color: Colors.white,
                     size: 16,
                   ),
-                  label: const CustomText(
-                    text: "Cape Grafton",
+                  label:  CustomText(
+                    text: postModel.locationName ?? '',
                     weight: FontWeight.w400,
                     sizeOfFont: 13,
                     color: Colors.white,
@@ -164,11 +177,17 @@ class SingleFishPostWidget extends StatelessWidget {
           ),
           ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                "${postModel.fishingImage}",
+              child: Image.network(
+                "${postModel.image}",
                 width: double.infinity,
                 height: Get.height * 0.4,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Image.asset(
+                  fishingImage,
+                  width: double.infinity,
+                  height: Get.height * 0.4,
+                  fit: BoxFit.cover,
+                ),
               )),
           Row(
             children: [
@@ -217,9 +236,9 @@ class SingleFishPostWidget extends StatelessWidget {
               ),
             ],
           ),
-          const CustomText(
+           CustomText(
             text:
-                "Lorem ipsum dolor sit amet, connect dolor sit amet, consectetur maisena adipiscing elit, sed do eiusmod",
+              postModel.caption ?? ''  ,
             weight: FontWeight.w600,
             sizeOfFont: 14,
             maxLin: 2,
@@ -228,8 +247,8 @@ class SingleFishPostWidget extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          const CustomText(
-            text: "Mary Williams Love that 🙌🏼 !!",
+           CustomText(
+            text: postModel.tagFish ?? '',
             weight: FontWeight.w500,
             sizeOfFont: 13,
             color: Colors.white,

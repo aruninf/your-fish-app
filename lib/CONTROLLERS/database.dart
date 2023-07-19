@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:yourfish/UTILS/dialog_helper.dart';
 
 class Database {
+
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final String userCollection = "users";
   final String chatsCollection = "chats";
@@ -162,7 +163,7 @@ class Database {
       return true;
     } else {
       // Collection not exits
-      print('collection doesn\'t exists ============================');
+      print('collection does\'t exists ============================');
       return false;
     }
   }

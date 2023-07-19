@@ -3,13 +3,17 @@ import 'package:get/get.dart';
 import 'package:yourfish/CREATE_ACCOUNT/upload_profile_picture.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
+import '../CONTROLLERS/auth_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_field.dart';
 import '../UTILS/app_color.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
-  const ForgotPasswordScreen({super.key});
+  ForgotPasswordScreen({super.key});
+
+  final email=TextEditingController();
+  final userController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -20,29 +24,32 @@ class ForgotPasswordScreen extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            const Column(
+             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomAppBar(heading: 'Set Your Password', logoColor: btnColor),
+                const CustomAppBar(heading: 'Forgot Your Password', logoColor: btnColor),
+                const SizedBox(height: 16,),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text("Enter Your Registered email address\nwe will send you a password reset link on \nthis email address.",
+                  style: TextStyle(color: secondaryColor,),),
+                ),
+
                 Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       CommonTextField(
-                        hintText: 'New Password',
+                        controller: email,
+                        hintText: 'Email',
                       ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      CommonTextField(
-                        hintText: 'Confirm New Password',
-                      ),
+
                     ],
                   ),
                 )
@@ -69,9 +76,19 @@ class ForgotPasswordScreen extends StatelessWidget {
         child: CommonButton(
           btnBgColor: fishColor,
           btnTextColor: primaryColor,
-          btnText: "Confirm",
-          onClick: () => Get.to(() =>  UploadProfilePicture(data: null),
-              transition: Transition.rightToLeft),
+          btnText: "Send reset link",
+          onClick: () {
+            if (email.text == '' ||
+                email.text.isEmpty ||
+                !email.text.contains('@') ||
+                !email.text.contains('.')) {
+              Get.snackbar('Required!', 'Enter Valid Email',
+                  colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+              return;
+            }
+            userController.forgotPassword(email.text.trim());
+
+          },
         ),
       ),
     );

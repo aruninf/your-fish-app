@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/CONTROLLERS/user_controller.dart';
+import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/PROFILE/edit_profile_screen.dart';
 import 'package:yourfish/UTILS/consts.dart';
 
@@ -12,7 +12,7 @@ import '../UTILS/app_color.dart';
 class ProfileSection extends StatelessWidget {
   ProfileSection({super.key});
 
-  final controller = Get.put(UserController());
+  final controller = Get.find<PostController>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,21 +35,37 @@ class ProfileSection extends StatelessWidget {
                     horizontalTitleGap: 8,
                     contentPadding: EdgeInsets.zero,
                     leading: ClipOval(
-                      child: Image.asset(
-                        'images/chat_image2.png',
-                        fit: BoxFit.cover,
-                        height: 50,
-                        width: 50,
-                      ),
+                      child: (controller.userData.value.profilePic ?? '')
+                              .isNotEmpty
+                          ? Image.network(
+                              controller.userData.value.profilePic ?? '',
+                              fit: BoxFit.cover,
+                              height: 50,
+                              width: 50,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Image.asset(
+                                'images/chat_image2.png',
+                                fit: BoxFit.cover,
+                                height: 50,
+                                width: 50,
+                              ),
+                            )
+                          : Image.asset(
+                              'images/chat_image2.png',
+                              fit: BoxFit.cover,
+                              height: 50,
+                              width: 50,
+                            ),
                     ),
-                    title: const CustomText(
-                      text: 'Alex Brown',
+                    title:  CustomText(
+                      text: controller.userData.value.name ?? '',
                       color: Colors.white,
                       weight: FontWeight.w800,
                       sizeOfFont: 18,
                     ),
-                    subtitle: const CustomText(
-                      text: 'Gold Cost, au',
+                    subtitle:  CustomText(
+                      text: Get.find<PostController>().currentAddress.value ?? '',
+                      maxLin: 1,
                       color: Colors.white,
                       sizeOfFont: 15,
                       weight: FontWeight.w500,
@@ -57,7 +73,9 @@ class ProfileSection extends StatelessWidget {
                     trailing: SizedBox(
                       height: 30,
                       child: TextButton(
-                          onPressed: () => Get.to(EditProfileScreen(),
+                          onPressed: () => Get.to(EditProfileScreen(
+                            userData: controller.userData.value,
+                          ),
                               transition: Transition.rightToLeft),
                           style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
@@ -202,7 +220,7 @@ class ProfileSection extends StatelessWidget {
                     child: controller.selectedIndex.value == "My Posts"
                         ? const MyPostWidget()
                         : controller.selectedIndex.value == "My Map"
-                            ? const MyProfileMapWidget(
+                            ? MyProfileMapWidget(
                                 isTopSpots: false,
                               )
                             : controller.selectedIndex.value == "Fish Unlocked"

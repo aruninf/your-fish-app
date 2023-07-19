@@ -6,14 +6,14 @@ class PermissionService {
     Permission.camera,
   ];
 
-  Future<void> askCamera() async {
-    var activityRecognitionStatus = await Permission.camera.status;
+  Future<void> askLocation() async {
+    var activityRecognitionStatus = await Permission.location.status;
     if (activityRecognitionStatus != PermissionStatus.granted) {
       //here
-      var status = await Permission.camera.request();
+      var status = await Permission.location.request();
       if (status != PermissionStatus.granted) {
         //here
-        await openAppSettings();
+        ///await openAppSettings();
       }
     }
   }

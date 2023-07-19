@@ -2,18 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CREATE_ACCOUNT/select_fishing_location.dart';
 
+import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
+import '../CUSTOM_WIDGETS/fish_selection_widget.dart';
 import '../UTILS/app_color.dart';
-import '../UTILS/consts.dart';
-
+import '../UTILS/dialog_helper.dart';
 
 class SelectFishYouExperience extends StatelessWidget {
-  const SelectFishYouExperience({super.key});
+  SelectFishYouExperience({super.key});
+
+  final userController = Get.find<UserController>();
+
+  void callApi() async {
+    Future.delayed(
+      Duration.zero,
+          () => userController.getFish(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    callApi();
     return Scaffold(
       extendBody: false,
       backgroundColor: primaryColor,
@@ -38,45 +49,29 @@ class SelectFishYouExperience extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            Expanded(
-                child: GridView.builder(
-              itemCount: fishData.length,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 5 / 4),
-              itemBuilder: (context, index) => Container(
-                decoration: BoxDecoration(
-                  border: Border.all(width: 0.67, color: Colors.white),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          fishData[index].fishImage ?? '',
-                          height: Get.width * 0.25,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        fishData[index].fishName ?? '',
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w700),
-                      ),
+            Obx(() => Expanded(
+                    child: userController.isDataLoading.value
+                        ? const Center(
+                      child: CircularProgressIndicator(),
                     )
-                  ],
-                ),
-              ),
-            ))
+                        : userController.fishData.isEmpty
+                        ? const Center(
+                      child: Text("No Record Found!",style: TextStyle(color: Colors.white),),
+                    )
+                        :  GridView.builder(
+                  itemCount: userController.fishData.length,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      childAspectRatio: 5 / 4),
+                  itemBuilder: (context, index) => FishItemSelectWidget(
+                    fishData: userController.fishData[index],
+                    selectedFishInterest: userController.selectedFishExp,
+                  ),
+                )))
           ],
         ),
       ),
@@ -88,8 +83,18 @@ class SelectFishYouExperience extends StatelessWidget {
           btnBgColor: fishColor,
           btnTextColor: primaryColor,
           btnText: "NEXT",
-          onClick: () => Get.to(() => const SelectFishingLocation(),
-              transition: Transition.rightToLeft),
+          onClick: () {
+            if (userController.selectedFishExp.isEmpty) {
+              Get.snackbar('Required!', 'Select at-least one',
+                  colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+              return;
+            }
+            var data={
+              "experience_fish_id":  userController.selectedFishExp.join(",").toString(),
+            };
+            userController.updateOnBoarding(data,2);
+
+          },
         ),
       ),
     );

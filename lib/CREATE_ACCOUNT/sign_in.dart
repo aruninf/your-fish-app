@@ -8,6 +8,7 @@ import '../CUSTOM_WIDGETS/custom_text_field.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../HOME/main_home.dart';
 import '../UTILS/app_color.dart';
+import '../UTILS/dialog_helper.dart';
 import 'forget_password.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -54,15 +55,48 @@ class SignInScreen extends StatelessWidget {
                     CommonTextField(
                       controller: email,
                       hintText: 'Email',
+                      maxLength: 30,
                     ),
                     SizedBox(
                       height: Get.height * 0.03,
                     ),
-                     CommonTextField(
-                      controller: password,
-                      hintText: 'Password',
-                      isPassword: true,
-                    ),
+
+                    Obx(() => Container(
+                      decoration: BoxDecoration(
+                        color: btnColor,
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: TextFormField(
+                          controller: password,
+                          keyboardType: TextInputType.text,
+                          obscureText: controller.isPasswordVisible.value,
+                          maxLines: 1,
+                          maxLength: 16,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w800, fontSize: 16),
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              counterText: '',
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 16),
+                              hintStyle: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800),
+                              hintText: 'Password',
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  controller.isPasswordVisible.value =
+                                  !controller.isPasswordVisible.value;
+                                },
+                                child: Icon(
+                                  controller.isPasswordVisible.value
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
+                              ))),
+                    ),),
+
                     SizedBox(
                       height: Get.height * 0.03,
                     ),
@@ -74,13 +108,26 @@ class SignInScreen extends StatelessWidget {
                         btnTextColor: primaryColor,
                         btnText: "Log In",
                         onClick: () {
-                          if (_formKey.currentState!.validate()) {
+
+                          if (email.text == '' ||
+                              email.text.isEmpty ||
+                              !email.text.contains('@') ||
+                              !email.text.contains('.')) {
+                            Get.snackbar('Required!', 'Please enter the correct email',
+                                colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+                            return;
+                          }
+                          if ((password.text ?? '').length<6) {
+                            Get.snackbar('Required!', 'Please enter the correct password',
+                                colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+                            return;
+                          }
                             var data={
                               "email":email.text.trim(),
                               "password":password.text.trim()
                             };
                             controller.userLogin(data);
-                          }
+                        
 
                         },
                       ),
@@ -92,12 +139,12 @@ class SignInScreen extends StatelessWidget {
                       alignment: Alignment.center,
                       child: TextButton(
                         onPressed: () => (
-                          Get.to(() => const ForgotPasswordScreen(),
+                          Get.to(() =>  ForgotPasswordScreen(),
                               transition: Transition.rightToLeft),
                         ),
                         child: const SizedBox(
                           child: CustomText(
-                            text: 'Forgot Password?',
+                            text: 'Forgot Password ?',
                             color: secondaryColor,
                             sizeOfFont: 16,
                             weight: FontWeight.w800,
