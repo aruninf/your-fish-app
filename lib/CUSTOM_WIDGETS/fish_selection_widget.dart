@@ -47,7 +47,7 @@ class FishItemSelectWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  fishData.fishName ?? '',
+                  fishData.localName ?? '',
                   maxLines: 1,
                   textAlign: TextAlign.center,
                   style: const TextStyle(

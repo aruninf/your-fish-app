@@ -15,19 +15,25 @@ class BlogsScreen extends StatelessWidget {
   final controller = Get.find<SettingController>();
 
   callApi() async {
+    var data = {
+      "sortBy": "asc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
     Future.delayed(
       Duration.zero,
-      () => controller.getBlogs(),
+      () => controller.getBlogs(data),
     );
     Future.delayed(
       Duration.zero,
-      () => controller.getArticles(),
+      () => controller.getArticles(data),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    callApi();
+
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(

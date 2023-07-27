@@ -16,6 +16,38 @@ class SettingsScreen extends StatelessWidget {
 
   final controller = Get.put(SettingController());
 
+
+
+
+  void callFaqApi()async {
+    var data = {
+      "sortBy": "asc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
+    Future.delayed(Duration.zero,() => controller.getFaq(data),);
+  }
+  void callPrivacyPolicyApi()async {
+    Future.delayed(Duration.zero,() => controller.getContent(),);
+  }
+  callBlogArticleApi() async {
+    var data = {
+      "sortBy": "asc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
+    Future.delayed(
+      Duration.zero,
+          () => controller.getBlogs(data),
+    );
+    Future.delayed(
+      Duration.zero,
+          () => controller.getArticles(data),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,30 +144,38 @@ class SettingsScreen extends StatelessWidget {
                       color: btnColor, borderRadius: BorderRadius.circular(16)),
                   child: ListTile(
                     onTap: () {
-                      index == 0
-                          ? Get.to(const NotificationScreen(),
-                              transition: Transition.rightToLeft)
-                          : index == 1
-                              ? controller.shareApp()
-                              : index == 2
-                                  ? Get.to(
-                                      const PrivacyAndTermsScreen(
-                                        title: "Terms & Conditions",
-                                      ),
-                                      transition: Transition.rightToLeft)
-                                  : index == 3
-                                      ? Get.to(
-                                          const PrivacyAndTermsScreen(
-                                            title: "Privacy Policy",
-                                          ),
-                                          transition: Transition.rightToLeft)
-                                      : index == 4
-                                          ? Get.to(FAQScreen(),
-                                              transition:
-                                                  Transition.rightToLeft)
-                                          : Get.to(const HelpSupportScreen(),
-                                              transition:
-                                                  Transition.rightToLeft);
+                      if(index==0){
+                        Get.to(const NotificationScreen(),
+                            transition: Transition.rightToLeft);
+                      }else if(index==1){
+                        controller.shareApp();
+                      }
+                      else if(index==2){
+                        callPrivacyPolicyApi();
+                        Get.to(
+                            PrivacyAndTermsScreen(
+                              title: "Terms & Conditions",
+                            ),transition: Transition.rightToLeft);
+                      }
+                      else if(index==3){
+                        callPrivacyPolicyApi();
+                          Get.to(
+                              PrivacyAndTermsScreen(
+                                title: "Privacy Policy",
+                              ),transition: Transition.rightToLeft);
+                      }
+                      else if(index==4){
+                        callFaqApi();
+                            Get.to(FAQScreen(),
+                                transition:
+                                Transition.rightToLeft);
+                      }else {
+
+                        Get.to(const HelpSupportScreen(),
+                            transition:
+                            Transition.rightToLeft);
+                      }
+
                     },
                     dense: true,
                     title: CustomText(

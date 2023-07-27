@@ -33,40 +33,107 @@ class FishResponse {
 class FishData {
   int? id;
   int? catId;
-  String? fishName;
+  String? localName;
+  String? scientificName;
   String? fishImage;
+  String? legalSize;
+  String? info;
+  String? conservationStatus;
   int? status;
   String? createdAt;
   String? updatedAt;
+  String? categoryName;
 
   FishData(
       {this.id,
         this.catId,
-        this.fishName,
+        this.localName,
+        this.scientificName,
         this.fishImage,
+        this.legalSize,
+        this.info,
+        this.conservationStatus,
         this.status,
         this.createdAt,
-        this.updatedAt});
+        this.updatedAt,
+        this.categoryName});
 
   FishData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     catId = json['cat_id'];
-    fishName = json['fish_name'];
+    localName = json['local_name'];
+    scientificName = json['scientific_name'];
     fishImage = json['fish_image'];
+    legalSize = json['legal_size'];
+    info = json['info'];
+    conservationStatus = json['conservation_status'];
     status = json['status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    categoryName = json['category_name'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['cat_id'] = this.catId;
-    data['fish_name'] = this.fishName;
+    data['local_name'] = this.localName;
+    data['scientific_name'] = this.scientificName;
     data['fish_image'] = this.fishImage;
+    data['legal_size'] = this.legalSize;
+    data['info'] = this.info;
+    data['conservation_status'] = this.conservationStatus;
     data['status'] = this.status;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['category_name'] = this.categoryName;
     return data;
   }
 }
+
+class TagFish {
+  int? id;
+  String? localName;
+  String? scientificName;
+
+  TagFish({this.id, this.localName, this.scientificName});
+
+  TagFish.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    localName = json['local_name'];
+    scientificName = json['scientific_name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['local_name'] = this.localName;
+    data['scientific_name'] = this.scientificName;
+    return data;
+  }
+}
+class PostResponse {
+  List<TagFish>? tagFish;
+
+  PostResponse({this.tagFish});
+
+  PostResponse.fromJson(Map<String, dynamic> json) {
+    if (json['tag_fish'] != null) {
+      tagFish = <TagFish>[];
+      json['tag_fish'].forEach((v) {
+        tagFish!.add(new TagFish.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.tagFish != null) {
+      data['tag_fish'] = this.tagFish!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+
+

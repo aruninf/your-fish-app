@@ -128,9 +128,9 @@ class UserController extends GetxController {
 
   /// 💥💥💥💥💥💥💥 Get Fish 💥💥💥💥💥💥💥
 
-  Future<void> getFish() async {
+  Future<void> getFish(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().getRequest(endPoint: getFishApi);
+    var response = await Network().postRequest(endPoint: getFishApi,formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
       FishResponse fish = FishResponse.fromJson(response?.data);
@@ -140,9 +140,9 @@ class UserController extends GetxController {
 
   /// 💥💥💥💥💥💥💥 Get Fish Location 💥💥💥💥💥💥💥
 
-  Future<void> getFishLocation() async {
+  Future<void> getFishLocation(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().getRequest(endPoint: getFishingLocationApi);
+    var response = await Network().postRequest(endPoint: getFishingLocationApi,formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
       LocationResponse fish = LocationResponse.fromJson(response?.data);
@@ -152,9 +152,9 @@ class UserController extends GetxController {
 
   /// 💥💥💥💥💥💥💥 Get Fish Gear 💥💥💥💥💥💥💥
 
-  Future<void> getFishGear() async {
+  Future<void> getFishGear(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().getRequest(endPoint: getFishingGearApi);
+    var response = await Network().postRequest(endPoint: getFishingGearApi,formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
       GearResponse fish = GearResponse.fromJson(response?.data);
@@ -164,9 +164,9 @@ class UserController extends GetxController {
 
   /// 💥💥💥💥💥💥💥 Get Fish Category 💥💥💥💥💥💥💥
 
-  Future<void> getFishCategory() async {
+  Future<void> getFishCategory(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().getRequest(endPoint: getFishCategoryApi);
+    var response = await Network().postRequest(endPoint: getFishCategoryApi,formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
       CategoryResponse fish = CategoryResponse.fromJson(response?.data);

@@ -33,20 +33,27 @@ class PostResponse {
 class PostData {
   int? id;
   int? userId;
-  int? locationId;
-  String? tagFish;
+  int? isPublic;
+  String? latitude;
+  String? longitude;
+  String? address;
   String? image;
   String? caption;
   int? status;
   String? createdAt;
   String? updatedAt;
   String? userName;
-  String? locationName;
+  String? userHandle;
+  List<TagFish>? tagFish;
+
 
   PostData(
       {this.id,
         this.userId,
-        this.locationId,
+        this.isPublic,
+        this.latitude,
+        this.longitude,
+        this.address,
         this.tagFish,
         this.image,
         this.caption,
@@ -54,35 +61,70 @@ class PostData {
         this.createdAt,
         this.updatedAt,
         this.userName,
-        this.locationName});
+        this.userHandle});
 
   PostData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
-    locationId = json['location_id'];
-    tagFish = json['tag_fish'];
+    isPublic = json['isPublic'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    address = json['address'];
+    if (json['tag_fish'] != null) {
+      tagFish = <TagFish>[];
+      json['tag_fish'].forEach((v) {
+        tagFish!.add(new TagFish.fromJson(v));
+      });
+    }
     image = json['image'];
     caption = json['caption'];
     status = json['status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     userName = json['user_name'];
-    locationName = json['location_name'];
+    userHandle = json['user_handle'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['user_id'] = this.userId;
-    data['location_id'] = this.locationId;
-    data['tag_fish'] = this.tagFish;
+    data['isPublic'] = this.isPublic;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+    data['address'] = this.address;
+    if (this.tagFish != null) {
+      data['tag_fish'] = this.tagFish!.map((v) => v.toJson()).toList();
+    }
     data['image'] = this.image;
     data['caption'] = this.caption;
     data['status'] = this.status;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['user_name'] = this.userName;
-    data['location_name'] = this.locationName;
+    data['user_handle'] = this.userHandle;
+    return data;
+  }
+}
+
+class TagFish {
+  int? id;
+  String? localName;
+  String? scientificName;
+
+  TagFish({this.id, this.localName, this.scientificName});
+
+  TagFish.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    localName = json['local_name'];
+    scientificName = json['scientific_name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['local_name'] = this.localName;
+    data['scientific_name'] = this.scientificName;
     return data;
   }
 }

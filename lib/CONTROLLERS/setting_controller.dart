@@ -6,6 +6,7 @@ import 'package:yourfish/MODELS/blog_response.dart';
 import 'package:yourfish/MODELS/faq_response.dart';
 import 'package:yourfish/NETWORKS/network_strings.dart';
 
+import '../MODELS/content_response.dart';
 import '../NETWORKS/network.dart';
 import '../PROFILE/faq_screen.dart';
 
@@ -24,13 +25,14 @@ class SettingController extends GetxController {
   var blogData=<BlogData>[].obs;
   var articleData=<ArticleData>[].obs;
   var faqData=<FaqData>[].obs;
+  var contentData=<ContentData>[].obs;
   var currentValues = 20.0.obs;
 
 
 
   /// 💥💥💥💥💥💥💥 Get Blogs 💥💥💥💥💥💥💥
 
-  Future<void> getBlogs() async {
+  Future<void> getBlogs(dynamic data) async {
     isLoading.value=true;
     var response = await Network().getRequest(endPoint: getBlogApi);
     if (response?.data != null) {
@@ -49,7 +51,7 @@ class SettingController extends GetxController {
 
   /// 💥💥💥💥💥💥💥 Get Articles 💥💥💥💥💥💥💥
 
-  Future<void> getArticles() async {
+  Future<void> getArticles(dynamic data) async {
     isLoading.value=true;
     var response = await Network().getRequest(endPoint: getArticlesApi);
     if (response?.data != null) {
@@ -62,14 +64,24 @@ class SettingController extends GetxController {
 
   /// 💥💥💥💥💥💥💥 Get Faq 💥💥💥💥💥💥💥
 
-  Future<void> getFaq() async {
+  Future<void> getFaq(dynamic data) async {
     isLoading.value=true;
-    var response = await Network().getRequest(endPoint: getFaqApi);
+    var response = await Network().postRequest(endPoint: getFaqApi,formData: data);
     if (response?.data != null) {
       isLoading.value=false;
       FaqResponse blog = FaqResponse.fromJson(response?.data);
       faqData.value = blog.data ?? [];
 
+    }
+  }
+
+  getContent() async {
+    isLoading.value=true;
+    var response = await Network().getRequest(endPoint: getContentApi);
+    if (response?.data != null) {
+      isLoading.value=false;
+      ContentResponse content = ContentResponse.fromJson(response?.data);
+      contentData.value = content.data ?? [];
     }
   }
 

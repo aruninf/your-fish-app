@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../CONTROLLERS/setting_controller.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../UTILS/app_color.dart';
 import '../UTILS/app_strings.dart';
 
 class PrivacyAndTermsScreen extends StatelessWidget {
-  const PrivacyAndTermsScreen({super.key, required this.title});
+  PrivacyAndTermsScreen({super.key, required this.title});
 
   final String title;
+  final controller=Get.put(SettingController());
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +38,15 @@ class PrivacyAndTermsScreen extends StatelessWidget {
                     child: SizedBox(
                       height: Get.height,
                       width: Get.width,
-                      child: const Text(
-                        privacyText,
+                      child:  Obx(() =>  controller.isLoading.value ? const Center(child: CircularProgressIndicator()) : Text(
+                        '${ title == 'Terms & Conditions' ? controller.contentData[0].content : controller.contentData[1].content }',
                         textAlign: TextAlign.justify,
-                        style: TextStyle(
+                        style: const TextStyle(
                           height: 1.4,
                           fontSize: 13,
                           color: Colors.white,
                         ),
-                      ),
+                      )),
                     ),
                   ),
                 ),

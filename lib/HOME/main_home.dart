@@ -3,6 +3,7 @@ import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/CONTROLLERS/setting_controller.dart';
+import 'package:yourfish/CREATE_ACCOUNT/add_your_gear.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_text_style.dart';
 import 'package:yourfish/HOME/chats_section.dart';
 import 'package:yourfish/HOME/home_section.dart';
@@ -33,28 +34,52 @@ class _MainHomeState extends State<MainHome> {
   var postController = Get.put(PostController());
 
   void _onItemTapped(int index) async {
+    var data={
+      "sortBy": "desc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
     if (index == 2) {
       Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
     } else {
       setState(() {
         _page = index;
       });
-      index == 1
-          ? postController.getPosts()
-          : index == 2
-              ? postController.getChatsUser()
+      index == 0
+          ? postController.getPosts(data)
+          : index == 1
+              ? postController.getChatsUser(data)
               : index == 4
-                  ? postController.getUserData()
-                  : postController.getUserData();
+                  ? getMyPost() : nothing();
     }
   }
 
 
+  void getMyPost() {
+    var data = {
+      "sortBy": "desc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
+    Future.delayed(
+      Duration.zero,
+          () => postController.getMyPost(data),
+    );
+    postController.getUserData();
+  }
 
   @override
   void initState() {
+    var data={
+      "sortBy": "desc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
     Future.delayed(Duration.zero,() async {
-      postController.getPosts();
+      postController.getPosts(data);
     },);
     super.initState();
   }
@@ -256,6 +281,8 @@ class _MainHomeState extends State<MainHome> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+
+  nothing () {}
 }
 
 class RightDrawerMenuWidget extends StatelessWidget {

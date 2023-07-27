@@ -15,9 +15,15 @@ class SelectFishingLocation extends StatelessWidget {
   final userController = Get.find<UserController>();
 
   void callApi() async {
+    var data={
+      "sortBy": "asc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
     Future.delayed(
       Duration.zero,
-          () => userController.getFishLocation(),
+          () => userController.getFishLocation(data),
     );
   }
   @override

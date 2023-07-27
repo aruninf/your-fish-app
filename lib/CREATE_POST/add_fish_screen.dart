@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
@@ -70,11 +72,11 @@ class AddFishScreen extends StatelessWidget {
                                     onChanged: (value) {
                                       controller.isLocationOn.value =
                                           !controller.isLocationOn.value;
-                                      if(controller.isLocationOn.value){
+                                      if (controller.isLocationOn.value) {
                                         Get.to(LocationPage());
                                       }
                                     },
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -96,18 +98,23 @@ class AddFishScreen extends StatelessWidget {
                                   vertical: 14, horizontal: 16),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide:
-                                    const BorderSide(color: Colors.white),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide:
-                                const BorderSide(color: Colors.white,width: 1),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide:
-                                    const BorderSide(color: Colors.white),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1),
                               ),
                               hintText: "Tag Fish",
                               hintStyle: const TextStyle(color: Colors.white54),
@@ -187,18 +194,23 @@ class AddFishScreen extends StatelessWidget {
                                   vertical: 14, horizontal: 16),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide:
-                                    const BorderSide(color: Colors.white,width: 1),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide:
-                                const BorderSide(color: Colors.white,width: 1),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide:
-                                    const BorderSide(color: Colors.white,width: 1),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1),
                               ),
                               hintText: "Caption...",
                               hintStyle: const TextStyle(color: Colors.white54),
@@ -224,12 +236,17 @@ class AddFishScreen extends StatelessWidget {
           onClick: () {
             if (_formKey.currentState!.validate()) {
               var data = {
-                "location_id": controller.isLocationOn.value ? 2 : 0,
+                "isPublic": controller.isLocationOn.value,
+                "latitude": controller.currentPosition.value.latitude,
+                "longitude": controller.currentPosition.value.longitude,
+                "address": controller.currentAddress.value,
                 "tag_fish": tagFishController.text.trim(),
                 "image": imageUrl.value,
                 "caption": captionsController.text.trim()
               };
               controller.createPost(data);
+              controller.uploadFile.value = File("");
+
             }
           },
         ),

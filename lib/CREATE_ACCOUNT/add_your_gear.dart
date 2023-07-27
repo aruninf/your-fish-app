@@ -1,151 +1,144 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/HOME/main_home.dart';
 import 'package:yourfish/UTILS/app_images.dart';
-import 'package:yourfish/UTILS/utils.dart';
 
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
-import '../NETWORKS/network_strings.dart';
 import '../UTILS/app_color.dart';
-import '../UTILS/dialog_helper.dart';
-
 
 class AddYourGear extends StatelessWidget {
   AddYourGear({super.key});
 
   final userController = Get.find<UserController>();
+  final fishingGearController = TextEditingController();
+
   void callApi() async {
+    var data={
+      "sortBy": "asc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
     Future.delayed(
       Duration.zero,
-          () => userController.getFishGear(),
+      () => userController.getFishGear(data),
     );
   }
+
   @override
   Widget build(BuildContext context) {
-    callApi();
+    //callApi();
     return Scaffold(
       extendBody: false,
       backgroundColor: primaryColor,
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CustomAppBar(
-              heading: 'Add your gear',
-              textColor: fishColor,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: SizedBox(
-                width: double.infinity,
-                height: 30,
-                child: CommonButton(
-                  onClick: () {
-
-                  },
-                  btnBgColor: btnColor,
-                  btnText: 'Add',
-                  btnTextColor: primaryColor,
+        child: Obx(() => Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CustomAppBar(
+                  heading: 'Add your gear',
+                  textColor: fishColor,
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-
-            // Expanded(
-            //     child: GridView.builder(
-            //       padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
-            //
-            //       gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(
-            //           crossAxisCount: 2,
-            //           mainAxisSpacing: 16,crossAxisSpacing: 16,
-            //           childAspectRatio: 4/5
-            //       ),
-            //       itemCount: gearData.length,
-            //       itemBuilder: (context, index) =>  Container(
-            //         decoration: BoxDecoration(
-            //           border: Border.all(width: 0.67,color: Colors.white),
-            //           borderRadius: BorderRadius.circular(16),
-            //
-            //         ),
-            //         child: Column(
-            //           mainAxisSize: MainAxisSize.min,
-            //           children: [
-            //             ClipRRect(
-            //                 borderRadius: BorderRadius.circular(16),
-            //                 child: Image.asset("${gearData[index].fishImage}",
-            //                   height: Get.width*0.45,fit: BoxFit.cover,width: double.infinity,)
-            //             ),
-            //             Padding(
-            //               padding:const EdgeInsets.all(5.0),
-            //               child: Text("${gearData[index].fishName}",
-            //                 maxLines: 1,
-            //                 textAlign:TextAlign.center,style: const TextStyle(
-            //                     color: Colors.white,
-            //                     fontWeight: FontWeight.w700
-            //
-            //                 ),),
-            //             )
-            //           ],
-            //         ),
-            //       ),
-            //     )
-            // )
-
-            Obx(() => Expanded(
-                child: userController.isDataLoading.value
-                    ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-                    : userController.fishingGear.isEmpty
-                    ? const Center(
-                  child: Text("No Record Found!",style: TextStyle(color: Colors.white),),
-                )
-                    : ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: userController.fishingGear.length,
-                  itemBuilder: (context, index) => Obx(() => Container(
-                    width: Get.width,
-                    margin: const EdgeInsets.only(top: 16),
-                    decoration: BoxDecoration(
-                      color: userController.selectedFishGear
-                          .contains(userController.fishingGear[index].id) ?fishColor : btnColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child:  InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () async {
-                        if (userController.selectedFishGear
-                            .contains(userController.fishingGear[index].id)) {
-                          userController.selectedFishGear
-                              .remove(userController.fishingGear[index].id);
-                        } else {
-                          userController.selectedFishGear
-                              .add(userController.fishingGear[index].id);
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: CustomText(
-                          text: userController.fishingGear[index].title ?? '',
-                          sizeOfFont: 16,
-                          weight: FontWeight.w800,
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Wrap(
+                    runSpacing: 16,
+                    spacing: 8,
+                    children: List.generate(
+                        userController.selectedFishGear.length,
+                        (index) => InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                          onTap: () {
+                            if(userController.selectedFishGear.contains(userController.selectedFishGear[index])){
+                              userController.selectedFishGear.remove(userController.selectedFishGear[index]);
+                            }
+                          },
+                          child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 10),
+                                decoration: BoxDecoration(
+                                    color: secondaryColor,
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      userController.selectedFishGear[index],
+                                      style: const TextStyle(
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    const Icon(
+                                      Icons.close,
+                                      color: primaryColor,
+                                      size: 16,
+                                    )
+                                  ],
+                                ),
+                              ),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextFormField(
+                    controller: fishingGearController,
+                    style: const TextStyle(color: Colors.white),
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'required';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      suffixIcon: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 5,horizontal: 8),
+                        width: 70,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            backgroundColor: secondaryColor,
+                          ),
+                          onPressed: () {
+                            if (fishingGearController.text.trim().isNotEmpty) {
+                              userController.selectedFishGear
+                                  .add(fishingGearController.text.trim());
+                              fishingGearController.text="";
+                            }
+                          },
+                          child: const Text('Save',style: TextStyle(color: primaryColor),),
                         ),
                       ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 14, horizontal: 16),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                        borderSide:
+                            const BorderSide(color: Colors.white, width: 1),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      hintText: "Add Fishing Gear",
+                      hintStyle: const TextStyle(color: Colors.white54),
+                      labelStyle: const TextStyle(color: Colors.white),
                     ),
-                  )),
-                )))
-          ],
-        ),
+                  ),
+                ),
+              ],
+            )),
       ),
       bottomNavigationBar: Container(
         width: Get.width,
@@ -157,14 +150,14 @@ class AddYourGear extends StatelessWidget {
           btnText: "NEXT",
           onClick: () async {
             if (userController.selectedFishGear.isEmpty) {
-              Get.snackbar('Required!', 'Select at-least one',
+              Get.snackbar('Required!', 'Please add at-least one',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
               return;
             }
-            var data={
+            var data = {
               "gear_id": userController.selectedFishGear.join(",").toString(),
             };
-            userController.updateOnBoarding(data,5);
+            userController.updateOnBoarding(data, 5);
           },
         ),
       ),

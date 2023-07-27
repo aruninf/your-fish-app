@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
+import 'package:yourfish/HOME/profile/my_fish_unlock.dart';
+import 'package:yourfish/HOME/profile/my_gear.dart';
+import 'package:yourfish/HOME/profile/my_post.dart';
 import 'package:yourfish/PROFILE/edit_profile_screen.dart';
 import 'package:yourfish/UTILS/consts.dart';
 
@@ -199,8 +202,11 @@ class ProfileSection extends StatelessWidget {
                                           : btnColor,
                                 ),
                                 child: InkWell(
-                                  onTap: () => controller.selectedIndex.value =
-                                      controller.listOfProfileSection[index],
+                                  onTap: () {
+                                    controller.selectedIndex.value =
+                                    controller.listOfProfileSection[index];
+
+                                  },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 8),
@@ -218,17 +224,17 @@ class ProfileSection extends StatelessWidget {
                 ),
                 Expanded(
                     child: controller.selectedIndex.value == "My Posts"
-                        ? const MyPostWidget()
+                        ? MyPostWidget()
                         : controller.selectedIndex.value == "My Map"
                             ? MyProfileMapWidget(
                                 isTopSpots: false,
                               )
                             : controller.selectedIndex.value == "Fish Unlocked"
-                                ? const MyFishUnlockedWidget()
+                                ?  MyFishUnlockedWidget()
                                 : controller.selectedIndex.value ==
                                         "My Future Fish"
-                                    ? const MyFutureFishWidget()
-                                    : const MyGearWidget()),
+                                    ?  MyFutureFishWidget()
+                                    :  MyGearWidget()),
               ],
             )),
       ),
@@ -236,116 +242,6 @@ class ProfileSection extends StatelessWidget {
   }
 }
 
-class MyGearWidget extends StatelessWidget {
-  const MyGearWidget({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 4 / 5),
-      itemCount: gearData.length,
-      itemBuilder: (context, index) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 0.67, color: Colors.white),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  "${gearData[index].fishImage}",
-                  height: Get.width * 0.45,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                )),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(
-                "${gearData[index].fishName}",
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w700),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-class MyFishUnlockedWidget extends StatelessWidget {
-  const MyFishUnlockedWidget({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: fishData.length,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 5 / 4),
-      itemBuilder: (context, index) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 0.67, color: Colors.white),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  fishData[index].fishImage ?? '',
-                  height: Get.width * 0.25,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                )),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                fishData[index].fishName ?? '',
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w700),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class MyPostWidget extends StatelessWidget {
-  const MyPostWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      itemCount: myPostList.length,
-      itemBuilder: (context, index) => ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.asset(
-            myPostList[index].fishingImage ?? '',
-            height: Get.width * 0.32,
-            width: Get.width * 0.32,
-            fit: BoxFit.cover,
-          )),
-    );
-  }
-}

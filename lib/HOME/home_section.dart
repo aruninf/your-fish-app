@@ -131,9 +131,10 @@ class NotificationItem extends StatelessWidget {
 }
 
 class SingleFishPostWidget extends StatelessWidget {
-  const SingleFishPostWidget({super.key, required this.postModel});
+  SingleFishPostWidget({super.key, required this.postModel});
 
   final PostData postModel;
+  final controller = Get.find<PostController>();
 
   @override
   Widget build(BuildContext context) {
@@ -148,31 +149,38 @@ class SingleFishPostWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+           Row(
             children: [
-              Text(
-                "${postModel.userName}",
-                style: const TextStyle(
-                    fontFamily: "Rodetta",
-                    fontWeight: FontWeight.w700,
-                    fontSize: 17,
-                    color: secondaryColor),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  "${postModel.userHandle}",
+                  style: const TextStyle(
+                      fontFamily: "Rodetta",
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17,
+                      color: secondaryColor),
+                ),
               ),
               const Spacer(),
-              TextButton.icon(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(alignment: Alignment.topRight),
-                  icon: const Icon(
-                    PhosphorIcons.map_pin,
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                  label:  CustomText(
-                    text: postModel.locationName ?? '',
-                    weight: FontWeight.w400,
-                    sizeOfFont: 13,
-                    color: Colors.white,
-                  ))
+              (postModel.isPublic ==1) ? SizedBox(
+                width: Get.width*0.35,
+                child: TextButton.icon(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(alignment: Alignment.topRight),
+                    icon: const Icon(
+                      PhosphorIcons.map_pin,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                    label:  CustomText(
+                      text: postModel.address ?? '',
+                      weight: FontWeight.w400,
+                      sizeOfFont: 13,
+                      maxLin: 1,
+                      color: Colors.white,
+                    )),
+              ): const SizedBox.shrink()
             ],
           ),
           ClipRRect(
@@ -189,22 +197,25 @@ class SingleFishPostWidget extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               )),
-          Row(
+          Obx(() => Row(
             children: [
               InkWell(
-                onTap: () {},
+                borderRadius: BorderRadius.circular(8),
+                onTap: () => controller.addLiked(postModel),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
                     fishIcon,
                     height: 28,
                     width: 28,
-                    color: Colors.white,
+                    color: controller.isLiked.value ? fishColor:  Colors.white,
                   ),
                 ),
               ),
               InkWell(
-                onTap: () {},
+                borderRadius: BorderRadius.circular(8),
+
+                onTap: () => controller.openChat(postModel),
                 child: const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Icon(
@@ -214,7 +225,10 @@ class SingleFishPostWidget extends StatelessWidget {
                 ),
               ),
               InkWell(
-                onTap: () {},
+                borderRadius: BorderRadius.circular(8),
+
+                onTap: () => controller.sharePost(postModel),
+
                 child: const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Icon(
@@ -225,17 +239,20 @@ class SingleFishPostWidget extends StatelessWidget {
               ),
               const Spacer(),
               InkWell(
-                onTap: () {},
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                borderRadius: BorderRadius.circular(8),
+
+                onTap: () => controller.addFavourite(postModel),
+
+                child:  Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Icon(
-                    PhosphorIcons.bookmark_simple,
-                    color: Colors.white,
+                    controller.isFav.value ? PhosphorIcons.bookmark_simple_fill : PhosphorIcons.bookmark_simple,
+                    color:  controller.isFav.value ? fishColor:  Colors.white,
                   ),
                 ),
               ),
             ],
-          ),
+          )),
            CustomText(
             text:
               postModel.caption ?? ''  ,
@@ -247,12 +264,22 @@ class SingleFishPostWidget extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-           CustomText(
-            text: postModel.tagFish ?? '',
-            weight: FontWeight.w500,
-            sizeOfFont: 13,
-            color: Colors.white,
+          Wrap(
+            children:List.generate((postModel.tagFish ?? []).length, (index) =>  Container(
+              margin: const EdgeInsets.only(right: 8,bottom: 8),
+              decoration: BoxDecoration(
+                color: Colors.white24,
+                borderRadius: BorderRadius.circular(16)
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 4),
+              child: CustomText(
+          text: "#${(postModel.tagFish ?? [])[index].localName}",
+              weight: FontWeight.w700,
+              sizeOfFont: 13,
+              color: secondaryColor,
           ),
+            ),)
+          )
         ],
       ),
     );

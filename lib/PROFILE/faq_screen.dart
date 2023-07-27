@@ -12,13 +12,11 @@ class FAQScreen extends StatelessWidget {
   FAQScreen({super.key});
   final controller=Get.put(SettingController());
 
-  void callApi()async {
-    Future.delayed(Duration.zero,() => controller.getFaq(),);
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    callApi();
+
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(

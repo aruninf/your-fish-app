@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/UTILS/app_images.dart';
 import 'package:yourfish/UTILS/consts.dart';
 
+import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../UTILS/app_color.dart';
 
 class MyFutureFishWidget extends StatelessWidget {
-  const MyFutureFishWidget({super.key});
+  MyFutureFishWidget({super.key});
 
+  final controller = Get.find<UserController>();
+
+  void getMyFutureFish(){
+    var data={
+      "sortBy": "asc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
+    Future.delayed(Duration.zero,() => controller.getFish(data),);
+  }
   @override
   Widget build(BuildContext context) {
+    getMyFutureFish();
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -18,7 +32,7 @@ class MyFutureFishWidget extends StatelessWidget {
           mainAxisSpacing: 16,
           crossAxisSpacing: 16,
           childAspectRatio: 5 / 4),
-      itemCount: fishData.length,
+      itemCount: controller.fishData.length,
       itemBuilder: (context, index) => Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.67, color: Colors.white),
@@ -100,11 +114,17 @@ class MyFutureFishWidget extends StatelessWidget {
                 children: [
                   ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      child: Image.asset(
-                        fishData[index].fishImage ?? '',
+                      child: Image.network(
+                        controller.fishData[index].fishImage ?? '',
                         height: Get.width * 0.25,
                         fit: BoxFit.cover,
                         width: double.infinity,
+                        errorBuilder: (context, error, stackTrace) => Image.asset(
+                          fishingImage,
+                          height: Get.width * 0.25,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
                       )),
                   const Align(
                       alignment: Alignment.topRight,
@@ -120,7 +140,7 @@ class MyFutureFishWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  fishData[index].fishName ?? 'Your fish name',
+                  controller.fishData[index].localName ?? 'Your fish name',
                   maxLines: 1,
                   textAlign: TextAlign.center,
                   style: const TextStyle(

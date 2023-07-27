@@ -23,13 +23,19 @@ class EditProfileScreen extends StatelessWidget {
   final numberController = TextEditingController();
 
   void getData()async {
+    var data={
+      "sortBy": "asc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
     Future.delayed(Duration.zero,() {
       nameController.text = userData.name ?? '';
       emailController.text = userData.email ?? '';
       handleController.text = userData.handle ?? '';
       numberController.text = userData.phoneNumber ?? '';
       locationController.text = userData.locationId ?? '';
-      userController.getFishCategory();
+      userController.getFishCategory(data);
     },);
   }
 

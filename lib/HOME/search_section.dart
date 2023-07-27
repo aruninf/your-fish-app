@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/HOME/profile/my_post.dart';
 import 'package:yourfish/HOME/profile_section.dart';
 
 import '../CHATS/one_to_one_chat_screen.dart';
@@ -237,7 +238,7 @@ class _SearchSectionState extends State<SearchSection> {
                 ),
           Expanded(
             child: selectedIndex == 'Posts'
-                ? const MyPostWidget()
+                ? MyPostWidget()
                 : ListView.builder(
                     itemCount: chatsList.length,
                     physics: const BouncingScrollPhysics(),

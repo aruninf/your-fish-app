@@ -9,9 +9,7 @@ import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_field.dart';
 import '../CUSTOM_WIDGETS/gender_dropdown.dart';
 import '../UTILS/app_color.dart';
-import '../UTILS/dialog_helper.dart';
 import 'create_password.dart';
-
 
 class CreateAccountScreen extends StatelessWidget {
   CreateAccountScreen(
@@ -65,7 +63,10 @@ class CreateAccountScreen extends StatelessWidget {
                         ),
                         CommonTextField(
                           hintText: 'Email',
-                          isReadOnly:(socialType=='google' && socialId.isNotEmpty) ? true : false,
+                          isReadOnly:
+                              (socialType == 'google' && socialId.isNotEmpty)
+                                  ? true
+                                  : false,
                           controller: userController.emailController,
                           maxLength: 30,
                         ),
@@ -73,7 +74,8 @@ class CreateAccountScreen extends StatelessWidget {
                           height: 12,
                         ),
                         Obx(() {
-                          userController.dobController.text = userController.selectDob.value;
+                          userController.dobController.text =
+                              userController.selectDob.value;
                           return Wrap(
                             direction: Axis.horizontal,
                             children: [
@@ -178,12 +180,12 @@ class CreateAccountScreen extends StatelessWidget {
           btnTextColor: primaryColor,
           btnText: "NEXT",
           onClick: () {
-            if ((userController.nameController.text ?? '').length<3) {
+            if ((userController.nameController.text ?? '').length < 3) {
               Get.snackbar('Required!', 'Enter valid name',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
               return;
             }
-            if ((userController.handleController.text ?? '').length<3) {
+            if ((userController.handleController.text ?? '').length < 3) {
               Get.snackbar('Required!', 'Please enter the correct handle',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
 
@@ -222,18 +224,17 @@ class CreateAccountScreen extends StatelessWidget {
               'gender': userController.gender ?? 'Male',
               'phone_number': userController.numberController.text.trim()
             };
-            if(socialType=='google' && socialId.isNotEmpty){
+            if (socialType != 'email' && socialId.isNotEmpty) {
               var newData = {'password': "12345678", ...data};
               Get.to(
-                      () => UploadProfilePicture(
-                    data: newData,
-                  ),
+                  () => UploadProfilePicture(
+                        data: newData,
+                      ),
                   transition: Transition.rightToLeft);
-            }else{
+            } else {
               Get.to(() => CreatePasswordScreen(data: data),
                   transition: Transition.rightToLeft);
             }
-
           },
         ),
       ),

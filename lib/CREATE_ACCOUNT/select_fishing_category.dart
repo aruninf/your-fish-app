@@ -17,9 +17,15 @@ class SelectFishingCategory extends StatelessWidget {
 
 
   void callApi() async {
+    var data={
+      "sortBy": "asc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
     Future.delayed(
       Duration.zero,
-          () => controller.getFishCategory(),
+          () => controller.getFishCategory(data),
     );
   }
   @override

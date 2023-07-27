@@ -5,6 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:yourfish/MODELS/login_response.dart';
 import 'package:yourfish/MODELS/post_response.dart';
 import 'package:yourfish/UTILS/permission_services.dart';
@@ -19,8 +20,12 @@ class PostController extends GetxController {
   var selectedCategories = [].obs;
   var isLoading = false.obs;
   var postData = <PostData>[].obs;
+  var myPostData = <PostData>[].obs;
   var userData = UserData().obs;
   var currentAddress = ''.obs;
+  var isLiked = false.obs;
+  var isFav = false.obs;
+
   var currentPosition = Position(
           longitude: 0,
           latitude: 0,
@@ -46,12 +51,12 @@ class PostController extends GetxController {
     super.onReady();
   }
 
-
   ///🧨🧨🧨🧨🧨🧨 Get Post data 🧨🧨🧨🧨🧨
 
-  Future<void> getPosts() async {
+  Future<void> getPosts(dynamic data) async {
     isLoading.value = true;
-    var response = await Network().getRequest(endPoint: getPostsApi);
+    var response = await Network()
+        .postRequest(endPoint: getPostsApi, formData: data, isLoader: false);
     if (response?.data != null) {
       isLoading.value = false;
       PostResponse post = PostResponse.fromJson(response?.data);
@@ -61,9 +66,10 @@ class PostController extends GetxController {
 
   ///🧨🧨🧨🧨🧨🧨 Get Chat user 🧨🧨🧨🧨🧨
 
-  Future<void> getChatsUser() async {
+  Future<void> getChatsUser(dynamic data) async {
     isLoading.value = true;
-    var response = await Network().getRequest(endPoint: getFishApi);
+    var response =
+        await Network().postRequest(endPoint: getFishApi, formData: data);
     if (response?.data != null) {
       isLoading.value = false;
       PostResponse post = PostResponse.fromJson(response?.data);
@@ -81,6 +87,18 @@ class PostController extends GetxController {
     }
   }
 
+  /// 💥💥💥💥💥💥💥 get My Post 💥💥💥💥💥💥
+
+  Future<void> getMyPost(dynamic data) async {
+    isLoading.value = true;
+    var response = await Network().getRequest(endPoint: getMyPostApi);
+    if (response?.data != null) {
+      isLoading.value = false;
+      PostResponse post = PostResponse.fromJson(response?.data);
+      myPostData.value = post.data ?? [];
+    }
+  }
+
   /// 💥💥💥💥💥💥💥 Update User Profile 💥💥💥💥💥💥💥
 
   Future<void> updateProfile(dynamic data) async {
@@ -88,7 +106,13 @@ class PostController extends GetxController {
         endPoint: updateProfileApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
-        await getPosts();
+        var data = {
+          "sortBy": "asc",
+          "sortOn": "created_at",
+          "page": "1",
+          "limit": "20"
+        };
+        await getPosts(data);
         Get.back();
       } else {
         DialogHelper.showErrorDialog(
@@ -104,14 +128,39 @@ class PostController extends GetxController {
         .postRequest(endPoint: addPostApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
-        await getPosts();
         Get.back();
+        Get.snackbar('Post created Successfully', '',
+            colorText: Colors.green, snackPosition: SnackPosition.TOP);
+        var data = {
+          "sortBy": "asc",
+          "sortOn": "created_at",
+          "page": "1",
+          "limit": "20"
+        };
+        getPosts(data);
       } else {
         DialogHelper.showErrorDialog(
             title: "Error", description: response?.data['message']);
       }
     }
   }
+
+  ///🧨🧨🧨🧨🧨🧨 Create New Post 🧨🧨🧨🧨🧨
+
+  Future<void> deletePost(dynamic data) async {
+    var response = await Network()
+        .postRequest(endPoint: deletePostApi, formData: data, isLoader: true);
+    if (response?.data != null) {
+      if (response?.data['status_code'] == 200) {
+        Get.snackbar('Post deleted successfully', '',
+            colorText: Colors.green, snackPosition: SnackPosition.TOP);
+      } else {
+        DialogHelper.showErrorDialog(
+            title: "Error", description: response?.data['message']);
+      }
+    }
+  }
+
   ///💥💥💥💥💥💥💥 Location Permission 💥💥💥💥💥💥💥
 
   Future<bool> handleLocationPermission() async {
@@ -132,6 +181,7 @@ class PostController extends GetxController {
         Get.snackbar('Location permissions are denied', '',
             colorText: Colors.deepOrangeAccent,
             snackPosition: SnackPosition.TOP);
+
         ///openAppSettings();
         return false;
       }
@@ -166,8 +216,10 @@ class PostController extends GetxController {
   ///💥💥💥💥💥💥💥  Get Address from Lat Long 💥💥💥💥💥💥💥
 
   Future<void> getAddressFromLatLng(Position position) async {
-    print("User Location 💥💥💥💥💥💥💥 ${position.latitude},${position.longitude}");
-    await placemarkFromCoordinates(currentPosition.value.latitude, currentPosition.value.longitude)
+    print(
+        "User Location 💥💥💥💥💥💥💥 ${position.latitude},${position.longitude}");
+    await placemarkFromCoordinates(
+            currentPosition.value.latitude, currentPosition.value.longitude)
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       currentAddress.value =
@@ -175,5 +227,48 @@ class PostController extends GetxController {
     }).catchError((e) {
       debugPrint(e);
     });
+  }
+
+  addLiked(PostData postModel) {
+    isLiked.value=!isLiked.value;
+    var data = {
+      "request_type": "like",
+      "post_id": postModel.id,
+      "request_status": isLiked.value
+    };
+    saveLikeFavourite(data);
+  }
+
+  saveLikeFavourite(dynamic data) async {
+    var response = await Network()
+        .postRequest(endPoint: likesFavouritesApi, formData: data, isLoader: true);
+    if (response?.data != null) {
+      if (response?.data['status_code'] == 200) {
+        Get.snackbar(response?.data['message'], '',
+            colorText: Colors.green, snackPosition: SnackPosition.TOP);
+      } else {
+        DialogHelper.showErrorDialog(
+            title: "Error", description: response?.data['message']);
+      }
+    }
+  }
+
+  openChat(PostData postModel) async {
+
+  }
+
+  sharePost(PostData postModel) async {
+    await Share.share(
+        "${postModel.userName} shared a post just have a look \n${postModel.image}\n\n${postModel.caption}");
+  }
+
+  addFavourite(PostData postModel) {
+    isFav.value=!isFav.value;
+    var data = {
+      "request_type": "favourite",
+      "post_id": postModel.id,
+      "request_status": isFav.value
+    };
+    saveLikeFavourite(data);
   }
 }
