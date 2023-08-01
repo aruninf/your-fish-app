@@ -160,6 +160,7 @@ class _MainHomeState extends State<MainHome> {
           IconButton(
               onPressed: () {
                 _scaffoldKey.currentState!.openEndDrawer();
+
               },
               icon: const Icon(
                 PhosphorIcons.list_bold,
@@ -340,6 +341,7 @@ class RightDrawerMenuWidget extends StatelessWidget {
                       } else if (index1 == 1) {
                         onClick(1);
                       } else if (index1 == 3) {
+
                         Get.to( BlogsScreen(),
                             transition: Transition.leftToRight);
                       } else if (index1 == 4) {

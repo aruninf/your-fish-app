@@ -29,12 +29,16 @@ class SettingController extends GetxController {
   var currentValues = 20.0.obs;
 
 
+  @override
+  void onReady() {
+    super.onReady();
+  }
 
   /// 💥💥💥💥💥💥💥 Get Blogs 💥💥💥💥💥💥💥
 
   Future<void> getBlogs(dynamic data) async {
     isLoading.value=true;
-    var response = await Network().getRequest(endPoint: getBlogApi);
+    var response = await Network().postRequest(endPoint: getBlogApi,formData: data);
     if (response?.data != null) {
       isLoading.value=false;
       BlogResponse blog = BlogResponse.fromJson(response?.data);
@@ -53,7 +57,7 @@ class SettingController extends GetxController {
 
   Future<void> getArticles(dynamic data) async {
     isLoading.value=true;
-    var response = await Network().getRequest(endPoint: getArticlesApi);
+    var response = await Network().postRequest(endPoint: getArticlesApi,formData: data);
     if (response?.data != null) {
       isLoading.value=false;
       ArticleResponse blog = ArticleResponse.fromJson(response?.data);

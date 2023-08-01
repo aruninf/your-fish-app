@@ -13,12 +13,7 @@ import 'help_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({super.key});
-
   final controller = Get.put(SettingController());
-
-
-
-
   void callFaqApi()async {
     var data = {
       "sortBy": "asc",

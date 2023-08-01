@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/setting_controller.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_search_field.dart';
 import 'package:yourfish/USER_BLOGS/blog_detail_screen.dart';
+import 'package:yourfish/USER_BLOGS/view_all_blog_article.dart';
 
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
@@ -33,7 +34,7 @@ class BlogsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    callApi();
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
@@ -63,7 +64,8 @@ class BlogsScreen extends StatelessWidget {
                         ),
                         const Spacer(),
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () => Get.to(()=>const ViewAllScreen()),
+
                             child: const Text(
                               "View All",
                               style: TextStyle(
@@ -145,7 +147,7 @@ class BlogsScreen extends StatelessWidget {
                         ),
                         const Spacer(),
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () => Get.to(()=>const ViewAllScreen()),
                             child: const Text(
                               "View All",
                               style: TextStyle(

@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
-import 'package:yourfish/HOME/location_page.dart';
 
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
@@ -72,8 +69,8 @@ class AddFishScreen extends StatelessWidget {
                                     onChanged: (value) {
                                       controller.isLocationOn.value =
                                           !controller.isLocationOn.value;
-                                      if (controller.isLocationOn.value) {
-                                        Get.to(LocationPage());
+                                      if(controller.isLocationOn.value){
+                                        controller.getUserData();
                                       }
                                     },
                                   ),
@@ -138,16 +135,16 @@ class AddFishScreen extends StatelessWidget {
                                       imageUrl.value = await Network()
                                               .uploadFile(uri!, 'fish') ??
                                           '';
-                                      controller.uploadFile.value = uri;
+                                      //controller.uploadFile.value = uri;
                                       //Get.back();
                                     },
                                     context: context);
                               },
-                              child: controller.uploadFile.value.path.isNotEmpty
+                              child: imageUrl.value.isNotEmpty
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(16),
-                                      child: Image.file(
-                                        controller.uploadFile.value,
+                                      child: Image.network(
+                                        imageUrl.value,
                                         fit: BoxFit.cover,
                                       ))
                                   : const Column(
@@ -239,14 +236,14 @@ class AddFishScreen extends StatelessWidget {
                 "isPublic": controller.isLocationOn.value,
                 "latitude": controller.currentPosition.value.latitude,
                 "longitude": controller.currentPosition.value.longitude,
-                "address": controller.currentAddress.value,
+                "address": (controller.userData.value.address ?? '').isNotEmpty
+                    ? controller.userData.value.address
+                    : controller.currentAddress.value,
                 "tag_fish": tagFishController.text.trim(),
                 "image": imageUrl.value,
                 "caption": captionsController.text.trim()
               };
               controller.createPost(data);
-              controller.uploadFile.value = File("");
-
             }
           },
         ),

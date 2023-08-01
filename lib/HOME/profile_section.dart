@@ -5,8 +5,8 @@ import 'package:yourfish/HOME/profile/my_fish_unlock.dart';
 import 'package:yourfish/HOME/profile/my_gear.dart';
 import 'package:yourfish/HOME/profile/my_post.dart';
 import 'package:yourfish/PROFILE/edit_profile_screen.dart';
-import 'package:yourfish/UTILS/consts.dart';
 
+import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../PROFILE/my_future_fish.dart';
 import '../PROFILE/my_map_screen.dart';
@@ -16,6 +16,7 @@ class ProfileSection extends StatelessWidget {
   ProfileSection({super.key});
 
   final controller = Get.find<PostController>();
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +61,17 @@ class ProfileSection extends StatelessWidget {
                               width: 50,
                             ),
                     ),
-                    title:  CustomText(
+                    title: CustomText(
                       text: controller.userData.value.name ?? '',
                       color: Colors.white,
                       weight: FontWeight.w800,
                       sizeOfFont: 18,
                     ),
-                    subtitle:  CustomText(
-                      text: Get.find<PostController>().currentAddress.value ?? '',
+                    subtitle: CustomText(
+                      text: (controller.userData.value.address ?? '').isNotEmpty
+                          ? controller.userData.value.address ?? ''
+                          : Get.find<PostController>().currentAddress.value ??
+                              '',
                       maxLin: 1,
                       color: Colors.white,
                       sizeOfFont: 15,
@@ -76,9 +80,10 @@ class ProfileSection extends StatelessWidget {
                     trailing: SizedBox(
                       height: 30,
                       child: TextButton(
-                          onPressed: () => Get.to(EditProfileScreen(
-                            userData: controller.userData.value,
-                          ),
+                          onPressed: () => Get.to(
+                              EditProfileScreen(
+                                userData: controller.userData.value,
+                              ),
                               transition: Transition.rightToLeft),
                           style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
@@ -204,8 +209,7 @@ class ProfileSection extends StatelessWidget {
                                 child: InkWell(
                                   onTap: () {
                                     controller.selectedIndex.value =
-                                    controller.listOfProfileSection[index];
-
+                                        controller.listOfProfileSection[index];
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -230,18 +234,14 @@ class ProfileSection extends StatelessWidget {
                                 isTopSpots: false,
                               )
                             : controller.selectedIndex.value == "Fish Unlocked"
-                                ?  MyFishUnlockedWidget()
+                                ? MyFishUnlockedWidget()
                                 : controller.selectedIndex.value ==
                                         "My Future Fish"
-                                    ?  MyFutureFishWidget()
-                                    :  MyGearWidget()),
+                                    ? MyFutureFishWidget()
+                                    : MyGearWidget()),
               ],
             )),
       ),
     );
   }
 }
-
-
-
-

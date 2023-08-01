@@ -50,7 +50,7 @@ class UploadProfilePicture extends StatelessWidget {
                               imageUrl.value =
                                   await Network().uploadFile(uri!, 'profile') ??
                                       '';
-                              Get.find<UserController>().uploadFile.value = uri;
+                              //Get.find<UserController>().uploadFile.value = uri;
                               //Get.back();
                             },
                             context: context);

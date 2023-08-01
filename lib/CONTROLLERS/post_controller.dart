@@ -16,7 +16,6 @@ import '../UTILS/dialog_helper.dart';
 
 class PostController extends GetxController {
   var isLocationOn = false.obs;
-  var uploadFile = File('').obs;
   var selectedCategories = [].obs;
   var isLoading = false.obs;
   var postData = <PostData>[].obs;
@@ -106,13 +105,7 @@ class PostController extends GetxController {
         endPoint: updateProfileApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
-        var data = {
-          "sortBy": "asc",
-          "sortOn": "created_at",
-          "page": "1",
-          "limit": "20"
-        };
-        await getPosts(data);
+        getUserData();
         Get.back();
       } else {
         DialogHelper.showErrorDialog(
@@ -254,7 +247,21 @@ class PostController extends GetxController {
   }
 
   openChat(PostData postModel) async {
-
+    var data={
+      "receiver_id": postModel.userId,
+      "post_id": postModel.id,
+    };
+    var response = await Network()
+        .postRequest(endPoint: startChatApi, formData: data, isLoader: true);
+    if (response?.data != null) {
+      if (response?.data['status_code'] == 200) {
+        Get.snackbar(response?.data['message'], '',
+            colorText: Colors.green, snackPosition: SnackPosition.TOP);
+      } else {
+        DialogHelper.showErrorDialog(
+            title: "Error", description: response?.data['message']);
+      }
+    }
   }
 
   sharePost(PostData postModel) async {

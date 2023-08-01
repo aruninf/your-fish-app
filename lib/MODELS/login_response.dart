@@ -40,6 +40,9 @@ class UserData {
   String? phoneNumber;
   String? profilePic;
   String? locationId;
+  String? latitude;
+  String? longitude;
+  String? address;
   String? interestedFishId;
   String? experienceFishId;
   String? fishCatId;
@@ -59,6 +62,9 @@ class UserData {
         this.phoneNumber,
         this.profilePic,
         this.locationId,
+        this.latitude,
+        this.longitude,
+        this.address,
         this.interestedFishId,
         this.experienceFishId,
         this.fishCatId,
@@ -78,6 +84,10 @@ class UserData {
     phoneNumber = json['phone_number'];
     profilePic = json['profile_pic'];
     locationId = json['location_id'];
+
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    address = json['address'];
     interestedFishId = json['interested_fish_id'];
     experienceFishId = json['experience_fish_id'];
     fishCatId = json['fish_cat_id'];
@@ -99,6 +109,9 @@ class UserData {
     data['phone_number'] = this.phoneNumber;
     data['profile_pic'] = this.profilePic;
     data['location_id'] = this.locationId;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+    data['address'] = this.address;
     data['interested_fish_id'] = this.interestedFishId;
     data['experience_fish_id'] = this.experienceFishId;
     data['fish_cat_id'] = this.fishCatId;

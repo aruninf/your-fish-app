@@ -190,6 +190,8 @@ class AuthController extends GetxController {
           Get.off(() => CreateAccountScreen(
                 socialType: socialType,
                 socialId: user.uid,
+                name: user.displayName,
+                email: user.email,
               ));
         }
       }

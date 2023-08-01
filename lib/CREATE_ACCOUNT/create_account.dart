@@ -13,16 +13,27 @@ import 'create_password.dart';
 
 class CreateAccountScreen extends StatelessWidget {
   CreateAccountScreen(
-      {super.key, required this.socialId, required this.socialType});
+      {super.key, required this.socialId, required this.socialType,this.email,this.name});
 
   final String socialId;
   final String socialType;
+  final String? email;
+  final String? name;
 
   final userController = Get.put(UserController());
   final _formKey = GlobalKey<FormState>();
 
+  final nameController = TextEditingController();
+  final handleController = TextEditingController();
+  final emailController = TextEditingController();
+  final dobController = TextEditingController();
+  final numberController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
+    emailController.text=email ?? '';
+    nameController.text=name ?? '';
     return Scaffold(
       resizeToAvoidBottomInset: false,
       //extendBody: true,
@@ -46,8 +57,8 @@ class CreateAccountScreen extends StatelessWidget {
                           height: 16,
                         ),
                         CommonTextField(
-                          hintText: 'Name',
-                          controller: userController.nameController,
+                          hintText: name ??  'Name',
+                          controller: nameController,
                           maxLength: 16,
                         ),
                         const SizedBox(
@@ -55,26 +66,26 @@ class CreateAccountScreen extends StatelessWidget {
                         ),
                         CommonTextField(
                           hintText: 'Handle',
-                          controller: userController.handleController,
+                          controller: handleController,
                           maxLength: 20,
                         ),
                         const SizedBox(
                           height: 12,
                         ),
                         CommonTextField(
-                          hintText: 'Email',
+                          hintText: email ?? 'Email',
                           isReadOnly:
                               (socialType == 'google' && socialId.isNotEmpty)
                                   ? true
                                   : false,
-                          controller: userController.emailController,
+                          controller: emailController,
                           maxLength: 30,
                         ),
                         const SizedBox(
                           height: 12,
                         ),
                         Obx(() {
-                          userController.dobController.text =
+                          dobController.text =
                               userController.selectDob.value;
                           return Wrap(
                             direction: Axis.horizontal,
@@ -90,7 +101,7 @@ class CreateAccountScreen extends StatelessWidget {
                                         onTap: () =>
                                             userController.selectDate(context),
                                         controller:
-                                            userController.dobController,
+                                            dobController,
                                         readOnly: true,
                                         keyboardType: TextInputType.text,
                                         maxLines: 1,
@@ -130,7 +141,7 @@ class CreateAccountScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                           child: TextFormField(
-                              controller: userController.numberController,
+                              controller: numberController,
                               keyboardType: TextInputType.number,
                               //obscureText:(isPassword ?? false) ? uController.isPasswordVisible.value : false,
                               maxLines: 1,
@@ -180,34 +191,34 @@ class CreateAccountScreen extends StatelessWidget {
           btnTextColor: primaryColor,
           btnText: "NEXT",
           onClick: () {
-            if ((userController.nameController.text ?? '').length < 3) {
+            if ((nameController.text ?? '').length < 3) {
               Get.snackbar('Required!', 'Enter valid name',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
               return;
             }
-            if ((userController.handleController.text ?? '').length < 3) {
+            if ((handleController.text ?? '').length < 3) {
               Get.snackbar('Required!', 'Please enter the correct handle',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
 
               return;
             }
-            if (userController.emailController.text == '' ||
-                userController.emailController.text.isEmpty ||
-                !userController.emailController.text.contains('@') ||
-                !userController.emailController.text.contains('.')) {
+            if (emailController.text == '' ||
+                emailController.text.isEmpty ||
+                !emailController.text.contains('@') ||
+                !emailController.text.contains('.')) {
               Get.snackbar('Required!', 'Please enter the correct email',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
 
               return;
             }
 
-            if ((userController.dobController.text ?? '').isEmpty) {
+            if ((dobController.text ?? '').isEmpty) {
               Get.snackbar('Required!', 'Select DOB',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
               return;
             }
 
-            if ((userController.numberController.text ?? '').length < 10) {
+            if ((numberController.text ?? '').length < 10) {
               Get.snackbar('Required!', 'Please enter the correct phone number',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
 
@@ -217,12 +228,12 @@ class CreateAccountScreen extends StatelessWidget {
               "user_type": "user",
               "social_type": socialType,
               "social_id": socialId,
-              'name': userController.nameController.text.trim(),
-              'handle': userController.handleController.text.trim(),
-              'email': userController.emailController.text.trim(),
-              'dob': userController.dobController.text.trim(),
+              'name': nameController.text.trim(),
+              'handle': handleController.text.trim(),
+              'email': emailController.text.trim(),
+              'dob': dobController.text.trim(),
               'gender': userController.gender ?? 'Male',
-              'phone_number': userController.numberController.text.trim()
+              'phone_number': numberController.text.trim()
             };
             if (socialType != 'email' && socialId.isNotEmpty) {
               var newData = {'password': "12345678", ...data};

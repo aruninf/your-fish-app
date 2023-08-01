@@ -30,13 +30,8 @@ class UserController extends GetxController {
   var isDataLoading = false.obs;
   var isPasswordVisible = true.obs;
 
-  var uploadFile = File('').obs;
   var selectDob = ''.obs;
-  final nameController = TextEditingController();
-  final handleController = TextEditingController();
-  final emailController = TextEditingController();
-  final dobController = TextEditingController();
-  final numberController = TextEditingController();
+
   String? gender;
   DateTime selectedDate = DateTime.now();
   var fishData = <FishData>[].obs;
@@ -44,25 +39,8 @@ class UserController extends GetxController {
   var fishCategory = <Category>[].obs;
   var fishingGear = <GearData>[].obs;
 
-  @override
-  void onReady() async {
-    String? email = await Utility.getStringValue(emailKey);
-    String? name = await Utility.getStringValue(nameKey);
-    nameController.text = name ?? '';
-    emailController.text = email ?? '';
-    super.onReady();
-  }
 
-  @override
-  void dispose() {
-    isDataLoading.value = false;
-    nameController.dispose();
-    handleController.dispose();
-    emailController.dispose();
-    dobController.dispose();
-    numberController.dispose();
-    super.dispose();
-  }
+
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -111,12 +89,6 @@ class UserController extends GetxController {
     if (response?.data != null) {
       UserResponse loginResponse = UserResponse.fromJson(response?.data);
       if (loginResponse.status ?? false) {
-        nameController.text='';
-        handleController.text='';
-        emailController.text='';
-        selectDob.value='';
-        numberController.text='';
-        gender='Male';
         Utility.setStringValue(tokenKey, loginResponse.token ?? "");
         Get.offAll(() => SelectFishInterest(), transition: Transition.rightToLeft);
       } else {

@@ -57,7 +57,7 @@ class MyPostWidget extends StatelessWidget {
                             children: [
                               InkWell(
                                 borderRadius: BorderRadius.circular(8),
-                                onTap: () => Get.to(AddFishScreen()),
+                                onTap: () => Get.to(()=>AddFishScreen()),
                                 child: Container(
                                     padding: const EdgeInsets.all(5),
                                     decoration: BoxDecoration(

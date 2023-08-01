@@ -47,9 +47,9 @@ class CustomAppBar extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: Get.height * 0.02,
+            height: (heading ?? '').isNotEmpty ?  Get.height * 0.02 : 0,
           ),
-          Padding(
+          (heading ?? '').isNotEmpty ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Text(
               heading ?? '',
@@ -61,7 +61,7 @@ class CustomAppBar extends StatelessWidget {
                   letterSpacing: 1,
                   fontWeight: FontWeight.bold),
             ),
-          ),
+          ): const SizedBox.shrink(),
         ],
       ),
     );

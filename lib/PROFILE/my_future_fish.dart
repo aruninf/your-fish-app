@@ -22,6 +22,7 @@ class MyFutureFishWidget extends StatelessWidget {
     };
     Future.delayed(Duration.zero,() => controller.getFish(data),);
   }
+
   @override
   Widget build(BuildContext context) {
     getMyFutureFish();
@@ -31,7 +32,8 @@ class MyFutureFishWidget extends StatelessWidget {
           crossAxisCount: 2,
           mainAxisSpacing: 16,
           crossAxisSpacing: 16,
-          childAspectRatio: 5 / 4),
+          childAspectRatio: 5 / 4
+      ),
       itemCount: controller.fishData.length,
       itemBuilder: (context, index) => Container(
         decoration: BoxDecoration(

@@ -53,7 +53,7 @@ class Database {
     Reference ref = FirebaseStorage.instance.ref("/${timestamp}_photo.jpg");
     UploadTask uploadTask = ref.putFile(imageFile!);
     var imageUrl = await (await uploadTask).ref.getDownloadURL();
-    print("uploading image url  == = = == = = = = = = = == = = =${imageUrl.toString()}");
+    print("uploading image url  == = =  = == = = =${imageUrl.toString()}");
     DialogHelper.hideLoading();
     return imageUrl.toString();
   }

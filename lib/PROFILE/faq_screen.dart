@@ -11,9 +11,6 @@ import '../UTILS/app_color.dart';
 class FAQScreen extends StatelessWidget {
   FAQScreen({super.key});
   final controller=Get.put(SettingController());
-
-
-
   @override
   Widget build(BuildContext context) {
 
