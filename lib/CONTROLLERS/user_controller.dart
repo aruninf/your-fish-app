@@ -26,18 +26,18 @@ class UserController extends GetxController {
   var selectedFishInterest = [].obs;
   var selectedFishingLocation = [].obs;
   var selectedFishExp = [].obs;
+  var selectedFishTag = <FishData>[].obs;
   var selectedFishGear = [].obs;
   var isDataLoading = false.obs;
   var isPasswordVisible = true.obs;
-
   var selectDob = ''.obs;
-
   String? gender;
   DateTime selectedDate = DateTime.now();
   var fishData = <FishData>[].obs;
   var fishingLocation = <FishingLocationData>[].obs;
   var fishCategory = <Category>[].obs;
   var fishingGear = <GearData>[].obs;
+
 
 
 

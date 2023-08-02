@@ -138,6 +138,8 @@ class SingleFishPostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.isLiked.value=postModel.isLiked ?? false;
+    controller.isFav.value=postModel.isFavourite ?? false;
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 12),
@@ -214,7 +216,6 @@ class SingleFishPostWidget extends StatelessWidget {
               ),
               InkWell(
                 borderRadius: BorderRadius.circular(8),
-
                 onTap: () => controller.openChat(postModel),
                 child: const Padding(
                   padding: EdgeInsets.all(8.0),

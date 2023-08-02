@@ -6,10 +6,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/MODELS/login_response.dart';
 import 'package:yourfish/MODELS/post_response.dart';
 import 'package:yourfish/UTILS/permission_services.dart';
 
+import '../CHATS/chat_model.dart';
+import '../CHATS/single_chat_page.dart';
 import '../NETWORKS/network.dart';
 import '../NETWORKS/network_strings.dart';
 import '../UTILS/dialog_helper.dart';
@@ -46,6 +49,7 @@ class PostController extends GetxController {
 
   @override
   void onReady() async {
+    await getUserData();
     await getCurrentPosition();
     super.onReady();
   }
@@ -121,11 +125,12 @@ class PostController extends GetxController {
         .postRequest(endPoint: addPostApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
+        Get.find<UserController>().selectedFishTag.clear();
         Get.back();
         Get.snackbar('Post created Successfully', '',
             colorText: Colors.green, snackPosition: SnackPosition.TOP);
         var data = {
-          "sortBy": "asc",
+          "sortBy": "desc",
           "sortOn": "created_at",
           "page": "1",
           "limit": "20"
@@ -237,6 +242,7 @@ class PostController extends GetxController {
         .postRequest(endPoint: likesFavouritesApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
+        Get.closeAllSnackbars();
         Get.snackbar(response?.data['message'], '',
             colorText: Colors.green, snackPosition: SnackPosition.TOP);
       } else {
@@ -255,8 +261,15 @@ class PostController extends GetxController {
         .postRequest(endPoint: startChatApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
-        Get.snackbar(response?.data['message'], '',
-            colorText: Colors.green, snackPosition: SnackPosition.TOP);
+        Get.to(
+                () => SingleChatPage(
+              receiver: ReceiverModel(
+                  matchRoomId: "${response?.data['data']['match_id']}",receiverId: "${response?.data['data']['receiver_id']}"
+              ),
+              image: "${response?.data['data']['receiver_image']}",
+              matchName: "${response?.data['data']['receiver_name']}",
+            ),
+            transition: Transition.rightToLeft);
       } else {
         DialogHelper.showErrorDialog(
             title: "Error", description: response?.data['message']);

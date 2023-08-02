@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/fish_dropdown.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
@@ -12,11 +15,10 @@ import '../UTILS/dialog_helper.dart';
 
 class AddFishScreen extends StatelessWidget {
   AddFishScreen({super.key});
-
+  final userController=Get.find<UserController>();
   final controller = Get.put(PostController());
   final imageUrl = ''.obs;
   final _formKey = GlobalKey<FormState>();
-  final tagFishController = TextEditingController();
   final captionsController = TextEditingController();
 
   @override
@@ -32,11 +34,19 @@ class AddFishScreen extends StatelessWidget {
             ),
             Obx(() => Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0,),
                     child: Form(
                       key: _formKey,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          CustomText(text: '${(controller.userData.value.address ?? '').isNotEmpty
+                              ? controller.userData.value.address
+                              : controller.currentAddress.value }',color: secondaryColor,maxLin: 1,),
+                          const SizedBox(
+                            height: 8,
+                          ),
                           Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
@@ -81,43 +91,55 @@ class AddFishScreen extends StatelessWidget {
                           const SizedBox(
                             height: 16,
                           ),
-                          TextFormField(
-                            controller: tagFishController,
-                            style: const TextStyle(color: Colors.white),
-                            validator: (text) {
-                              if (text == null || text.isEmpty) {
-                                return 'Tags required';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 14, horizontal: 16),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.white, width: 1),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.white, width: 1),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.white, width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.white, width: 1),
-                              ),
-                              hintText: "Tag Fish",
-                              hintStyle: const TextStyle(color: Colors.white54),
-                              labelStyle: const TextStyle(color: Colors.white),
-                            ),
+
+
+                          Wrap(
+                            runSpacing: 8,
+                            spacing: 5,
+                            children: List.generate(
+                                userController.selectedFishTag.length,
+                                    (index) => InkWell(
+                                  borderRadius: BorderRadius.circular(8),
+                                  onTap: () {
+                                    if(userController.selectedFishTag.contains(userController.selectedFishTag[index])){
+                                      userController.selectedFishTag.remove(userController.selectedFishTag[index]);
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white24,
+                                        borderRadius: BorderRadius.circular(16)),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          userController.selectedFishTag[index].localName ?? '',
+                                          style: const TextStyle(
+                                              color: secondaryColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        const SizedBox(
+                                          width: 4,
+                                        ),
+                                        const Icon(
+                                          Icons.close,
+                                          color: secondaryColor,
+                                          size: 16,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )),
                           ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+
+                          SearchableFishDropdown(),
                           const SizedBox(
                             height: 16,
                           ),
@@ -239,7 +261,7 @@ class AddFishScreen extends StatelessWidget {
                 "address": (controller.userData.value.address ?? '').isNotEmpty
                     ? controller.userData.value.address
                     : controller.currentAddress.value,
-                "tag_fish": tagFishController.text.trim(),
+                "tag_fish": userController.selectedFishTag.map((element) => element.id).toList(),
                 "image": imageUrl.value,
                 "caption": captionsController.text.trim()
               };

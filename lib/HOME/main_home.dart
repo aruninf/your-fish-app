@@ -3,6 +3,7 @@ import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/CONTROLLERS/setting_controller.dart';
+import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/CREATE_ACCOUNT/add_your_gear.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_text_style.dart';
 import 'package:yourfish/HOME/chats_section.dart';
@@ -41,7 +42,9 @@ class _MainHomeState extends State<MainHome> {
       "limit": "20"
     };
     if (index == 2) {
+
       Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
+      Get.find<UserController>().getFish(data);
     } else {
       setState(() {
         _page = index;

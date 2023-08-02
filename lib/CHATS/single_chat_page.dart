@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:yourfish/CONTROLLERS/auth_controller.dart';
+import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/UTILS/app_color.dart';
 
 import '../CONTROLLERS/chat_controller.dart';
@@ -34,9 +36,8 @@ class SingleChatPage extends StatefulWidget {
 }
 
 class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
-  var userController = Get.put(UserController());
+  var postController = Get.put(PostController());
   var controller = Database();
-  //var chatsController = Get.put(ChatsController());
   File? imageFile;
   int _limit = 20;
   final int _limitIncrement = 20;
@@ -47,9 +48,6 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
   String? userStatus;
-  String userId = '444';
-  String username = 'Arun Android';
-  String userProfile = '';
   Timer? _timer;
 
   @override
@@ -57,7 +55,7 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
     Future.delayed(
       Duration.zero,
       () async {
-        controller.updateStatus("online", userId);
+        controller.updateStatus("online", "${postController.userData.value.id}" );
       },
     );
     super.initState();
@@ -103,15 +101,15 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
                       ChatResult chatMessages =
                           ChatResult.fromDocument(listMessages[index]);
                       print(
-                          "sender id = == ${chatMessages.senderId} user id === $userId");
-                      if (chatMessages.receiverId == userId) {
+                          "sender id = == ${chatMessages.senderId} user id === ${postController.userData.value.id}");
+                      if (chatMessages.receiverId == "${postController.userData.value.id}") {
                         print("updating status");
                         updateSeen(listMessages[index].reference.path ?? "");
                       }
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ChatItemRow(
-                          userId: userId,
+                          userId: "${postController.userData.value.id}",
                           documentSnapshot: listMessages[index],
                         ),
                       );
@@ -234,7 +232,7 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
                                   if (userStatus != "typing") {
                                     userStatus = "typing";
                                     controller.updateStatus(
-                                        "typing", userId ?? "");
+                                        "typing", "${postController.userData.value.id}");
                                   }
                                   const duration = Duration(seconds: 1);
 
@@ -247,7 +245,7 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
                                     userStatus = "online";
 
                                     controller.updateStatus(
-                                        "online", userId ?? "");
+                                        "online", "${postController.userData.value.id}");
                                   });
                                 }
                               },
@@ -272,7 +270,7 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
   }
 
   Future<bool> onBackPress() async {
-    await controller.updateStatus("Offline", userId);
+    await controller.updateStatus("Offline",  "${postController.userData.value.id}");
     return Future.value(true);
   }
 
@@ -293,13 +291,13 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
     String ids = DateTime.now().toUtc().millisecondsSinceEpoch.toString();
     var req = ChatResult(
       id: ids,
-      senderId: userId,
+      senderId: "${postController.userData.value.id}",
       receiverId: "${widget.receiver?.receiverId}",
       messageType: messageType,
       message: message.trim(),
       chatroomId: "${widget.receiver?.matchRoomId}",
-      senderName: username,
-      senderProfile: userProfile,
+      senderName: "${postController.userData.value.name}",
+      senderProfile: "${postController.userData.value.profilePic}",
       status: "0",
       timeStamp: ids,
       isDeleted: false,
@@ -412,16 +410,16 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    controller.updateStatus("Offline", userId);
+    controller.updateStatus("Offline", "${postController.userData.value.id}");
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      controller.updateStatus("Offline", userId);
+      controller.updateStatus("Offline", "${postController.userData.value.id}");
     } else if (state == AppLifecycleState.resumed) {
-      controller.updateStatus("online", userId);
+      controller.updateStatus("online", "${postController.userData.value.id}");
     }
     super.didChangeAppLifecycleState(state);
   }
