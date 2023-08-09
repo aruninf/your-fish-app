@@ -10,6 +10,8 @@ import '../CUSTOM_WIDGETS/custom_search_field.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 
+
+
 class HomeSection extends StatelessWidget {
   HomeSection({super.key});
 
@@ -138,8 +140,8 @@ class SingleFishPostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.isLiked.value=postModel.isLiked ?? false;
-    controller.isFav.value=postModel.isFavourite ?? false;
+    //controller.isLiked.value=postModel.isLiked ?? false;
+    //controller.isFav.value=postModel.isFavourite ?? false;
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 12),

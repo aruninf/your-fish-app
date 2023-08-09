@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:yourfish/CONTROLLERS/user_controller.dart';
+import 'package:yourfish/MODELS/chat_user_response.dart';
 import 'package:yourfish/MODELS/login_response.dart';
 import 'package:yourfish/MODELS/post_response.dart';
 import 'package:yourfish/UTILS/permission_services.dart';
@@ -22,6 +23,7 @@ class PostController extends GetxController {
   var selectedCategories = [].obs;
   var isLoading = false.obs;
   var postData = <PostData>[].obs;
+  var chatsUser = <ChatUserData>[].obs;
   var myPostData = <PostData>[].obs;
   var userData = UserData().obs;
   var currentAddress = ''.obs;
@@ -72,11 +74,11 @@ class PostController extends GetxController {
   Future<void> getChatsUser(dynamic data) async {
     isLoading.value = true;
     var response =
-        await Network().postRequest(endPoint: getFishApi, formData: data);
+        await Network().getRequest(endPoint: getChatUserApi);
     if (response?.data != null) {
       isLoading.value = false;
-      PostResponse post = PostResponse.fromJson(response?.data);
-      postData.value = post.data ?? [];
+      var post = ChatUserResponse.fromJson(response?.data);
+      chatsUser.value = post.data ?? [];
     }
   }
 

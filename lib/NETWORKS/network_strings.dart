@@ -22,6 +22,7 @@ const String getBlogApi="get-blog";
 const String getFaqApi="get-faq";
 const String getArticlesApi="get-article";
 const String getFishApi="get-fish";
+const String getChatUserApi="get-chat-history";
 const String getUserDataApi="get-user-details";
 const String getFishingGearApi="get-gear";
 const String getFishCategoryApi="get-category";

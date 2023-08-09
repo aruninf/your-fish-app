@@ -95,15 +95,15 @@ class PostData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['isPublic'] = this.isPublic;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
-    data['address'] = this.address;
-    if (this.tagFish != null) {
-      data['tag_fish'] = this.tagFish!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    data['id'] = id;
+    data['user_id'] = userId;
+    data['isPublic'] = isPublic;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
+    data['address'] = address;
+    if (tagFish != null) {
+      data['tag_fish'] = tagFish!.map((v) => v.toJson()).toList();
     }
     data['image'] = this.image;
     data['caption'] = this.caption;
@@ -134,7 +134,7 @@ class TagFish {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data =  Map<String, dynamic>();
     data['id'] = this.id;
     data['local_name'] = this.localName;
     data['scientific_name'] = this.scientificName;

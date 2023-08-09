@@ -6,13 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:yourfish/CONTROLLERS/auth_controller.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/UTILS/app_color.dart';
 
-import '../CONTROLLERS/chat_controller.dart';
 import '../CONTROLLERS/database.dart';
-import '../CONTROLLERS/user_controller.dart';
 import 'bottom_composer.dart';
 import 'chat_app_bar.dart';
 import 'chat_item_row.dart';
@@ -54,8 +51,9 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
   void initState() {
     Future.delayed(
       Duration.zero,
-      () async {
-        controller.updateStatus("online", "${postController.userData.value.id}" );
+          () async {
+        controller.updateStatus(
+            "online", "${postController.userData.value.id}");
       },
     );
     super.initState();
@@ -88,7 +86,6 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
               "${widget.receiver?.matchRoomId}", _limit),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            //print("chat result message snap this one");
             if (snapshot.hasData) {
               listMessages = snapshot.data!.docs;
               if (listMessages.isNotEmpty) {
@@ -99,12 +96,10 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
                     controller: scrollController,
                     itemBuilder: (context, index) {
                       ChatResult chatMessages =
-                          ChatResult.fromDocument(listMessages[index]);
-                      print(
-                          "sender id = == ${chatMessages.senderId} user id === ${postController.userData.value.id}");
-                      if (chatMessages.receiverId == "${postController.userData.value.id}") {
-                        print("updating status");
-                        updateSeen(listMessages[index].reference.path ?? "");
+                      ChatResult.fromDocument(listMessages[index]);
+                      if (chatMessages.receiverId ==
+                          "${postController.userData.value.id}") {
+                        updateSeen(listMessages[index].reference.path);
                       }
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -139,14 +134,14 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
       onWillPop: onBackPress,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar:  PreferredSize(
+        appBar: PreferredSize(
           preferredSize: const Size(double.infinity, 75),
           child: CustomChatAppBar(
             title: widget.matchName ?? '',
             image: widget.image ?? '',
             backPress: onBackPress,
             chatRoomId: widget.receiver?.matchRoomId ?? '',
-            userId:widget.receiver?.receiverId ?? '',
+            userId: widget.receiver?.receiverId ?? '',
           ),
         ),
         body: SafeArea(
@@ -155,113 +150,118 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
               buildListMessage(),
               messageType == 2
                   ? Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: [
-                              Image.file(
-                                imageFile == null
-                                    ? File("")
-                                    : File(imageFile!.path),
-                                fit: BoxFit.cover,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.45,
-                                width: double.infinity,
-                              ),
-                              Container(
-                                margin: const EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                  color:
-                                      primaryColor, //Colors.grey.withOpacity(0.4),
-                                  borderRadius: BorderRadius.circular(20),
-                                  //boxShadow: Constants.fixShadow()
-                                ),
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            messageType = 1;
-                                            imageFile = null;
-                                          });
-                                        },
-                                        color: Colors.white,
-                                        icon: const Icon(
-                                          Icons.close_sharp,
-                                        )),
-                                    const Spacer(),
-                                    IconButton(
-                                        color: Colors.white,
-                                        onPressed: imageMessageSendClick,
-                                        icon: const Icon(
-                                          Icons.send_rounded,
-                                          color: Colors.white,
-                                        )),
-                                  ],
-                                ),
-                              )
-                            ],
-                          )),
-                    )
-                  : Column(
+                padding: const EdgeInsets.all(10.0),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
                       children: [
-                        const Divider(height: 1.0),
-                        BottomComposer(
-                            file: imageFile == null
-                                ? File("")
-                                : File(imageFile!.path),
-                            widget: TextField(
-                              controller: _textController,
-                              textAlignVertical: TextAlignVertical.center,
-                              maxLines: 3,
-                              maxLength: 250,
-                              minLines: 1,
-                              style: const TextStyle(fontSize: 14),
-                              decoration: InputDecoration(
-                                  counterText: "",
-                                  hintText: "Send a message",
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 14, vertical: 4),
-                                  border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(20))),
-                              onChanged: (String text) async {
-                                if (text.isNotEmpty) {
-                                  if (userStatus != "typing") {
-                                    userStatus = "typing";
-                                    controller.updateStatus(
-                                        "typing", "${postController.userData.value.id}");
-                                  }
-                                  const duration = Duration(seconds: 1);
-
-                                  if (_timer != null) {
-                                    _timer!.cancel();
-                                  }
-
-                                  _timer = Timer(duration, () {
-                                    print("userStatus updating online");
-                                    userStatus = "online";
-
-                                    controller.updateStatus(
-                                        "online", "${postController.userData.value.id}");
-                                  });
-                                }
-                              },
-                              onSubmitted: (value) {
-                                //_sendMessage(value, 1);
-                              },
-                            ),
-                            pickFileClick: () {
-                              _bottomSheet(context);
-                            },
-                            sendClick: sendClick),
-                        Builder(builder: (BuildContext context) {
-                          return const SizedBox(width: 0.0, height: 0.0);
-                        })
+                        Image.file(
+                          imageFile == null
+                              ? File("")
+                              : File(imageFile!.path),
+                          fit: BoxFit.cover,
+                          height:
+                          MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.45,
+                          width: double.infinity,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.all(5.0),
+                          decoration: BoxDecoration(
+                            color:
+                            primaryColor, //Colors.grey.withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(20),
+                            //boxShadow: Constants.fixShadow()
+                          ),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      messageType = 1;
+                                      imageFile = null;
+                                    });
+                                  },
+                                  color: Colors.white,
+                                  icon: const Icon(
+                                    Icons.close_sharp,
+                                  )),
+                              const Spacer(),
+                              IconButton(
+                                  color: Colors.white,
+                                  onPressed: imageMessageSendClick,
+                                  icon: const Icon(
+                                    Icons.send_rounded,
+                                    color: Colors.white,
+                                  )),
+                            ],
+                          ),
+                        )
                       ],
-                    )
+                    )),
+              )
+                  : Column(
+                children: [
+                  const Divider(height: 1.0),
+                  BottomComposer(
+                      file: imageFile == null
+                          ? File("")
+                          : File(imageFile!.path),
+                      widget: TextField(
+                        controller: _textController,
+                        textAlignVertical: TextAlignVertical.center,
+                        maxLines: 3,
+                        maxLength: 250,
+                        minLines: 1,
+                        style: const TextStyle(fontSize: 14),
+                        decoration: InputDecoration(
+                            counterText: "",
+                            hintText: "Send a message",
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 4),
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.circular(20))),
+                        onChanged: (String text) async {
+                          if (text.isNotEmpty) {
+                            if (userStatus != "typing") {
+                              userStatus = "typing";
+                              controller.updateStatus(
+                                  "typing",
+                                  "${postController.userData.value.id}");
+                            }
+                            const duration = Duration(seconds: 1);
+
+                            if (_timer != null) {
+                              _timer!.cancel();
+                            }
+
+                            _timer = Timer(duration, () {
+                              //print("userStatus updating online");
+                              userStatus = "online";
+
+                              controller.updateStatus(
+                                  "online",
+                                  "${postController.userData.value.id}");
+                            });
+                          }
+                        },
+                        onSubmitted: (value) {
+                          //_sendMessage(value, 1);
+                        },
+                      ),
+                      pickFileClick: () {
+                        _bottomSheet(context);
+                      },
+                      sendClick: sendClick),
+                  Builder(builder: (BuildContext context) {
+                    return const SizedBox(width: 0.0, height: 0.0);
+                  })
+                ],
+              )
             ],
           ),
         ),
@@ -270,7 +270,8 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
   }
 
   Future<bool> onBackPress() async {
-    await controller.updateStatus("Offline",  "${postController.userData.value.id}");
+    await controller.updateStatus(
+        "Offline", "${postController.userData.value.id}");
     return Future.value(true);
   }
 
@@ -287,8 +288,14 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
   }
 
   Future<void> _sendMessage(String message, int messageType) async {
-    if (message.trim().isEmpty) return;
-    String ids = DateTime.now().toUtc().millisecondsSinceEpoch.toString();
+    if (message
+        .trim()
+        .isEmpty) return;
+    String ids = DateTime
+        .now()
+        .toUtc()
+        .millisecondsSinceEpoch
+        .toString();
     var req = ChatResult(
       id: ids,
       senderId: "${postController.userData.value.id}",
@@ -303,11 +310,11 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
       isDeleted: false,
     ).toJson();
     _textController.clear();
-    var param = {
-      "receiverId": widget.receiver?.matchRoomId,
-      "message": messageType == 2 ? "📷" : message.trim(),
-      "matchId": widget.receiver!.receiverId
-    };
+    // var param = {
+    //   "receiverId": widget.receiver?.matchRoomId,
+    //   "message": messageType == 2 ? "📷" : message.trim(),
+    //   "matchId": widget.receiver!.receiverId
+    // };
     controller.sendMessage("${widget.receiver?.matchRoomId}", req);
     //NotificationController.sendMsgNotification(param);
     scrollController.animateTo(0,

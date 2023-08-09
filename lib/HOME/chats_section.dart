@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CHATS/chat_model.dart';
+import 'package:yourfish/CONTROLLERS/post_controller.dart';
 
 import '../CHATS/single_chat_page.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
@@ -19,6 +20,7 @@ class _ChatsSectionState extends State<ChatsSection>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  var controller=Get.find<PostController>();
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
@@ -65,8 +67,11 @@ class _ChatsSectionState extends State<ChatsSection>
               child: CustomSearchField(hintText: 'Search'),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: chatsList1.length,
+              child:  Obx(() => controller.isLoading.value ?
+              const Center(child:  CircularProgressIndicator(),):
+              controller.chatsUser.isNotEmpty ?
+              ListView.builder(
+                itemCount: controller.chatsUser.length,
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 physics: const BouncingScrollPhysics(),
@@ -74,17 +79,17 @@ class _ChatsSectionState extends State<ChatsSection>
                     top: 8, bottom: 8, left: 12, right: 12),
                 itemBuilder: (context, index) => ListTile(
                   onTap: () => Get.to(
-                      () => SingleChatPage(
-                            receiver: ReceiverModel(
-                              matchRoomId: "00045$index",receiverId: "9989$index"
-                            ),
-                            image: "https://funylife.in/wp-content/uploads/2023/04/13_Cute-Girl-Pic-WWW.FUNYLIFE.IN_-1024x1024.jpg",
-                            matchName: "Shivani $index",
-                          ),
+                          () => SingleChatPage(
+                        receiver: ReceiverModel(
+                            matchRoomId: "${controller.chatsUser[index].matchId}",receiverId: "${controller.chatsUser[index].receiverId}"
+                        ),
+                        image: "https://funylife.in/wp-content/uploads/2023/04/13_Cute-Girl-Pic-WWW.FUNYLIFE.IN_-1024x1024.jpg",
+                        matchName: "${controller.chatsUser[index].receiverName}",
+                      ),
                       transition: Transition.rightToLeft),
                   dense: true,
                   contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
                   leading: ClipOval(
                     child: Image.asset(
                       chatsList1[index].profileImage ?? '',
@@ -94,13 +99,13 @@ class _ChatsSectionState extends State<ChatsSection>
                     ),
                   ),
                   title: CustomText(
-                    text: chatsList1[index].name ?? '',
+                    text: controller.chatsUser[index].receiverName ?? '',
                     color: btnColor,
                     sizeOfFont: 14,
                     weight: FontWeight.w700,
                   ),
                   subtitle: CustomText(
-                    text: chatsList1[index].username ?? '',
+                    text: controller.chatsUser[index].receiverName ?? '',
                     color: Colors.white70,
                     sizeOfFont: 13,
                   ),
@@ -125,6 +130,7 @@ class _ChatsSectionState extends State<ChatsSection>
                     ],
                   ),
                 ),
+              ):const Center(child: Text("No record found!"),)
               ),
             ),
           ],

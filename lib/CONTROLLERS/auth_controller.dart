@@ -41,7 +41,7 @@ class AuthController extends GetxController {
             transition: Transition.rightToLeft);
       }
     }
-    //await getToken();
+    await getToken();
     //String? token = await Utility.getStringValue(tokenKey);
     print("token==========$token");
     super.onReady();
