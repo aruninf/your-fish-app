@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_app_bar.dart';
-import 'package:yourfish/NETWORKS/keys.dart';
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
