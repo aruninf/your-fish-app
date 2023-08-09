@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_app_bar.dart';
+import 'package:yourfish/NETWORKS/keys.dart';
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
@@ -41,8 +42,8 @@ class SelectFishingLocation extends StatelessWidget {
     // then get the Prediction selected
     Prediction? p = await PlacesAutocomplete.show(
       context: context,
-      //apiKey: 'AIzaSyBr963PVsQJaqZkj4QhHEbWwnJ-uudPNFg',
-      apiKey: 'AIzaSyAynBIwL47RimOYbJk_9jQYalO4RA9tS6M',
+      //apiKey: '',
+      apiKey: '',
       onError: onError,
       radius: 10000000,
       types: [],
@@ -67,7 +68,7 @@ class SelectFishingLocation extends StatelessWidget {
 
 Future<void> displayPrediction(Prediction p) async {
   GoogleMapsPlaces _places = GoogleMapsPlaces(
-    apiKey: 'AIzaSyAynBIwL47RimOYbJk_9jQYalO4RA9tS6M',
+    apiKey: '',
     apiHeaders: await const GoogleApiHeaders().getHeaders(),
   );
   PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId ?? '');

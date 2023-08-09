@@ -9,7 +9,8 @@ const String nameKey = 'name';
 const String tokenKey = 'token';
 const String isLoginKey = 'login_key';
 const String ACCEPT = 'application/json';
-
+//apiKey: 'AIzaSyBr963PVsQJaqZkj4QhHEbWwnJ-uudPNFg',
+const String mapKey= 'AIzaSyAynBIwL47RimOYbJk_9jQYalO4RA9tS6M';
 
 /// 🧨🧨🧨🧨🧨🧨🧨🧨 APIS END Points 🧨🧨🧨🧨🧨🧨🧨🧨🧨🧨🧨🧨🧨🧨
 

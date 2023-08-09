@@ -18,7 +18,7 @@ class ChatItemRow extends StatelessWidget {
   Widget build(BuildContext context) {
     if (documentSnapshot != null) {
       ChatResult chatMessages = ChatResult.fromDocument(documentSnapshot!);
-      return chatMessages.receiverId == userId
+      return chatMessages.receiverId != userId
           ? ReceiverWidgetItem(
               chatModel: chatMessages,
               documentReference: documentSnapshot!.reference.path)
