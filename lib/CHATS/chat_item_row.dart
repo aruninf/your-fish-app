@@ -6,8 +6,6 @@ import 'package:yourfish/CHATS/sender_widget_item.dart';
 
 import 'chat_model.dart';
 
-
-
 class ChatItemRow extends StatelessWidget {
   const ChatItemRow({Key? key, required this.userId, required this.documentSnapshot})
       : super(key: key);
@@ -18,7 +16,7 @@ class ChatItemRow extends StatelessWidget {
   Widget build(BuildContext context) {
     if (documentSnapshot != null) {
       ChatResult chatMessages = ChatResult.fromDocument(documentSnapshot!);
-      return chatMessages.receiverId != userId
+      return chatMessages.receiverId == userId
           ? ReceiverWidgetItem(
               chatModel: chatMessages,
               documentReference: documentSnapshot!.reference.path)

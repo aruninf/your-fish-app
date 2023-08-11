@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +6,7 @@ import 'package:yourfish/CREATE_ACCOUNT/select_fish_you_experience.dart';
 import 'package:yourfish/HOME/main_home.dart';
 import 'package:yourfish/MODELS/fish_category_response.dart';
 import 'package:yourfish/MODELS/fish_response.dart';
+import 'package:yourfish/MODELS/user_response.dart';
 import 'package:yourfish/UTILS/dialog_helper.dart';
 
 import '../CREATE_ACCOUNT/add_your_gear.dart';
@@ -19,7 +19,6 @@ import '../MODELS/login_response.dart';
 import '../NETWORKS/network.dart';
 import '../NETWORKS/network_strings.dart';
 import '../UTILS/utils.dart';
-import 'auth_controller.dart';
 
 class UserController extends GetxController {
   var selectedCategories = [].obs;
@@ -27,6 +26,7 @@ class UserController extends GetxController {
   var selectedFishingLocation = [].obs;
   var selectedFishExp = [].obs;
   var selectedFishTag = <FishData>[].obs;
+  var allUsers = <UserData>[].obs;
   var selectedFishGear = [].obs;
   var isDataLoading = false.obs;
   var isPasswordVisible = true.obs;
@@ -37,10 +37,6 @@ class UserController extends GetxController {
   var fishingLocation = <FishingLocationData>[].obs;
   var fishCategory = <Category>[].obs;
   var fishingGear = <GearData>[].obs;
-
-
-
-
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -62,7 +58,7 @@ class UserController extends GetxController {
     var response = await Network()
         .postRequest(endPoint: loginApi, formData: data, isLoader: true);
     if (response?.data != null) {
-      UserResponse loginResponse = UserResponse.fromJson(response?.data);
+      LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
       if (loginResponse.status ?? false) {
         Utility.setStringValue(tokenKey, loginResponse.token ?? "");
         if (loginResponse.data?.gearId != null) {
@@ -87,7 +83,7 @@ class UserController extends GetxController {
     var response = await Network()
         .postRequest(endPoint: registerApi, formData: data, isLoader: true);
     if (response?.data != null) {
-      UserResponse loginResponse = UserResponse.fromJson(response?.data);
+      LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
       if (loginResponse.status ?? false) {
         Utility.setStringValue(tokenKey, loginResponse.token ?? "");
         Get.offAll(() => SelectFishInterest(), transition: Transition.rightToLeft);
@@ -107,6 +103,19 @@ class UserController extends GetxController {
       isDataLoading.value = false;
       FishResponse fish = FishResponse.fromJson(response?.data);
       fishData.value = fish.data ?? [];
+    }
+  }
+
+
+  /// 💥💥💥💥💥💥💥 Get Fish 💥💥💥💥💥💥💥
+
+  Future<void> getAllUsers(dynamic data) async {
+    isDataLoading.value = true;
+    var response = await Network().postRequest(endPoint: getAllUserApi,formData: data);
+    if (response?.data != null) {
+      isDataLoading.value = false;
+      var sp = UserResponse.fromJson(response?.data);
+      allUsers.value = sp.data ?? [];
     }
   }
 
@@ -153,7 +162,7 @@ class UserController extends GetxController {
     var response = await Network().postRequest(
         endPoint: updateOnBoardingApi, formData: data, isLoader: true);
     if (response?.data != null) {
-      print("updateProfile=================${response?.data}");
+      //print("updateProfile=================${response?.data}");
       if (step == 1) {
         Get.to(() => SelectFishYouExperience(),
             transition: Transition.rightToLeft);

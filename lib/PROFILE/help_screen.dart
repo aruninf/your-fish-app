@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CONTROLLERS/auth_controller.dart';
+import 'package:yourfish/CONTROLLERS/post_controller.dart';
+import 'package:yourfish/CONTROLLERS/user_controller.dart';
 
+import '../CONTROLLERS/setting_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../UTILS/app_color.dart';
@@ -8,10 +12,18 @@ import '../UTILS/app_color.dart';
 
 
 class HelpSupportScreen extends StatelessWidget {
-  const HelpSupportScreen({super.key});
+  HelpSupportScreen({super.key});
+
+  final controller = Get.find<SettingController>();
+  final userController = Get.find<PostController>();
+
+  var nameCo=TextEditingController();
+  var email=TextEditingController();
+  var commentCo=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    email.text=userController.userData.value.email ?? '';
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
@@ -27,6 +39,7 @@ class HelpSupportScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     TextFormField(
+                      controller: nameCo,
                       style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -42,7 +55,7 @@ class HelpSupportScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16.0),
                           borderSide: const BorderSide(color: Colors.white),
                         ),
-                        hintText: "Name",
+                        hintText: "Subject",
                         hintStyle: const TextStyle(
                             color: Colors.white54,
                             fontSize: 16,
@@ -50,10 +63,11 @@ class HelpSupportScreen extends StatelessWidget {
                         labelStyle: const TextStyle(color: Colors.white),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     TextFormField(
+                      controller: email,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(
@@ -78,6 +92,7 @@ class HelpSupportScreen extends StatelessWidget {
                       height: 16,
                     ),
                     TextFormField(
+                      controller: commentCo,
                       style: const TextStyle(color: Colors.white),
                       maxLines: 10,
                       decoration: InputDecoration(
@@ -91,7 +106,7 @@ class HelpSupportScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16.0),
                           borderSide: const BorderSide(color: Colors.white),
                         ),
-                        hintText: "Comments...",
+                        hintText: "Message...",
                         hintStyle: const TextStyle(
                             color: Colors.white54,
                             fontSize: 16,
@@ -114,9 +129,41 @@ class HelpSupportScreen extends StatelessWidget {
           btnBgColor: secondaryColor,
           btnTextColor: primaryColor,
           btnText: "Submit",
-          onClick: () => Get.back(),
+          onClick: () => submitRequest(),
         ),
       ),
     );
+  }
+
+  submitRequest() {
+
+    if (nameCo.text.length < 3) {
+      Get.snackbar('Required!', 'Please enter the correct subject',
+          colorText: Colors.orange,
+          snackPosition: SnackPosition.TOP);
+      return;
+    }
+
+    if (email.text.length < 3) {
+      Get.snackbar('Required!', 'Please enter the correct email',
+          colorText: Colors.orange,
+          snackPosition: SnackPosition.TOP);
+      return;
+    }
+
+    if (commentCo.text.length < 3) {
+      Get.snackbar('Required!', 'Please enter the correct message',
+          colorText: Colors.orange,
+          snackPosition: SnackPosition.TOP);
+      return;
+    }
+
+
+    var data={
+      "name": nameCo.text.trim(),
+      "email": email.text.trim(),
+      "comments": commentCo.text.trim()
+    };
+    controller.sendMessageToAdmin(data);
   }
 }

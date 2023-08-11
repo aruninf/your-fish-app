@@ -1,19 +1,21 @@
-class LoginResponse {
+class UserResponse {
   bool? status;
   String? message;
   int? statusCode;
-  LoginData? data;
-  String? token;
+  List<UserData>? data;
 
-  LoginResponse(
-      {this.status, this.message, this.statusCode, this.data, this.token});
+  UserResponse({this.status, this.message, this.statusCode, this.data});
 
-  LoginResponse.fromJson(Map<String, dynamic> json) {
+  UserResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     statusCode = json['status_code'];
-    data = json['data'] != null ?  LoginData.fromJson(json['data']) : null;
-    token = json['token'];
+    if (json['data'] != null) {
+      data = <UserData>[];
+      json['data'].forEach((v) {
+        data!.add(new UserData.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -22,14 +24,13 @@ class LoginResponse {
     data['message'] = this.message;
     data['status_code'] = this.statusCode;
     if (this.data != null) {
-      data['data'] = this.data!.toJson();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['token'] = this.token;
     return data;
   }
 }
 
-class LoginData {
+class UserData {
   int? id;
   String? userType;
   String? name;
@@ -39,19 +40,15 @@ class LoginData {
   String? gender;
   String? phoneNumber;
   String? profilePic;
-  String? locationId;
-  String? latitude;
-  String? longitude;
-  String? address;
-  String? interestedFishId;
-  String? experienceFishId;
-  String? fishCatId;
   String? gearId;
   int? status;
+  String? socialType;
+  String? socialId;
   String? createdAt;
   String? updatedAt;
+  int? totalPosts;
 
-  LoginData(
+  UserData(
       {this.id,
         this.userType,
         this.name,
@@ -61,19 +58,15 @@ class LoginData {
         this.gender,
         this.phoneNumber,
         this.profilePic,
-        this.locationId,
-        this.latitude,
-        this.longitude,
-        this.address,
-        this.interestedFishId,
-        this.experienceFishId,
-        this.fishCatId,
         this.gearId,
         this.status,
+        this.socialType,
+        this.socialId,
         this.createdAt,
-        this.updatedAt});
+        this.updatedAt,
+        this.totalPosts});
 
-  LoginData.fromJson(Map<String, dynamic> json) {
+  UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userType = json['user_type'];
     name = json['name'];
@@ -83,18 +76,13 @@ class LoginData {
     gender = json['gender'];
     phoneNumber = json['phone_number'];
     profilePic = json['profile_pic'];
-    locationId = json['location_id'];
-
-    latitude = json['latitude'];
-    longitude = json['longitude'];
-    address = json['address'];
-    interestedFishId = json['interested_fish_id'];
-    experienceFishId = json['experience_fish_id'];
-    fishCatId = json['fish_cat_id'];
     gearId = json['gear_id'];
     status = json['status'];
+    socialType = json['social_type'];
+    socialId = json['social_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    totalPosts = json['total_posts'];
   }
 
   Map<String, dynamic> toJson() {
@@ -108,17 +96,13 @@ class LoginData {
     data['gender'] = this.gender;
     data['phone_number'] = this.phoneNumber;
     data['profile_pic'] = this.profilePic;
-    data['location_id'] = this.locationId;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
-    data['address'] = this.address;
-    data['interested_fish_id'] = this.interestedFishId;
-    data['experience_fish_id'] = this.experienceFishId;
-    data['fish_cat_id'] = this.fishCatId;
     data['gear_id'] = this.gearId;
     data['status'] = this.status;
+    data['social_type'] = this.socialType;
+    data['social_id'] = this.socialId;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['total_posts'] = this.totalPosts;
     return data;
   }
 }

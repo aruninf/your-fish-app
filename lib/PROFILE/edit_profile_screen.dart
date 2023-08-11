@@ -15,7 +15,7 @@ import '../UTILS/dialog_helper.dart';
 class EditProfileScreen extends StatelessWidget {
   EditProfileScreen({super.key, required this.userData});
 
-  final UserData userData;
+  final LoginData userData;
   final controller = Get.put(PostController());
   final userController = Get.find<UserController>();
 

@@ -268,4 +268,9 @@ class Consts {
   static String formatDateTime(DateTime dateTime) {
     return DateFormat('hh:mm:ss').format(dateTime);
   }
+
+  static String formatDateTimeToMMM(String dateTime) {
+    var date = DateTime.parse(dateTime);
+    return DateFormat('dd MMM yyyy').format(date);
+  }
 }

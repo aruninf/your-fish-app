@@ -8,7 +8,7 @@ import 'package:yourfish/NETWORKS/network_strings.dart';
 
 import '../MODELS/content_response.dart';
 import '../NETWORKS/network.dart';
-import '../PROFILE/faq_screen.dart';
+import '../UTILS/dialog_helper.dart';
 
 class SettingController extends GetxController {
   var selectedCategories = [].obs;
@@ -26,13 +26,8 @@ class SettingController extends GetxController {
   var articleData=<ArticleData>[].obs;
   var faqData=<FaqData>[].obs;
   var contentData=<ContentData>[].obs;
-  var currentValues = 20.0.obs;
+  var currentValues = 68.0.obs;
 
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   /// 💥💥💥💥💥💥💥 Get Blogs 💥💥💥💥💥💥💥
 
@@ -43,15 +38,12 @@ class SettingController extends GetxController {
       isLoading.value=false;
       BlogResponse blog = BlogResponse.fromJson(response?.data);
       blogData.value = blog.data ?? [];
-
     }
   }
-
 
   shareApp() async {
     Share.share('check out my App https://appifanydevelopers.github.io/#/', subject: 'Look what I made!');
   }
-
 
   /// 💥💥💥💥💥💥💥 Get Articles 💥💥💥💥💥💥💥
 
@@ -79,6 +71,8 @@ class SettingController extends GetxController {
     }
   }
 
+  /// 💥💥💥💥💥💥💥 Get Static content 💥💥💥💥💥💥💥
+
   getContent() async {
     isLoading.value=true;
     var response = await Network().getRequest(endPoint: getContentApi);
@@ -86,6 +80,35 @@ class SettingController extends GetxController {
       isLoading.value=false;
       ContentResponse content = ContentResponse.fromJson(response?.data);
       contentData.value = content.data ?? [];
+    }
+  }
+
+  Future<void> sendMessageToAdmin(dynamic data) async {
+    var response = await Network().postRequest(
+        endPoint: contactUsApi, formData: data, isLoader: true);
+    if (response?.data != null) {
+      if (response?.data['status_code'] == 200) {
+        Get.back();
+        Get.snackbar('Request sent Successfully', '',
+            colorText: Colors.green, snackPosition: SnackPosition.TOP);
+      } else {
+        DialogHelper.showErrorDialog(
+            title: "Error", description: response?.data['message']);
+      }
+    }
+  }
+
+  void updatePublicFeedRadios(dynamic data) async {
+    var response = await Network().postRequest(endPoint: settingApi, formData: data, isLoader: true);
+    if (response?.data != null) {
+      if (response?.data['status_code'] == 200) {
+        Get.back();
+        Get.snackbar('Update Successfully', '',
+            colorText: Colors.green, snackPosition: SnackPosition.TOP);
+      } else {
+        DialogHelper.showErrorDialog(
+            title: "Error", description: response?.data['message']);
+      }
     }
   }
 

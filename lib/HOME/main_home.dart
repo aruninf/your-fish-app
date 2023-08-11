@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/CONTROLLERS/setting_controller.dart';
 import 'package:yourfish/CONTROLLERS/user_controller.dart';
-import 'package:yourfish/CREATE_ACCOUNT/add_your_gear.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_text_style.dart';
 import 'package:yourfish/HOME/chats_section.dart';
 import 'package:yourfish/HOME/home_section.dart';
@@ -35,16 +34,17 @@ class _MainHomeState extends State<MainHome> {
   var postController = Get.put(PostController());
 
   void _onItemTapped(int index) async {
-    var data={
+    var data = {
       "sortBy": "desc",
       "sortOn": "created_at",
       "page": "1",
       "limit": "20"
     };
     if (index == 2) {
-
       Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
       Get.find<UserController>().getFish(data);
+    } else if (index == 3) {
+      Get.find<UserController>().getAllUsers(data);
     } else {
       setState(() {
         _page = index;
@@ -54,10 +54,10 @@ class _MainHomeState extends State<MainHome> {
           : index == 1
               ? postController.getChatsUser(data)
               : index == 4
-                  ? getMyPost() : nothing();
+                  ? getMyPost()
+                  : nothing();
     }
   }
-
 
   void getMyPost() {
     var data = {
@@ -68,22 +68,25 @@ class _MainHomeState extends State<MainHome> {
     };
     Future.delayed(
       Duration.zero,
-          () => postController.getMyPost(data),
+      () => postController.getMyPost(data),
     );
     postController.getUserData();
   }
 
   @override
   void initState() {
-    var data={
+    var data = {
       "sortBy": "desc",
       "sortOn": "created_at",
       "page": "1",
       "limit": "20"
     };
-    Future.delayed(Duration.zero,() async {
-      postController.getPosts(data);
-    },);
+    Future.delayed(
+      Duration.zero,
+      () async {
+        postController.getPosts(data);
+      },
+    );
     super.initState();
   }
 
@@ -163,7 +166,6 @@ class _MainHomeState extends State<MainHome> {
           IconButton(
               onPressed: () {
                 _scaffoldKey.currentState!.openEndDrawer();
-
               },
               icon: const Icon(
                 PhosphorIcons.list_bold,
@@ -286,7 +288,7 @@ class _MainHomeState extends State<MainHome> {
     );
   }
 
-  nothing () {}
+  nothing() {}
 }
 
 class RightDrawerMenuWidget extends StatelessWidget {
@@ -337,15 +339,14 @@ class RightDrawerMenuWidget extends StatelessWidget {
                     onTap: () {
                       Get.back();
                       if (index1 == 2) {
-                        Get.to( MyProfileMapWidget(isTopSpots: true),
+                        Get.to(MyProfileMapWidget(isTopSpots: true),
                             transition: Transition.leftToRight);
                       } else if (index1 == 0) {
                         onClick(0);
                       } else if (index1 == 1) {
                         onClick(1);
                       } else if (index1 == 3) {
-
-                        Get.to( BlogsScreen(),
+                        Get.to(BlogsScreen(),
                             transition: Transition.leftToRight);
                       } else if (index1 == 4) {
                         Get.to(const ChatsScreen(),

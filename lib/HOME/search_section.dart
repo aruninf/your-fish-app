@@ -238,7 +238,7 @@ class _SearchSectionState extends State<SearchSection> {
                 ),
           Expanded(
             child: selectedIndex == 'Posts'
-                ? MyPostWidget()
+                ? MyPostWidget(myPost: false,)
                 : ListView.builder(
                     itemCount: chatsList.length,
                     physics: const BouncingScrollPhysics(),

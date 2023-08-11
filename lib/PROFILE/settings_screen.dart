@@ -16,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
   final controller = Get.put(SettingController());
   void callFaqApi()async {
     var data = {
-      "sortBy": "asc",
+      "sortBy": "desc",
       "sortOn": "created_at",
       "page": "1",
       "limit": "20"
@@ -28,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
   }
   callBlogArticleApi() async {
     var data = {
-      "sortBy": "asc",
+      "sortBy": "desc",
       "sortOn": "created_at",
       "page": "1",
       "limit": "20"
@@ -85,6 +85,12 @@ class SettingsScreen extends StatelessWidget {
                         label: '${controller.currentValues.value.toInt()}',
                         onChanged: (double value) {
                           controller.currentValues.value = value;
+                        },
+                        onChangeEnd: (value) {
+                          var data={
+                            "public_feed":controller.currentValues.value
+                          };
+                          controller.updatePublicFeedRadios(data);
                         },
                       ),
                       CustomText(
@@ -166,7 +172,7 @@ class SettingsScreen extends StatelessWidget {
                                 Transition.rightToLeft);
                       }else {
 
-                        Get.to(const HelpSupportScreen(),
+                        Get.to( HelpSupportScreen(),
                             transition:
                             Transition.rightToLeft);
                       }

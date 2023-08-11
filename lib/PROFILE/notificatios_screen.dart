@@ -65,6 +65,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             value: listOfOn.contains(listOfNotification[index]),
                             onChanged: (value) {
                               setState(() {
+                                // var data={
+                                //   "public_feed":listOfNotification[index]
+                                // };
+                                // controller.updatePublicFeedRadios(data);
                                 if (listOfOn
                                     .contains(listOfNotification[index])) {
                                   listOfOn.remove(listOfNotification[index]);

@@ -174,7 +174,7 @@ class AuthController extends GetxController {
       var response =
           await Network().postRequest(endPoint: socialLoginApi, formData: data);
       if (response?.data != null) {
-        UserResponse loginResponse = UserResponse.fromJson(response?.data);
+        LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
         if (loginResponse.status ?? false) {
           Utility.setStringValue(tokenKey, loginResponse.token ?? "");
           if (loginResponse.data?.gearId != null) {

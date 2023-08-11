@@ -228,7 +228,7 @@ class ProfileSection extends StatelessWidget {
                 ),
                 Expanded(
                     child: controller.selectedIndex.value == "My Posts"
-                        ? MyPostWidget()
+                        ? MyPostWidget(myPost: true,)
                         : controller.selectedIndex.value == "My Map"
                             ? MyProfileMapWidget(
                                 isTopSpots: false,

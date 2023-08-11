@@ -39,9 +39,7 @@ class Network {
   static CancelToken _getCancelToken() {
     return _cancelRequestToken ??= CancelToken();
   }
-
   ///💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥 Get Request 💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥
-
   Future<Response?> getRequest(
       {String baseUrl = API_BASE_URL,
       required String endPoint,

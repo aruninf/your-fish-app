@@ -8,12 +8,9 @@ import 'package:yourfish/UTILS/app_images.dart';
 import '../../CONTROLLERS/post_controller.dart';
 
 class MyPostWidget extends StatelessWidget {
-  MyPostWidget({super.key});
-
+  MyPostWidget({super.key, required this.myPost});
   final controller = Get.find<PostController>();
-
-
-
+  final bool myPost;
   @override
   Widget build(BuildContext context) {
     return Obx(() => controller.isLoading.value
@@ -51,7 +48,7 @@ class MyPostWidget extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        Padding(
+                       myPost ? Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: [
@@ -166,7 +163,7 @@ class MyPostWidget extends StatelessWidget {
                               ),
                             ],
                           ),
-                        )
+                        ):const SizedBox.shrink()
                       ],
                     )),
               ));

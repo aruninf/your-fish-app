@@ -25,7 +25,7 @@ class PostController extends GetxController {
   var postData = <PostData>[].obs;
   var chatsUser = <ChatUserData>[].obs;
   var myPostData = <PostData>[].obs;
-  var userData = UserData().obs;
+  var userData = LoginData().obs;
   var currentAddress = ''.obs;
   var isLiked = false.obs;
   var isFav = false.obs;
@@ -87,8 +87,8 @@ class PostController extends GetxController {
   Future<void> getUserData() async {
     var response = await Network().getRequest(endPoint: getUserDataApi);
     if (response?.data != null) {
-      UserResponse user = UserResponse.fromJson(response?.data);
-      userData.value = user.data ?? UserData();
+      LoginResponse user = LoginResponse.fromJson(response?.data);
+      userData.value = user.data ?? LoginData();
     }
   }
 
