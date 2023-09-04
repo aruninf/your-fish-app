@@ -15,7 +15,8 @@ import '../UTILS/dialog_helper.dart';
 
 class AddFishScreen extends StatelessWidget {
   AddFishScreen({super.key});
-  final userController=Get.find<UserController>();
+
+  final userController = Get.find<UserController>();
   final controller = Get.put(PostController());
   final imageUrl = ''.obs;
   final _formKey = GlobalKey<FormState>();
@@ -34,16 +35,21 @@ class AddFishScreen extends StatelessWidget {
             ),
             Obx(() => Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0,),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                    ),
                     child: Form(
                       key: _formKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomText(text: '${(controller.userData.value.address ?? '').isNotEmpty
-                              ? controller.userData.value.address
-                              : controller.currentAddress.value }',color: secondaryColor,maxLin: 1,),
+                          CustomText(
+                            text:
+                                '${(controller.userData.value.address ?? '').isNotEmpty ? controller.userData.value.address : controller.currentAddress.value}',
+                            color: secondaryColor,
+                            maxLin: 1,
+                          ),
                           const SizedBox(
                             height: 8,
                           ),
@@ -79,7 +85,7 @@ class AddFishScreen extends StatelessWidget {
                                     onChanged: (value) {
                                       controller.isLocationOn.value =
                                           !controller.isLocationOn.value;
-                                      if(controller.isLocationOn.value){
+                                      if (controller.isLocationOn.value) {
                                         controller.getUserData();
                                       }
                                     },
@@ -91,54 +97,60 @@ class AddFishScreen extends StatelessWidget {
                           const SizedBox(
                             height: 16,
                           ),
-
-
                           Wrap(
                             runSpacing: 8,
                             spacing: 5,
                             children: List.generate(
                                 userController.selectedFishTag.length,
-                                    (index) => InkWell(
-                                  borderRadius: BorderRadius.circular(8),
-                                  onTap: () {
-                                    if(userController.selectedFishTag.contains(userController.selectedFishTag[index])){
-                                      userController.selectedFishTag.remove(userController.selectedFishTag[index]);
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white24,
-                                        borderRadius: BorderRadius.circular(16)),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          userController.selectedFishTag[index].localName ?? '',
-                                          style: const TextStyle(
+                                (index) => InkWell(
+                                      borderRadius: BorderRadius.circular(8),
+                                      onTap: () {
+                                        if (userController.selectedFishTag
+                                            .contains(userController
+                                                .selectedFishTag[index])) {
+                                          userController.selectedFishTag.remove(
+                                              userController
+                                                  .selectedFishTag[index]);
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 5),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white24,
+                                            borderRadius:
+                                                BorderRadius.circular(16)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              userController
+                                                      .selectedFishTag[index]
+                                                      .localName ??
+                                                  '',
+                                              style: const TextStyle(
+                                                  color: secondaryColor,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            const Icon(
+                                              Icons.close,
                                               color: secondaryColor,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700),
+                                              size: 16,
+                                            )
+                                          ],
                                         ),
-                                        const SizedBox(
-                                          width: 4,
-                                        ),
-                                        const Icon(
-                                          Icons.close,
-                                          color: secondaryColor,
-                                          size: 16,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )),
+                                      ),
+                                    )),
                           ),
                           const SizedBox(
                             height: 8,
                           ),
-
                           SearchableFishDropdown(),
                           const SizedBox(
                             height: 16,
@@ -261,7 +273,9 @@ class AddFishScreen extends StatelessWidget {
                 "address": (controller.userData.value.address ?? '').isNotEmpty
                     ? controller.userData.value.address
                     : controller.currentAddress.value,
-                "tag_fish": userController.selectedFishTag.map((element) => element.id).toList(),
+                "tag_fish": userController.selectedFishTag
+                    .map((element) => element.id)
+                    .toList(),
                 "image": imageUrl.value,
                 "caption": captionsController.text.trim()
               };

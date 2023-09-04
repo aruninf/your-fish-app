@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/HOME/profile/my_post.dart';
 import 'package:yourfish/HOME/profile_section.dart';
+import 'package:yourfish/UTILS/app_images.dart';
 
 import '../CHATS/one_to_one_chat_screen.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
@@ -67,7 +69,7 @@ class _SearchSectionState extends State<SearchSection> {
                             onTap: () => setState(() {
                               selectedIndex = listOfFilter[index];
                               if (selectedIndex == 'Friend Requests') {
-                                Get.to(const FriendRequestScreen());
+                                Get.to(FriendRequestScreen());
                               }
                             }),
                             child: index == 2
@@ -238,80 +240,10 @@ class _SearchSectionState extends State<SearchSection> {
                 ),
           Expanded(
             child: selectedIndex == 'Posts'
-                ? MyPostWidget(myPost: false,)
-                : ListView.builder(
-                    itemCount: chatsList.length,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                        top: 0, bottom: 8, left: 8, right: 8),
-                    itemBuilder: (context, index) => ListTile(
-                      onTap: () => Get.to(() => const OneToOneChatScreen(),
-                          transition: Transition.rightToLeft),
-                      dense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 1),
-                      leading: ClipOval(
-                        child: Image.asset(
-                          '${chatsList[index].profileImage}',
-                          height: 48,
-                          width: 48,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      title: CustomText(
-                        text: '${chatsList[index].name}',
-                        color: Colors.white,
-                      ),
-                      subtitle: CustomText(
-                        text: '${chatsList[index].username}',
-                        color: Colors.white,
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            height: 30,
-                            child: TextButton(
-                                onPressed: () {},
-                                style: TextButton.styleFrom(
-                                    backgroundColor: fishColor,
-                                    padding: EdgeInsets.zero,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8))),
-                                child: const Text(
-                                  'Follow',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: primaryColor,
-                                      fontWeight: FontWeight.w700),
-                                )),
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          SizedBox(
-                            height: 30,
-                            child: TextButton(
-                                onPressed: () {},
-                                style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        side: const BorderSide(
-                                            width: 1, color: Colors.white))),
-                                child: const Text(
-                                  'Chat',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600),
-                                )),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                ? MyPostWidget(
+                    myPost: false,
+                  )
+                : GetAllUserWidget(),
           ),
         ],
       ),
@@ -319,43 +251,65 @@ class _SearchSectionState extends State<SearchSection> {
   }
 }
 
-class FriendRequestScreen extends StatelessWidget {
-  const FriendRequestScreen({super.key});
+class GetAllUserWidget extends StatelessWidget {
+  GetAllUserWidget({super.key});
+
+  final controller = Get.find<UserController>();
+
+  void getAllUsers() {
+    var data = {
+      "sortBy": "asc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
+    Future.delayed(
+      Duration.zero,
+      () => controller.getAllUsers(data),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const CustomAppBar(
-              heading: "Friend Requests",
-              textColor: secondaryColor,
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: chatsList.length,
+    getAllUsers();
+    return Obx(() => controller.isDataLoading.value
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : controller.allUsers.isNotEmpty
+            ? ListView.builder(
+                itemCount: controller.allUsers.length,
                 physics: const BouncingScrollPhysics(),
                 padding:
-                    const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 8),
+                    const EdgeInsets.only(top: 0, bottom: 8, left: 8, right: 8),
                 itemBuilder: (context, index) => ListTile(
+                  onTap: () => Get.to(() => const OneToOneChatScreen(),
+                      transition: Transition.rightToLeft),
                   dense: true,
                   contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
                   leading: ClipOval(
-                    child: Image.asset(
-                      chatsList[index].profileImage ?? '',
+                    child: Image.network(
+                      '${controller.allUsers[index].profilePic}',
                       height: 48,
                       width: 48,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Image.asset(
+                        fishPlaceHolder,
+                        height: 48,
+                        width: 48,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   title: CustomText(
-                    text: chatsList[index].name ?? '',
+                    text: '${controller.allUsers[index].name}',
                     color: Colors.white,
                   ),
-                  //subtitle: const CustomText(text: '@a.brown',color: Colors.white,),
+                  subtitle: CustomText(
+                    text: '${controller.allUsers[index].handle}',
+                    color: Colors.white,
+                  ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -369,7 +323,7 @@ class FriendRequestScreen extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8))),
                             child: const Text(
-                              'Accept',
+                              'Follow',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: primaryColor,
@@ -390,7 +344,7 @@ class FriendRequestScreen extends StatelessWidget {
                                     side: const BorderSide(
                                         width: 1, color: Colors.white))),
                             child: const Text(
-                              'Deny',
+                              'Chat',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.white,
@@ -400,7 +354,136 @@ class FriendRequestScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
+              )
+            : const Center(
+                child: Text(
+                  "No Record Found!",
+                  style: TextStyle(color: secondaryColor),
+                ),
+              ));
+  }
+}
+
+class FriendRequestScreen extends StatelessWidget {
+  FriendRequestScreen({super.key});
+
+  final controller = Get.find<UserController>();
+
+  void getFriendRequest() {
+    var data = {
+      "sortBy": "asc",
+      "sortOn": "created_at",
+      "page": "1",
+      "limit": "20"
+    };
+    Future.delayed(
+      Duration.zero,
+      () => controller.getFriendRequest(data),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    getFriendRequest();
+    return Scaffold(
+      backgroundColor: primaryColor,
+      body: SafeArea(
+        child: Column(
+          children: [
+            const CustomAppBar(
+              heading: "Friend Requests",
+              textColor: secondaryColor,
+            ),
+            Expanded(
+              child: Obx(() => controller.isDataLoading.value
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : controller.friendRequest.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: controller.friendRequest.length,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.only(
+                              top: 8, bottom: 8, left: 8, right: 8),
+                          itemBuilder: (context, index) => ListTile(
+                            dense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            leading: ClipOval(
+                              child: Image.network(
+                                controller.friendRequest[index].profilePic ??
+                                    '',
+                                height: 48,
+                                width: 48,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Image.asset(
+                                  fishPlaceHolder,
+                                  height: 48,
+                                  width: 48,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            title: CustomText(
+                              text: controller.friendRequest[index].name ?? '',
+                              color: Colors.white,
+                            ),
+                            //subtitle: const CustomText(text: '@a.brown',color: Colors.white,),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                  child: TextButton(
+                                      onPressed: () {},
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: fishColor,
+                                          padding: EdgeInsets.zero,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8))),
+                                      child: const Text(
+                                        'Accept',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: primaryColor,
+                                            fontWeight: FontWeight.w700),
+                                      )),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                  child: TextButton(
+                                      onPressed: () {},
+                                      style: TextButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              side: const BorderSide(
+                                                  width: 1,
+                                                  color: Colors.white))),
+                                      child: const Text(
+                                        'Deny',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      )),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : const Center(
+                          child: Text(
+                            "No Friend Request!",
+                            style: TextStyle(color: secondaryColor),
+                          ),
+                        )),
             ),
           ],
         ),

@@ -38,3 +38,5 @@ const String uploadFileApi="image-upload";
 const String getMyPostApi="get-my-post";
 const String logoutApi="logout";
 const String getContentApi="get-combined-data";
+const String storeFollowUnfollowApi="store-follow-unfollow";
+const String getFollowUnfollowUserApi="get-my-follow-unfollow";

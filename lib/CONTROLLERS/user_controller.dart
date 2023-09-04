@@ -27,6 +27,7 @@ class UserController extends GetxController {
   var selectedFishExp = [].obs;
   var selectedFishTag = <FishData>[].obs;
   var allUsers = <UserData>[].obs;
+  var friendRequest = <UserData>[].obs;
   var selectedFishGear = [].obs;
   var isDataLoading = false.obs;
   var isPasswordVisible = true.obs;
@@ -107,7 +108,7 @@ class UserController extends GetxController {
   }
 
 
-  /// 💥💥💥💥💥💥💥 Get Fish 💥💥💥💥💥💥💥
+  /// 💥💥💥💥💥💥💥 Get All user 💥💥💥💥💥💥💥
 
   Future<void> getAllUsers(dynamic data) async {
     isDataLoading.value = true;
@@ -118,6 +119,33 @@ class UserController extends GetxController {
       allUsers.value = sp.data ?? [];
     }
   }
+
+
+  /// 💥💥💥💥💥💥💥 Get Friend Request 💥💥💥💥💥💥💥
+
+  Future<void> getFriendRequest(dynamic data) async {
+    isDataLoading.value = true;
+    var response = await Network().postRequest(endPoint: getFollowUnfollowUserApi,formData: data);
+    if (response?.data != null) {
+      isDataLoading.value = false;
+      var sp = UserResponse.fromJson(response?.data);
+      friendRequest.value = sp.data ?? [];
+    }
+  }
+
+
+  /// 💥💥💥💥💥💥💥 User Follow and Unfollow 💥💥💥💥💥💥💥
+
+  Future<void> userFollowUnfollow(dynamic data) async {
+    isDataLoading.value = true;
+    var response = await Network().postRequest(endPoint: storeFollowUnfollowApi,formData: data);
+    if (response?.data != null) {
+      isDataLoading.value = false;
+      var sp = UserResponse.fromJson(response?.data);
+      friendRequest.value = sp.data ?? [];
+    }
+  }
+
 
   /// 💥💥💥💥💥💥💥 Get Fish Location 💥💥💥💥💥💥💥
 

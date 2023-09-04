@@ -14,6 +14,7 @@ import 'package:yourfish/UTILS/app_color.dart';
 
 import '../CHATS/chats_screen.dart';
 import '../CREATE_POST/add_fish_screen.dart';
+import '../CUSTOM_WIDGETS/common_button.dart';
 import '../PROFILE/my_map_screen.dart';
 import '../USER_BLOGS/blog_screen.dart';
 import '../UTILS/app_images.dart';
@@ -34,6 +35,12 @@ class _MainHomeState extends State<MainHome> {
   var postController = Get.put(PostController());
 
   void _onItemTapped(int index) async {
+    if(index != 2){
+      setState(() {
+        _page = index;
+      });
+    }
+
     var data = {
       "sortBy": "desc",
       "sortOn": "created_at",
@@ -41,14 +48,11 @@ class _MainHomeState extends State<MainHome> {
       "limit": "20"
     };
     if (index == 2) {
-      Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
+      modalBottomSheetMenu();
       Get.find<UserController>().getFish(data);
     } else if (index == 3) {
-      Get.find<UserController>().getAllUsers(data);
+      postController.getPosts(data);
     } else {
-      setState(() {
-        _page = index;
-      });
       index == 0
           ? postController.getPosts(data)
           : index == 1
@@ -289,6 +293,54 @@ class _MainHomeState extends State<MainHome> {
   }
 
   nothing() {}
+
+  void modalBottomSheetMenu() {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return SafeArea(
+              child: Container(
+            padding: const EdgeInsets.only(top:4,right: 16,left: 16,bottom: 16),
+            height: Get.height * 0.2,
+            width: Get.width,
+            color: Colors.transparent,
+            //could change this to Color(0xFF737373),
+            //so you don't have to change MaterialApp canvasColor
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+
+                Align(
+                  alignment: Alignment.topRight,
+                    child: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.close))
+                ),
+                SizedBox(
+                  width: Get.width,
+                  child: CommonButton(
+                    btnBgColor: secondaryColor,
+                    btnText: "Upload Post",
+                    btnTextColor: primaryColor,
+                    onClick: () {
+                       Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: Get.width,
+                  child: CommonButton(
+                    btnBgColor: secondaryColor,
+                    btnText: "Upload Private Post",
+                    btnTextColor: primaryColor,
+                    onClick: () {
+                       Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
+                    },
+                  ),
+                )
+              ],
+            ),
+          ));
+        });
+  }
 }
 
 class RightDrawerMenuWidget extends StatelessWidget {

@@ -17,9 +17,9 @@ class HelpSupportScreen extends StatelessWidget {
   final controller = Get.find<SettingController>();
   final userController = Get.find<PostController>();
 
-  var nameCo=TextEditingController();
-  var email=TextEditingController();
-  var commentCo=TextEditingController();
+  final nameCo=TextEditingController();
+  final email=TextEditingController();
+  final commentCo=TextEditingController();
 
   @override
   Widget build(BuildContext context) {

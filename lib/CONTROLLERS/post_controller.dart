@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -216,14 +215,13 @@ class PostController extends GetxController {
   ///💥💥💥💥💥💥💥  Get Address from Lat Long 💥💥💥💥💥💥💥
 
   Future<void> getAddressFromLatLng(Position position) async {
-    print(
-        "User Location 💥💥💥💥💥💥💥 ${position.latitude},${position.longitude}");
+    //print("User Location 💥💥💥💥💥💥💥 ${position.latitude},${position.longitude}");
     await placemarkFromCoordinates(
             currentPosition.value.latitude, currentPosition.value.longitude)
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       currentAddress.value =
-          '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}';
+          '${place.subLocality}, ${place.subAdministrativeArea}';
     }).catchError((e) {
       debugPrint(e);
     });

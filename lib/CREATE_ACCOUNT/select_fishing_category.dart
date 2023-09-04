@@ -28,6 +28,7 @@ class SelectFishingCategory extends StatelessWidget {
           () => controller.getFishCategory(data),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     callApi();
@@ -104,7 +105,8 @@ class SelectFishingCategory extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ))
+                          )
+                          )
                   ),
                 ),
               ),
