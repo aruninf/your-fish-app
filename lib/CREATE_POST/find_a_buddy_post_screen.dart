@@ -13,8 +13,8 @@ import '../NETWORKS/network.dart';
 import '../UTILS/app_color.dart';
 import '../UTILS/dialog_helper.dart';
 
-class AddFishScreen extends StatelessWidget {
-  AddFishScreen({super.key});
+class FindABuddyPostScreen extends StatelessWidget {
+  FindABuddyPostScreen({super.key});
 
   final userController = Get.find<UserController>();
   final controller = Get.put(PostController());
@@ -30,7 +30,7 @@ class AddFishScreen extends StatelessWidget {
         child: Column(
           children: [
             const CustomAppBar(
-              heading: 'Create Your Post',
+              heading: 'Post to find a buddy',
               textColor: secondaryColor,
             ),
             Obx(() => Expanded(
@@ -155,61 +155,61 @@ class AddFishScreen extends StatelessWidget {
                           const SizedBox(
                             height: 16,
                           ),
-                          Container(
-                            height: Get.height * 0.33,
-                            width: Get.width,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                border:
-                                    Border.all(width: 1, color: Colors.white)),
-                            child: GestureDetector(
-                              onTap: () {
-                                DialogHelper.selectImageFrom(
-                                    onClick: (uri) async {
-                                      imageUrl.value = await Network()
-                                              .uploadFile(uri!, 'fish') ??
-                                          '';
-                                      //controller.uploadFile.value = uri;
-                                      //Get.back();
-                                    },
-                                    context: context);
-                              },
-                              child: imageUrl.value.isNotEmpty
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: Image.network(
-                                        imageUrl.value,
-                                        fit: BoxFit.cover,
-                                      ))
-                                  : const Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.add_circle_outline_rounded,
-                                          size: 48,
-                                          color: secondaryColor,
-                                          weight: 800,
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        CustomText(
-                                          text: 'Upload Post',
-                                          color: btnColor,
-                                          weight: FontWeight.w800,
-                                          sizeOfFont: 16,
-                                        )
-                                      ],
-                                    ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
+                          // Container(
+                          //   height: Get.height * 0.33,
+                          //   width: Get.width,
+                          //   decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(16),
+                          //       border:
+                          //           Border.all(width: 1, color: Colors.white)),
+                          //   child: GestureDetector(
+                          //     onTap: () {
+                          //       DialogHelper.selectImageFrom(
+                          //           onClick: (uri) async {
+                          //             imageUrl.value = await Network()
+                          //                     .uploadFile(uri!, 'fish') ??
+                          //                 '';
+                          //             //controller.uploadFile.value = uri;
+                          //             //Get.back();
+                          //           },
+                          //           context: context);
+                          //     },
+                          //     child: imageUrl.value.isNotEmpty
+                          //         ? ClipRRect(
+                          //             borderRadius: BorderRadius.circular(16),
+                          //             child: Image.network(
+                          //               imageUrl.value,
+                          //               fit: BoxFit.cover,
+                          //             ))
+                          //         : const Column(
+                          //             mainAxisSize: MainAxisSize.min,
+                          //             mainAxisAlignment:
+                          //                 MainAxisAlignment.center,
+                          //             crossAxisAlignment:
+                          //                 CrossAxisAlignment.center,
+                          //             children: [
+                          //               Icon(
+                          //                 Icons.add_circle_outline_rounded,
+                          //                 size: 48,
+                          //                 color: secondaryColor,
+                          //                 weight: 800,
+                          //               ),
+                          //               SizedBox(
+                          //                 height: 8,
+                          //               ),
+                          //               CustomText(
+                          //                 text: 'Upload Post',
+                          //                 color: btnColor,
+                          //                 weight: FontWeight.w800,
+                          //                 sizeOfFont: 16,
+                          //               )
+                          //             ],
+                          //           ),
+                          //   ),
+                          // ),
+                          // const SizedBox(
+                          //   height: 16,
+                          // ),
                           TextFormField(
                             controller: captionsController,
                             style: const TextStyle(color: Colors.white),

@@ -168,7 +168,8 @@ Future<void> displayPrediction(Prediction p) async {
                                     ),
                                   )),
                             ),
-                )))
+                ))
+            )
           ],
         ),
       ),

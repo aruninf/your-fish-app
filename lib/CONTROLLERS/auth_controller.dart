@@ -22,7 +22,7 @@ import '../UTILS/utils.dart';
 
 class AuthController extends GetxController {
   var uploadFile = File('').obs;
-  late String? fcmToken;
+  var fcmToken="invalid_token".obs;
   late String? socialType;
   late String? currentTimeZone;
   var isPasswordVisible = true.obs;
@@ -50,8 +50,8 @@ class AuthController extends GetxController {
   Future<void> getToken() async {
     // Get firebase token
     mess.FirebaseMessaging.instance.getToken().then((token) {
-      fcmToken = token;
-      print("fcmToken==============$fcmToken");
+      fcmToken.value = token ?? "";
+      print("fcmToken==============${fcmToken.value}");
     });
   }
 

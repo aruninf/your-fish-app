@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/auth_controller.dart';
 import 'package:yourfish/CONTROLLERS/setting_controller.dart';
+import 'package:yourfish/HOME/profile/get_saved_post.dart';
 import 'package:yourfish/PROFILE/notificatios_screen.dart';
 import 'package:yourfish/PROFILE/terms_privacy_screen.dart';
 
@@ -145,27 +146,31 @@ class SettingsScreen extends StatelessWidget {
                       color: btnColor, borderRadius: BorderRadius.circular(16)),
                   child: ListTile(
                     onTap: () {
+
                       if(index==0){
-                        Get.to(const NotificationScreen(),
+                        Get.to( SavedPostWidget(),
                             transition: Transition.rightToLeft);
                       }else if(index==1){
+                        Get.to(const NotificationScreen(),
+                            transition: Transition.rightToLeft);
+                      }else if(index==2){
                         controller.shareApp();
                       }
-                      else if(index==2){
+                      else if(index==3){
                         callPrivacyPolicyApi();
                         Get.to(
                             PrivacyAndTermsScreen(
                               title: "Terms & Conditions",
                             ),transition: Transition.rightToLeft);
                       }
-                      else if(index==3){
+                      else if(index==4){
                         callPrivacyPolicyApi();
                           Get.to(
                               PrivacyAndTermsScreen(
                                 title: "Privacy Policy",
                               ),transition: Transition.rightToLeft);
                       }
-                      else if(index==4){
+                      else if(index==5){
                         callFaqApi();
                             Get.to(FAQScreen(),
                                 transition:

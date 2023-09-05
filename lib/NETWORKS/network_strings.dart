@@ -17,6 +17,7 @@ const String socialLoginApi = "social-login";
 const String updateOnBoardingApi="user/on-boarding";
 const String forgotPasswordApi="forgot-password/send-email";
 const String getBlogApi="get-blog";
+const String getSavedPostApi="get-my-favourite-posts";
 const String getFaqApi="get-faq";
 const String getArticlesApi="get-article";
 const String getFishApi="get-fish";

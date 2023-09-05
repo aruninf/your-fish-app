@@ -32,7 +32,7 @@ class GearResponse {
 
 class GearData {
   int? id;
-  String? userId;
+  int? userId;
   String? title;
   String? image;
   int? status;

@@ -4,6 +4,8 @@ import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
 import '../../CONTROLLERS/post_controller.dart';
+import '../../CUSTOM_WIDGETS/custom_text_style.dart';
+import '../../UTILS/app_color.dart';
 import '../../UTILS/consts.dart';
 class MyGearWidget extends StatelessWidget {
   MyGearWidget({super.key});
@@ -21,49 +23,56 @@ class MyGearWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     getMyGear();
-    return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 4 / 5),
-      itemCount: controller.fishingGear.length,
-      itemBuilder: (context, index) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 0.67, color: Colors.white),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.network(
-                  "${controller.fishingGear[index].image}",
-                  height: Get.width * 0.45,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  errorBuilder: (context, error, stackTrace) => Image.asset(
-                   fishingImage,
-                    height: Get.width * 0.45,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                )),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(
-                "${controller.fishingGear[index].title}",
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w700),
-              ),
-            )
-          ],
-        ),
+    return Obx(() => controller.isDataLoading.value
+        ? const Center(
+      child: CircularProgressIndicator(),
+    )
+        : controller.fishingGear.isEmpty
+        ? const Center(
+      child: Text(
+        "No Record Found!",
+        style: TextStyle(color: Colors.white),
       ),
-    );
+    )
+        : ListView.builder(
+      itemCount: controller.fishingGear.length,
+      itemBuilder: (context, index) => Obx(() =>
+          Container(
+            width: Get.width,
+            margin: const EdgeInsets.only(top: 16,left: 16,right: 16),
+            decoration: BoxDecoration(
+              color: btnColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                // if (controller
+                //     .selectedFishingLocation
+                //     .contains(controller
+                //     .fishingLocation[index].name)) {
+                //   controller.selectedFishingLocation
+                //       .remove(controller
+                //       .fishingLocation[index].name);
+                // } else {
+                //   controller.selectedFishingLocation
+                //       .add(controller
+                //       .fishingLocation[index].name);
+                // }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: CustomText(
+                  text: controller
+                      .fishingGear[index]
+                      .title ??
+                      '',
+                  sizeOfFont: 16,
+                  weight: FontWeight.w800,
+                ),
+              ),
+            ),
+          )),
+    ),);
   }
 }

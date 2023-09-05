@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CONTROLLERS/auth_controller.dart';
 import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/CREATE_ACCOUNT/upload_profile_picture.dart';
 import 'package:yourfish/UTILS/app_images.dart';
@@ -233,7 +234,8 @@ class CreateAccountScreen extends StatelessWidget {
               'email': emailController.text.trim(),
               'dob': dobController.text.trim(),
               'gender': userController.gender ?? 'Male',
-              'phone_number': numberController.text.trim()
+              'phone_number': numberController.text.trim(),
+              'fcm_token': Get.find<AuthController>().fcmToken.value
             };
             if (socialType != 'email' && socialId.isNotEmpty) {
               var newData = {'password': "12345678", ...data};

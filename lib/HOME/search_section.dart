@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/user_controller.dart';
+import 'package:yourfish/HOME/profile/get_all_post.dart';
 import 'package:yourfish/HOME/profile/my_post.dart';
 import 'package:yourfish/HOME/profile_section.dart';
 import 'package:yourfish/UTILS/app_images.dart';
@@ -240,9 +241,7 @@ class _SearchSectionState extends State<SearchSection> {
                 ),
           Expanded(
             child: selectedIndex == 'Posts'
-                ? MyPostWidget(
-                    myPost: false,
-                  )
+                ? AllPostWidget()
                 : GetAllUserWidget(),
           ),
         ],

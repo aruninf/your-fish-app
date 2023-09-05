@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/CONTROLLERS/setting_controller.dart';
 import 'package:yourfish/CONTROLLERS/user_controller.dart';
+import 'package:yourfish/CREATE_POST/find_a_buddy_post_screen.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_text_style.dart';
 import 'package:yourfish/HOME/chats_section.dart';
 import 'package:yourfish/HOME/home_section.dart';
@@ -297,6 +298,7 @@ class _MainHomeState extends State<MainHome> {
   void modalBottomSheetMenu() {
     showModalBottomSheet(
         context: context,
+        backgroundColor: primaryColor,
         builder: (builder) {
           return SafeArea(
               child: Container(
@@ -312,16 +314,16 @@ class _MainHomeState extends State<MainHome> {
 
                 Align(
                   alignment: Alignment.topRight,
-                    child: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.close))
+                    child: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.close,color: secondaryColor,))
                 ),
                 SizedBox(
                   width: Get.width,
                   child: CommonButton(
                     btnBgColor: secondaryColor,
-                    btnText: "Upload Post",
+                    btnText: "Find a buddy",
                     btnTextColor: primaryColor,
                     onClick: () {
-                       Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
+                       Get.to(() => FindABuddyPostScreen(), transition: Transition.rightToLeft);
                     },
                   ),
                 ),
@@ -329,7 +331,7 @@ class _MainHomeState extends State<MainHome> {
                   width: Get.width,
                   child: CommonButton(
                     btnBgColor: secondaryColor,
-                    btnText: "Upload Private Post",
+                    btnText: "Upload a Post",
                     btnTextColor: primaryColor,
                     onClick: () {
                        Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
