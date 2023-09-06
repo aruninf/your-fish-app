@@ -51,7 +51,7 @@ class AuthController extends GetxController {
     // Get firebase token
     mess.FirebaseMessaging.instance.getToken().then((token) {
       fcmToken.value = token ?? "";
-      print("fcmToken==============${fcmToken.value}");
+      //print("fcmToken==============${fcmToken.value}");
     });
   }
 
@@ -170,7 +170,7 @@ class AuthController extends GetxController {
     if (user != null) {
       Utility.setStringValue(emailKey, user.email ?? "");
       Utility.setStringValue(nameKey, user.displayName ?? "");
-      dynamic data = {"social_type": socialType, "social_id": user.uid};
+      dynamic data = {"social_type": socialType, "social_id": user.uid,"fcm_token":fcmToken.value};
       var response =
           await Network().postRequest(endPoint: socialLoginApi, formData: data);
       if (response?.data != null) {

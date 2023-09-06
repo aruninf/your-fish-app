@@ -7,11 +7,12 @@ class CustomSearchField extends StatelessWidget {
   const CustomSearchField({
     super.key,
     this.controller,
-    required this.hintText,
+    required this.hintText, this.onChanges,
   });
 
   final TextEditingController? controller;
   final String hintText;
+  final Function(String)? onChanges;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,8 @@ class CustomSearchField extends StatelessWidget {
           keyboardType: TextInputType.text,
           textAlign: TextAlign.start,
           textInputAction: TextInputAction.search,
+          controller: controller,
+          onChanged: onChanges,
           autofocus: false,
           style: const TextStyle(
               fontWeight: FontWeight.w500, fontSize: 13),

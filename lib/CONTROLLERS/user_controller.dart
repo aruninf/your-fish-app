@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +8,8 @@ import 'package:yourfish/MODELS/fish_response.dart';
 import 'package:yourfish/MODELS/user_response.dart';
 import 'package:yourfish/UTILS/dialog_helper.dart';
 
+import '../CHATS/chat_model.dart';
+import '../CHATS/single_chat_page.dart';
 import '../CREATE_ACCOUNT/add_your_gear.dart';
 import '../CREATE_ACCOUNT/select_fish_interest.dart';
 import '../CREATE_ACCOUNT/select_fishing_category.dart';
@@ -87,7 +88,8 @@ class UserController extends GetxController {
       LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
       if (loginResponse.status ?? false) {
         Utility.setStringValue(tokenKey, loginResponse.token ?? "");
-        Get.offAll(() => SelectFishInterest(), transition: Transition.rightToLeft);
+        Get.offAll(() => SelectFishInterest(),
+            transition: Transition.rightToLeft);
       } else {
         DialogHelper.showErrorDialog(
             title: "Error", description: response?.data['message']);
@@ -99,7 +101,8 @@ class UserController extends GetxController {
 
   Future<void> getFish(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().postRequest(endPoint: getFishApi,formData: data);
+    var response =
+        await Network().postRequest(endPoint: getFishApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
       FishResponse fish = FishResponse.fromJson(response?.data);
@@ -107,12 +110,12 @@ class UserController extends GetxController {
     }
   }
 
-
   /// 💥💥💥💥💥💥💥 Get All user 💥💥💥💥💥💥💥
 
   Future<void> getAllUsers(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().postRequest(endPoint: getAllUserApi,formData: data);
+    var response =
+        await Network().postRequest(endPoint: getAllUserApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
       var sp = UserResponse.fromJson(response?.data);
@@ -120,38 +123,71 @@ class UserController extends GetxController {
     }
   }
 
-
   /// 💥💥💥💥💥💥💥 Get Friend Request 💥💥💥💥💥💥💥
 
   Future<void> getFriendRequest(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().postRequest(endPoint: getFollowUnfollowUserApi,formData: data);
+    var response = await Network()
+        .postRequest(endPoint: getMyFollowUnfollowApi, formData: data,isLoader: false);
     if (response?.data != null) {
       isDataLoading.value = false;
       var sp = UserResponse.fromJson(response?.data);
       friendRequest.value = sp.data ?? [];
     }
   }
-
 
   /// 💥💥💥💥💥💥💥 User Follow and Unfollow 💥💥💥💥💥💥💥
 
   Future<void> userFollowUnfollow(dynamic data) async {
-    isDataLoading.value = true;
-    var response = await Network().postRequest(endPoint: storeFollowUnfollowApi,formData: data);
+    //isDataLoading.value = true;
+    var response =
+        await Network().postRequest(endPoint: sendRequestApi, formData: data);
+    await Network()
+        .postRequest(endPoint: storeFollowUnfollowApi, formData: data);
     if (response?.data != null) {
-      isDataLoading.value = false;
-      var sp = UserResponse.fromJson(response?.data);
-      friendRequest.value = sp.data ?? [];
+      //isDataLoading.value = false;
+      Get.snackbar(response?.data['message'], '',
+          colorText: Colors.green, snackPosition: SnackPosition.TOP);
+
+      getFriendRequest({
+        "sortBy": "asc",
+        "sortOn": "created_at",
+        "page": "1",
+        "limit": "20"
+      });
     }
   }
 
+  openChat(UserData userData) async {
+    var data = {
+      "receiver_id": userData.id,
+    };
+    var response = await Network()
+        .postRequest(endPoint: startChatApi, formData: data, isLoader: true);
+    if (response?.data != null) {
+      if (response?.data['status_code'] == 200) {
+        Get.to(
+            () => SingleChatPage(
+                  receiver: ReceiverModel(
+                      matchRoomId: "${response?.data['data']['match_id']}",
+                      receiverId: "${response?.data['data']['receiver_id']}"),
+                  image: "${response?.data['data']['receiver_image']}",
+                  matchName: "${response?.data['data']['receiver_name']}",
+                ),
+            transition: Transition.rightToLeft);
+      } else {
+        DialogHelper.showErrorDialog(
+            title: "Error", description: response?.data['message']);
+      }
+    }
+  }
 
   /// 💥💥💥💥💥💥💥 Get Fish Location 💥💥💥💥💥💥💥
 
   Future<void> getFishLocation(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().postRequest(endPoint: getFishingLocationApi,formData: data);
+    var response = await Network()
+        .postRequest(endPoint: getFishingLocationApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
       LocationResponse fish = LocationResponse.fromJson(response?.data);
@@ -163,7 +199,8 @@ class UserController extends GetxController {
 
   Future<void> getFishGear(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().postRequest(endPoint: getFishingGearApi,formData: data);
+    var response = await Network()
+        .postRequest(endPoint: getFishingGearApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
       GearResponse fish = GearResponse.fromJson(response?.data);
@@ -175,7 +212,8 @@ class UserController extends GetxController {
 
   Future<void> getFishCategory(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().postRequest(endPoint: getFishCategoryApi,formData: data);
+    var response = await Network()
+        .postRequest(endPoint: getFishCategoryApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
       CategoryResponse fish = CategoryResponse.fromJson(response?.data);

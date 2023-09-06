@@ -55,18 +55,23 @@ class PostController extends GetxController {
     super.onReady();
   }
 
-  ///🧨🧨🧨🧨🧨🧨 Get Post data 🧨🧨🧨🧨🧨
+
+  ///🧨🧨🧨🧨🧨🧨 Get Post data and Search post 🧨🧨🧨🧨🧨
 
   Future<void> getPosts(dynamic data) async {
     isLoading.value = true;
+    if(data['page']=="1"){
+      postData.clear();
+    }
     var response = await Network()
         .postRequest(endPoint: getPostsApi, formData: data, isLoader: false);
     if (response?.data != null) {
       isLoading.value = false;
       PostResponse post = PostResponse.fromJson(response?.data);
-      postData.value = post.data ?? [];
+      postData.addAll(post.data ?? []);
     }
   }
+
 
   ///🧨🧨🧨🧨🧨🧨 Get Chat user 🧨🧨🧨🧨🧨
 

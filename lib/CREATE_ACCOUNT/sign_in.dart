@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CONTROLLERS/auth_controller.dart';
 import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
@@ -124,7 +125,8 @@ class SignInScreen extends StatelessWidget {
                           }
                             var data={
                               "email":email.text.trim(),
-                              "password":password.text.trim()
+                              "password":password.text.trim(),
+                              "fcm_token":Get.find<AuthController>().fcmToken.value
                             };
                             controller.userLogin(data);
                         

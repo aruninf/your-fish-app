@@ -1,5 +1,5 @@
 //Emoji ⚠️🦀🔓🧨🎉🏆🍔
-
+/// Arun Android
 ///🏆🏆🏆🏆🏆🏆🏆 Frontend Route 🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆
 
 const String API_BASE_URL = "https://appfish.infinitysoftsystems.in/api/";
@@ -9,6 +9,7 @@ const String nameKey = 'name';
 const String tokenKey = 'token';
 const String isLoginKey = 'login_key';
 const String ACCEPT = 'application/json';
+
 /// 🧨🧨🧨🧨🧨🧨🧨🧨 APIS END Points 🧨🧨🧨🧨🧨🧨🧨🧨🧨🧨🧨🧨🧨🧨
 
 const String loginApi = "login";
@@ -39,5 +40,10 @@ const String uploadFileApi="image-upload";
 const String getMyPostApi="get-my-post";
 const String logoutApi="logout";
 const String getContentApi="get-combined-data";
+
 const String storeFollowUnfollowApi="store-follow-unfollow";
-const String getFollowUnfollowUserApi="get-my-follow-unfollow";
+const String sendRequestApi="send-friend-request";
+const String getFriendRequestsListApi="get-friend-requests-list";
+const String getMyFollowUnfollowApi="get-my-follow-unfollow";
+const String searchPostApi="search-post";
+const String searchUserApi="find-buddy";

@@ -13,7 +13,7 @@ class UserResponse {
     if (json['data'] != null) {
       data = <UserData>[];
       json['data'].forEach((v) {
-        data!.add(new UserData.fromJson(v));
+        data!.add( UserData.fromJson(v));
       });
     }
   }

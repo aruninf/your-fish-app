@@ -46,7 +46,7 @@ class _MainHomeState extends State<MainHome> {
       "sortBy": "desc",
       "sortOn": "created_at",
       "page": "1",
-      "limit": "20"
+      "limit": "5"
     };
     if (index == 2) {
       modalBottomSheetMenu();
@@ -69,7 +69,7 @@ class _MainHomeState extends State<MainHome> {
       "sortBy": "desc",
       "sortOn": "created_at",
       "page": "1",
-      "limit": "20"
+      "limit": "5"
     };
     Future.delayed(
       Duration.zero,
@@ -84,7 +84,7 @@ class _MainHomeState extends State<MainHome> {
       "sortBy": "desc",
       "sortOn": "created_at",
       "page": "1",
-      "limit": "20"
+      "limit": "5"
     };
     Future.delayed(
       Duration.zero,
