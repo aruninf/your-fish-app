@@ -7,6 +7,7 @@ import '../../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../../MODELS/post_response.dart';
 import '../../UTILS/app_color.dart';
 import '../../UTILS/app_images.dart';
+import 'find_a_buddy_post_item.dart';
 
 class SingleFishPostWidget extends StatelessWidget {
   SingleFishPostWidget({super.key, required this.postModel});
@@ -18,7 +19,7 @@ class SingleFishPostWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     //controller.isLiked.value=postModel.isLiked ?? false;
     //controller.isFav.value=postModel.isFavourite ?? false;
-    return Container(
+    return  Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 12),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),

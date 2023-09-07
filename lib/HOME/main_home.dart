@@ -52,7 +52,7 @@ class _MainHomeState extends State<MainHome> {
       modalBottomSheetMenu();
       Get.find<UserController>().getFish(data);
     } else if (index == 3) {
-      postController.getPosts(data);
+      //postController.getPosts(data);
     } else {
       index == 0
           ? postController.getPosts(data)
@@ -69,7 +69,7 @@ class _MainHomeState extends State<MainHome> {
       "sortBy": "desc",
       "sortOn": "created_at",
       "page": "1",
-      "limit": "5"
+      "limit": "10"
     };
     Future.delayed(
       Duration.zero,
@@ -82,9 +82,9 @@ class _MainHomeState extends State<MainHome> {
   void initState() {
     var data = {
       "sortBy": "desc",
-      "sortOn": "created_at",
+      "sortOn": "id",
       "page": "1",
-      "limit": "5"
+      "limit": "10"
     };
     Future.delayed(
       Duration.zero,

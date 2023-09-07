@@ -9,18 +9,56 @@ import '../../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../../UTILS/app_color.dart';
 import '../../UTILS/app_images.dart';
 
-class GetAllUserWidget extends StatelessWidget {
+class GetAllUserWidget extends StatefulWidget {
   GetAllUserWidget({super.key});
 
+  @override
+  State<GetAllUserWidget> createState() => _GetAllUserWidgetState();
+}
+
+class _GetAllUserWidgetState extends State<GetAllUserWidget> {
   final controller = Get.find<UserController>();
+
   final searchController=TextEditingController().obs;
+
+
+  final scrollController = ScrollController();
+  var page = 1;
+
+  @override
+  void initState() {
+    scrollController.addListener(() {
+      if ((scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent)) {
+        setState(() {
+          page += 1;
+          //add api for load the more data according to new page
+          Future.delayed(
+            Duration.zero,
+                () async {
+              var data = {
+                "sortBy": "desc",
+                "sortOn": "created_at",
+                "page": page,
+                "limit": "10",
+              };
+              await controller.getAllUsers(data);
+            },
+          );
+        });
+      }
+    });
+    super.initState();
+    getAllUsers();
+  }
+
 
   void getAllUsers() {
     var data = {
       "sortBy": "asc",
       "sortOn": "created_at",
-      "page": "1",
-      "limit": "20",
+      "page": page,
+      "limit": "10",
       "filter": ""
     };
     Future.delayed(
@@ -31,7 +69,7 @@ class GetAllUserWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getAllUsers();
+
     return Column(
       children: [
         Padding(
@@ -55,13 +93,10 @@ class GetAllUserWidget extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Obx(() => controller.isDataLoading.value
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : controller.allUsers.isNotEmpty
+          child: Obx(() => controller.allUsers.isNotEmpty
                   ? ListView.builder(
                       itemCount: controller.allUsers.length,
+                      controller: scrollController,
                       physics: const BouncingScrollPhysics(),
                       padding: const EdgeInsets.only(
                           top: 0, bottom: 8, left: 8, right: 8),

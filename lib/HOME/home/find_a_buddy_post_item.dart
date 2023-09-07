@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/UTILS/app_images.dart';
 
+import '../../CONTROLLERS/post_controller.dart';
 import '../../CUSTOM_WIDGETS/custom_text_style.dart';
+import '../../MODELS/post_response.dart';
 import '../../UTILS/app_color.dart';
 
-class NotificationItem extends StatelessWidget {
-  const NotificationItem({super.key});
+class FindABuddyPostItem extends StatelessWidget {
+  FindABuddyPostItem({super.key, required this.postModel});
+
+  final controller = Get.find<PostController>();
+
+  final PostData postModel;
 
   @override
   Widget build(BuildContext context) {
@@ -22,28 +29,36 @@ class NotificationItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Image.asset(
-                'images/chat_image2.png',
-                height: 35,
-                width: 35,
-                fit: BoxFit.cover,
+              ClipOval(
+                child: Image.network(
+                  postModel.image ?? '',
+                  height: 35,
+                  width: 35,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Image.asset(
+                    fishPlaceHolder,
+                    height: 35,
+                    width: 35,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               const SizedBox(
                 width: 8,
               ),
-              const Text(
-                "@Allie-W",
-                style: TextStyle(
+              Text(
+                postModel.userHandle ?? '',
+                style: const TextStyle(
                     fontFamily: "Rodetta",
-                    fontWeight: FontWeight.w700,
-                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
                     color: secondaryColor),
               ),
               const Spacer(),
               SizedBox(
                 height: 30,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () => controller.openChat(postModel),
                   style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
@@ -64,9 +79,8 @@ class NotificationItem extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          const CustomText(
-            text:
-            "Looking for a fishing buddy this weekend\nMessage e to plan!",
+          CustomText(
+            text: postModel.caption ?? '',
             weight: FontWeight.w600,
             sizeOfFont: 12,
             maxLin: 2,

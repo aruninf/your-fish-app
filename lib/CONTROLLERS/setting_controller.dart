@@ -118,7 +118,6 @@ class SettingController extends GetxController {
     var response = await Network().postRequest(endPoint: settingApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
-        Get.back();
         Get.snackbar('Update Successfully', '',
             colorText: Colors.green, snackPosition: SnackPosition.TOP);
       } else {

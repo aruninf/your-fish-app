@@ -34,6 +34,7 @@ class PostData {
   int? id;
   int? userId;
   int? isPublic;
+  int? type;
   String? latitude;
   String? longitude;
   String? address;
@@ -53,6 +54,7 @@ class PostData {
       {this.id,
         this.userId,
         this.isPublic,
+        this.type,
         this.latitude,
         this.longitude,
         this.address,
@@ -73,6 +75,7 @@ class PostData {
     id = json['id'];
     userId = json['user_id'];
     isPublic = json['isPublic'];
+    type = json['type'];
     latitude = json['latitude'];
     longitude = json['longitude'];
     address = json['address'];
@@ -99,6 +102,7 @@ class PostData {
     data['id'] = id;
     data['user_id'] = userId;
     data['isPublic'] = isPublic;
+    data['type'] = type;
     data['latitude'] = latitude;
     data['longitude'] = longitude;
     data['address'] = address;

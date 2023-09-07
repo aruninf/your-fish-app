@@ -268,6 +268,7 @@ class FindABuddyPostScreen extends StatelessWidget {
             if (_formKey.currentState!.validate()) {
               var data = {
                 "isPublic": controller.isLocationOn.value,
+                "type":2,
                 "latitude": controller.currentPosition.value.latitude,
                 "longitude": controller.currentPosition.value.longitude,
                 "address": (controller.userData.value.address ?? '').isNotEmpty
