@@ -59,7 +59,7 @@ class PostController extends GetxController {
   ///🧨🧨🧨🧨🧨🧨 Get Post data and Search post 🧨🧨🧨🧨🧨
 
   Future<void> getPosts(dynamic data) async {
-    if(data['page']=="1"){
+    if(data['page']==1){
       postData.clear();
     }
     var response = await Network()
@@ -67,10 +67,7 @@ class PostController extends GetxController {
     if (response?.data != null) {
       PostResponse post = PostResponse.fromJson(response?.data);
       postData.addAll(post.data ?? []);
-      // if((post.data ?? []).isEmpty){
-      //   Get.snackbar('No more data', '',
-      //       colorText: Colors.deepOrange, snackPosition: SnackPosition.TOP);
-      // }
+
     }
   }
 

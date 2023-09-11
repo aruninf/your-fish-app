@@ -19,8 +19,7 @@ class GetAllUserWidget extends StatefulWidget {
 class _GetAllUserWidgetState extends State<GetAllUserWidget> {
   final controller = Get.find<UserController>();
 
-  final searchController=TextEditingController().obs;
-
+  final searchController = TextEditingController().obs;
 
   final scrollController = ScrollController();
   var page = 1;
@@ -52,24 +51,21 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
     getAllUsers();
   }
 
-
   void getAllUsers() {
     var data = {
-      "sortBy": "asc",
-      "sortOn": "created_at",
+      "sortBy": "desc",
+      "sortOn": "id",
       "page": page,
-      "limit": "10",
-      "filter": ""
+      "limit": "20",
     };
     Future.delayed(
       Duration.zero,
-      () => controller.getAllUsers(data),
+          () => controller.getAllUsers(data),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Padding(
@@ -83,112 +79,136 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
                 "sortOn": "created_at",
                 "page": "1",
                 "limit": "20",
-                "filter": searchController.value.text
+                "filter": p0
               };
               Future.delayed(
                 Duration.zero,
                     () => controller.getAllUsers(data),
               );
+              searchController.value.text = "";
             },
           ),
         ),
         Expanded(
-          child: Obx(() => controller.allUsers.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: controller.allUsers.length,
-                      controller: scrollController,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.only(
-                          top: 0, bottom: 8, left: 8, right: 8),
-                      itemBuilder: (context, index) => ListTile(
-                        onTap: () => Get.to(() => const OneToOneChatScreen(),
+          child: Obx(() =>
+          controller.allUsers.isNotEmpty
+              ? RefreshIndicator(
+            child: ListView.builder(
+              itemCount: controller.allUsers.length,
+              controller: scrollController,
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.only(
+                  top: 0, bottom: 8, left: 8, right: 8),
+              itemBuilder: (context, index) =>
+                  ListTile(
+                    onTap: () =>
+                        Get.to(() => const OneToOneChatScreen(),
                             transition: Transition.rightToLeft),
-                        dense: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 1),
-                        leading: ClipOval(
-                          child: Image.network(
-                            '${controller.allUsers[index].profilePic}',
-                            height: 48,
-                            width: 48,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Image.asset(
+                    dense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 1),
+                    leading: ClipOval(
+                      child: Image.network(
+                        '${controller.allUsers[index].profilePic}',
+                        height: 48,
+                        width: 48,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            Image.asset(
                               fishPlaceHolder,
                               height: 48,
                               width: 48,
                               fit: BoxFit.cover,
                             ),
-                          ),
-                        ),
-                        title: CustomText(
-                          text: '${controller.allUsers[index].name}',
-                          color: Colors.white,
-                        ),
-                        subtitle: CustomText(
-                          text: '${controller.allUsers[index].handle}',
-                          color: Colors.white,
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              height: 30,
-                              child: TextButton(
-                                  onPressed: () async {
-                                    var data = {
-                                      "request_sent_to": controller.allUsers[index].id,
-                                      "followed_person_id": controller.allUsers[index].id,
-                                      "follow_unfollow_status": 1
-                                    };
-                                    controller.userFollowUnfollow(data);
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: fishColor,
-                                      padding: EdgeInsets.zero,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8))),
-                                  child: const Text(
-                                    'Follow',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: primaryColor,
-                                        fontWeight: FontWeight.w700),
-                                  )),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            SizedBox(
-                              height: 30,
-                              child: TextButton(
-                                  onPressed: () => controller.openChat(controller.allUsers[index]),
-                                  style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          side: const BorderSide(
-                                              width: 1, color: Colors.white))),
-                                  child: const Text(
-                                    'Chat',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600),
-                                  )),
-                            ),
-                          ],
-                        ),
                       ),
-                    )
-                  : const Center(
-                      child: Text(
-                        "No Record Found!",
-                        style: TextStyle(color: secondaryColor),
-                      ),
-                    )),
+                    ),
+                    title: CustomText(
+                      text: '${controller.allUsers[index].name}',
+                      color: Colors.white,
+                    ),
+                    subtitle: CustomText(
+                      text: '${controller.allUsers[index].handle}',
+                      color: Colors.white,
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        /// When user deny your friend request Status = 4 Follow button will hide
+                        controller.allUsers[index].followingStatus == 4
+                            ? const SizedBox.shrink()
+                            : SizedBox(
+                          height: 30,
+                          child: TextButton(
+                              onPressed: () async {
+                                var data = {
+                                  "request_sent_to":
+                                  controller.allUsers[index].id,
+                                  "followed_person_id":
+                                  controller.allUsers[index].id,
+                                  "follow_unfollow_status": (controller
+                                      .allUsers[index].followingStatus == 0 || controller
+                                      .allUsers[index].followingStatus==2)
+                                      ? 1
+                                      : 2
+                                };
+                                if (controller.allUsers[index]
+                                    .followingStatus != 3) {
+                                  controller.userFollowUnfollow(data,1);
+                                }
+                              },
+                              style: TextButton.styleFrom(
+                                  backgroundColor: fishColor,
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(8))),
+                              child: Text(
+                                (controller.allUsers[index].followingStatus == 0 || controller.allUsers[index].followingStatus==2)
+                                    ? 'Follow'
+                                    : controller.allUsers[index].followingStatus == 1 ? "Unfollow" : "Following" ,
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.w600),
+                              )),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        SizedBox(
+                          height: 30,
+                          child: TextButton(
+                              onPressed: () =>
+                                  controller
+                                      .openChat(controller.allUsers[index]),
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: const BorderSide(
+                                          width: 1, color: Colors.white))),
+                              child: const Text(
+                                'Chat',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+            ),
+            onRefresh: () async {
+              getAllUsers();
+            },
+          )
+              : const Center(
+            child: Text(
+              "No Record Found!",
+              style: TextStyle(color: secondaryColor),
+            ),
+          )),
         ),
       ],
     );

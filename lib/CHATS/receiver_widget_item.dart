@@ -20,13 +20,13 @@ class ReceiverWidgetItem extends StatelessWidget {
           child: Wrap(
             children: [
               Container(
-                decoration: const BoxDecoration(
-                    color: primaryColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(1.0),
-                      bottomRight: Radius.circular(16.0),
-                      topRight: Radius.circular(16.0),
-                      topLeft: Radius.circular(16.0),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 0.56, color: Colors.white),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(8),
                     )),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
@@ -56,23 +56,19 @@ class ReceiverWidgetItem extends StatelessWidget {
                                 chatModel.message ?? '',
                                 textAlign: TextAlign.start,
                                 style: const TextStyle(
-                                    height: 1.2,
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
+                                    color: fishColor,
+                                    fontSize: 13,),
                               ),
                               const SizedBox(
                                 height: 3.0,
                               ),
                               Text(
                                 Consts.parseTimeStamp(
-                                    int.parse(chatModel.timeStamp!)),
+                                    int.parse(chatModel.timeStamp!)).toLowerCase(),
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
-                                    height: 1.2,
-                                    color: Colors.white70,
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.w400),
+                                    color: secondaryColor,
+                                    fontSize: 12.0,),
                               ),
                             ],
                           ),

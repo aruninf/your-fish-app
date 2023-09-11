@@ -249,7 +249,7 @@ class Consts {
 /// Date Formats //////////////////////////////////////
   static String parseTimeStamp(int value) {
     var date = DateTime.fromMillisecondsSinceEpoch(value).toLocal();
-    var d12 = DateFormat('hh:mm').format(date);
+    var d12 = DateFormat('hh:mm a').format(date);
     return d12;
   }
 

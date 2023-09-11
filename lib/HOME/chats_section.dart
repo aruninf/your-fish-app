@@ -20,7 +20,7 @@ class _ChatsSectionState extends State<ChatsSection>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  var controller=Get.find<PostController>();
+  final controller=Get.find<PostController>();
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
@@ -130,7 +130,8 @@ class _ChatsSectionState extends State<ChatsSection>
                     ],
                   ),
                 ),
-              ):const Center(child: Text("No record found!"),)
+              ):const Center(child: Text("No record found!",
+                style: TextStyle(color: secondaryColor),),)
               ),
             ),
           ],

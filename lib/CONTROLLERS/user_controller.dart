@@ -23,6 +23,7 @@ import '../UTILS/utils.dart';
 
 class UserController extends GetxController {
   var selectedCategories = [].obs;
+  var selectedCategory= 0.obs;
   var selectedFishInterest = [].obs;
   var selectedFishingLocation = [].obs;
   var selectedFishExp = [].obs;
@@ -127,8 +128,8 @@ class UserController extends GetxController {
 
   Future<void> getFriendRequest(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network()
-        .postRequest(endPoint: getMyFollowUnfollowApi, formData: data,isLoader: false);
+    var response = await Network().postRequest(
+        endPoint: getFriendRequestsListApi, formData: data, isLoader: false);
     if (response?.data != null) {
       isDataLoading.value = false;
       var sp = UserResponse.fromJson(response?.data);
@@ -136,25 +137,27 @@ class UserController extends GetxController {
     }
   }
 
-  /// 💥💥💥💥💥💥💥 User Follow and Unfollow 💥💥💥💥💥💥💥
+  /// 💥💥💥💥💥💥💥 User Follow, Unfollow  and Friend Request Api (Accept,deny,) 💥💥💥💥💥💥💥
 
-  Future<void> userFollowUnfollow(dynamic data) async {
+  Future<void> userFollowUnfollow(dynamic data, int type) async {
     //isDataLoading.value = true;
-    var response =
-        await Network().postRequest(endPoint: sendRequestApi, formData: data);
-    await Network()
-        .postRequest(endPoint: storeFollowUnfollowApi, formData: data);
+
+    var response = await Network()
+        .postRequest(endPoint: storeFollowUnfollowApi, formData: data,isLoader: true);
+    if (data["follow_unfollow_status"] == 1) {
+      await Network().postRequest(endPoint: sendRequestApi, formData: data,isLoader: false);
+    }
     if (response?.data != null) {
-      //isDataLoading.value = false;
+      Get.closeAllSnackbars();
       Get.snackbar(response?.data['message'], '',
           colorText: Colors.green, snackPosition: SnackPosition.TOP);
-
-      getFriendRequest({
-        "sortBy": "asc",
-        "sortOn": "created_at",
-        "page": "1",
-        "limit": "20"
-      });
+      if (type == 1) {
+        getAllUsers(
+            {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "20"});
+      } else {
+        getFriendRequest(
+            {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "20"});
+      }
     }
   }
 

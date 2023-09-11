@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../CONTROLLERS/user_controller.dart';
+import 'package:yourfish/UTILS/app_images.dart';
 import '../MODELS/fish_response.dart';
 import '../UTILS/app_color.dart';
 import 'package:get/get.dart';
@@ -29,7 +28,7 @@ class FishItemSelectWidget extends StatelessWidget {
             selectedFishInterest
                 .add(fishData.id);
           }
-          print(selectedFishInterest);
+          //print(selectedFishInterest);
         },
         child: Stack(
           children: [
@@ -41,6 +40,12 @@ class FishItemSelectWidget extends StatelessWidget {
                   height: Get.width * 0.25,
                   fit: BoxFit.cover,
                   width: double.infinity,
+                  errorBuilder: (context, error, stackTrace) => Image.asset(
+                    fishPlaceHolder,
+                    height: Get.width * 0.25,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
                 )),
             Align(
               alignment: Alignment.bottomCenter,

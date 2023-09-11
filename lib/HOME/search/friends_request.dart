@@ -86,7 +86,7 @@ class FriendRequestScreen extends StatelessWidget {
                                 "followed_person_id": controller.allUsers[index].id,
                                 "follow_unfollow_status": 3
                               };
-                              controller.userFollowUnfollow(data);
+                              controller.userFollowUnfollow(data,2);
                             },
                             style: TextButton.styleFrom(
                                 backgroundColor: fishColor,
@@ -114,7 +114,7 @@ class FriendRequestScreen extends StatelessWidget {
                                 "followed_person_id": controller.allUsers[index].id,
                                 "follow_unfollow_status": 4
                               };
-                              controller.userFollowUnfollow(data);
+                              controller.userFollowUnfollow(data,2);
                             },
                             style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,

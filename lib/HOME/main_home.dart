@@ -44,15 +44,15 @@ class _MainHomeState extends State<MainHome> {
 
     var data = {
       "sortBy": "desc",
-      "sortOn": "created_at",
-      "page": "1",
-      "limit": "5"
+      "sortOn": "id",
+      "page": 1,
+      "limit": "20"
     };
     if (index == 2) {
       modalBottomSheetMenu();
-      Get.find<UserController>().getFish(data);
+      //Get.find<UserController>().getFish(data);
     } else if (index == 3) {
-      //postController.getPosts(data);
+      postController.getPosts(data);
     } else {
       index == 0
           ? postController.getPosts(data)
@@ -68,7 +68,7 @@ class _MainHomeState extends State<MainHome> {
     var data = {
       "sortBy": "desc",
       "sortOn": "created_at",
-      "page": "1",
+      "page": 1,
       "limit": "10"
     };
     Future.delayed(
@@ -83,7 +83,7 @@ class _MainHomeState extends State<MainHome> {
     var data = {
       "sortBy": "desc",
       "sortOn": "id",
-      "page": "1",
+      "page": 1,
       "limit": "10"
     };
     Future.delayed(
@@ -303,15 +303,12 @@ class _MainHomeState extends State<MainHome> {
           return SafeArea(
               child: Container(
             padding: const EdgeInsets.only(top:4,right: 16,left: 16,bottom: 16),
-            height: Get.height * 0.2,
+            height: Get.height * 0.24,
             width: Get.width,
             color: Colors.transparent,
-            //could change this to Color(0xFF737373),
-            //so you don't have to change MaterialApp canvasColor
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-
                 Align(
                   alignment: Alignment.topRight,
                     child: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.close,color: secondaryColor,))
@@ -323,6 +320,7 @@ class _MainHomeState extends State<MainHome> {
                     btnText: "Find a buddy",
                     btnTextColor: primaryColor,
                     onClick: () {
+                       Get.back();
                        Get.to(() => FindABuddyPostScreen(), transition: Transition.rightToLeft);
                     },
                   ),
@@ -334,7 +332,8 @@ class _MainHomeState extends State<MainHome> {
                     btnText: "Upload a Post",
                     btnTextColor: primaryColor,
                     onClick: () {
-                       Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
+                      Get.back();
+                      Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
                     },
                   ),
                 )
@@ -403,7 +402,7 @@ class RightDrawerMenuWidget extends StatelessWidget {
                         Get.to(BlogsScreen(),
                             transition: Transition.leftToRight);
                       } else if (index1 == 4) {
-                        Get.to(const ChatsScreen(),
+                        Get.to( ChatsScreen(),
                             transition: Transition.leftToRight);
                       } else if (index1 == 5) {
                         Get.to(SettingsScreen(),

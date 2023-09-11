@@ -82,7 +82,7 @@ class PostData {
     if (json['tag_fish'] != null) {
       tagFish = <TagFish>[];
       json['tag_fish'].forEach((v) {
-        tagFish!.add(new TagFish.fromJson(v));
+        tagFish!.add( TagFish.fromJson(v));
       });
     }
     image = json['image'];

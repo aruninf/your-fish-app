@@ -51,7 +51,7 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
   void initState() {
     Future.delayed(
       Duration.zero,
-          () async {
+      () async {
         controller.updateStatus(
             "online", "${postController.userData.value.id}");
       },
@@ -96,7 +96,7 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
                     controller: scrollController,
                     itemBuilder: (context, index) {
                       ChatResult chatMessages =
-                      ChatResult.fromDocument(listMessages[index]);
+                          ChatResult.fromDocument(listMessages[index]);
                       if (chatMessages.receiverId ==
                           "${postController.userData.value.id}") {
                         updateSeen(listMessages[index].reference.path);
@@ -133,7 +133,7 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
     return WillPopScope(
       onWillPop: onBackPress,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: primaryColor,
         appBar: PreferredSize(
           preferredSize: const Size(double.infinity, 75),
           child: CustomChatAppBar(
@@ -150,118 +150,135 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
               buildListMessage(),
               messageType == 2
                   ? Container(
-                padding: const EdgeInsets.all(10.0),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        Image.file(
-                          imageFile == null
-                              ? File("")
-                              : File(imageFile!.path),
-                          fit: BoxFit.cover,
-                          height:
-                          MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.45,
-                          width: double.infinity,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            color:
-                            primaryColor, //Colors.grey.withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(20),
-                            //boxShadow: Constants.fixShadow()
-                          ),
-                          child: Row(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
                             children: [
-                              IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      messageType = 1;
-                                      imageFile = null;
-                                    });
-                                  },
-                                  color: Colors.white,
-                                  icon: const Icon(
-                                    Icons.close_sharp,
-                                  )),
-                              const Spacer(),
-                              IconButton(
-                                  color: Colors.white,
-                                  onPressed: imageMessageSendClick,
-                                  icon: const Icon(
-                                    Icons.send_rounded,
-                                    color: Colors.white,
-                                  )),
+                              Image.file(
+                                imageFile == null
+                                    ? File("")
+                                    : File(imageFile!.path),
+                                fit: BoxFit.cover,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
+                                width: double.infinity,
+                              ),
+                              Container(
+                                margin: const EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                  color:
+                                      primaryColor, //Colors.grey.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(20),
+                                  //boxShadow: Constants.fixShadow()
+                                ),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            messageType = 1;
+                                            imageFile = null;
+                                          });
+                                        },
+                                        color: Colors.white,
+                                        icon: const Icon(
+                                          Icons.close_sharp,
+                                        )),
+                                    const Spacer(),
+                                    IconButton(
+                                        color: Colors.white,
+                                        onPressed: imageMessageSendClick,
+                                        icon: const Icon(
+                                          Icons.send_rounded,
+                                          color: Colors.white,
+                                        )),
+                                  ],
+                                ),
+                              )
                             ],
-                          ),
-                        )
-                      ],
-                    )),
-              )
+                          )),
+                    )
                   : Column(
-                children: [
-                  const Divider(height: 1.0),
-                  BottomComposer(
-                      file: imageFile == null
-                          ? File("")
-                          : File(imageFile!.path),
-                      widget: TextField(
-                        controller: _textController,
-                        textAlignVertical: TextAlignVertical.center,
-                        maxLines: 3,
-                        maxLength: 250,
-                        minLines: 1,
-                        style: const TextStyle(fontSize: 14),
-                        decoration: InputDecoration(
-                            counterText: "",
-                            hintText: "Send a message",
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 4),
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.circular(20))),
-                        onChanged: (String text) async {
-                          if (text.isNotEmpty) {
-                            if (userStatus != "typing") {
-                              userStatus = "typing";
-                              controller.updateStatus(
-                                  "typing",
-                                  "${postController.userData.value.id}");
-                            }
-                            const duration = Duration(seconds: 1);
+                      children: [
 
-                            if (_timer != null) {
-                              _timer!.cancel();
-                            }
+                        BottomComposer(
+                            file: imageFile == null
+                                ? File("")
+                                : File(imageFile!.path),
+                            widget: TextField(
+                              controller: _textController,
+                              textAlignVertical: TextAlignVertical.center,
+                              maxLines: 3,
+                              maxLength: 250,
+                              minLines: 1,
+                              style: const TextStyle(fontSize: 14,color: btnColor),
+                              decoration: InputDecoration(
+                                  counterText: "",
 
-                            _timer = Timer(duration, () {
-                              //print("userStatus updating online");
-                              userStatus = "online";
+                                  hintStyle: const TextStyle(color: Colors.grey),
+                                  hintText: "Send a message",
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: const BorderSide(width: 0.56,color: btnColor)
 
-                              controller.updateStatus(
-                                  "online",
-                                  "${postController.userData.value.id}");
-                            });
-                          }
-                        },
-                        onSubmitted: (value) {
-                          //_sendMessage(value, 1);
-                        },
-                      ),
-                      pickFileClick: () {
-                        _bottomSheet(context);
-                      },
-                      sendClick: sendClick),
-                  Builder(builder: (BuildContext context) {
-                    return const SizedBox(width: 0.0, height: 0.0);
-                  })
-                ],
-              )
+                                  ),
+                                  disabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                      borderSide: const BorderSide(width: 0.56,color: btnColor)
+
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                      borderSide: const BorderSide(width: 0.56,color: btnColor)
+
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 14, vertical: 4),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                      borderSide: const BorderSide(width: 0.56,color: btnColor)
+
+                                  ),
+
+                              ),
+
+                              onChanged: (String text) async {
+                                if (text.isNotEmpty) {
+                                  if (userStatus != "typing") {
+                                    userStatus = "typing";
+                                    controller.updateStatus("typing",
+                                        "${postController.userData.value.id}");
+                                  }
+                                  const duration = Duration(seconds: 1);
+
+                                  if (_timer != null) {
+                                    _timer!.cancel();
+                                  }
+
+                                  _timer = Timer(duration, () {
+                                    //print("userStatus updating online");
+                                    userStatus = "online";
+
+                                    controller.updateStatus("online",
+                                        "${postController.userData.value.id}");
+                                  });
+                                }
+                              },
+                              onSubmitted: (value) {
+                                //_sendMessage(value, 1);
+                              },
+                            ),
+                            pickFileClick: () {
+                              _bottomSheet(context);
+                            },
+                            sendClick: sendClick),
+                        Builder(builder: (BuildContext context) {
+                          return const SizedBox(width: 0.0, height: 0.0);
+                        })
+                      ],
+                    )
             ],
           ),
         ),
@@ -288,14 +305,8 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
   }
 
   Future<void> _sendMessage(String message, int messageType) async {
-    if (message
-        .trim()
-        .isEmpty) return;
-    String ids = DateTime
-        .now()
-        .toUtc()
-        .millisecondsSinceEpoch
-        .toString();
+    if (message.trim().isEmpty) return;
+    String ids = DateTime.now().toUtc().millisecondsSinceEpoch.toString();
     var req = ChatResult(
       id: ids,
       senderId: "${postController.userData.value.id}",
@@ -406,7 +417,6 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
                     child: const Text('Open Gallery'),
                   ),
                 ),
-
               ],
             ),
           ),

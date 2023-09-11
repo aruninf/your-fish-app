@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/setting_controller.dart';
 import 'package:yourfish/CREATE_POST/add_fish_screen.dart';
+import 'package:yourfish/HOME/home/empty_post_widget.dart';
 import 'package:yourfish/UTILS/app_color.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
 import '../../CONTROLLERS/post_controller.dart';
 import '../../CUSTOM_WIDGETS/custom_app_bar.dart';
+import '../../PROFILE/post_detail_screen.dart';
 
 class SavedPostWidget extends StatelessWidget {
   SavedPostWidget({super.key});
@@ -17,7 +19,7 @@ class SavedPostWidget extends StatelessWidget {
     var data = {
       "sortBy": "desc",
       "sortOn": "created_at",
-      "page": "1",
+      "page": 1,
       "limit": "20"
     };
     Future.delayed(
@@ -47,11 +49,8 @@ class SavedPostWidget extends StatelessWidget {
                 child: CircularProgressIndicator(),
               )
                   : controller.savedPost.isEmpty
-                  ? const Center(
-                child: Text(
-                  "Not Post Yet!",
-                  style: TextStyle(color: secondaryColor),
-                ),
+                  ? EmptyPostWidget(
+                onClick: ()=>callSavedPostApi,
               )
                   : GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -59,26 +58,30 @@ class SavedPostWidget extends StatelessWidget {
                 padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 itemCount: controller.savedPost.length,
-                itemBuilder: (context, index) => ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        Image.network(
-                          controller.savedPost[index].image ?? '',
-                          height: Get.width * 0.32,
-                          width: Get.width * 0.32,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Image.asset(
-                                fishingImage,
-                                height: Get.width * 0.32,
-                                width: Get.width * 0.32,
-                                fit: BoxFit.cover,
-                              ),
-                        ),
-                      ],
-                    )),
+                itemBuilder: (context, index) => InkWell(
+                  //onTap: () => Get.to(PostDetailScreen(postModel: controller.savedPost[index])),
+                  borderRadius: BorderRadius.circular(16),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          Image.network(
+                            controller.savedPost[index].image ?? '',
+                            height: Get.width * 0.32,
+                            width: Get.width * 0.32,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Image.asset(
+                                  fishingImage,
+                                  height: Get.width * 0.32,
+                                  width: Get.width * 0.32,
+                                  fit: BoxFit.cover,
+                                ),
+                          ),
+                        ],
+                      )),
+                ),
               )),
             ),
           ],

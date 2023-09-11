@@ -22,15 +22,15 @@ class BottomComposer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Theme.of(context).cardColor),
+      decoration: const BoxDecoration(color: primaryColor),
       child: Column(
         children: [
           Row(
             children: <Widget>[
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.photo_camera,
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: fishColor,
                 ),
                 onPressed: pickFileClick,
               ),
@@ -45,7 +45,7 @@ class BottomComposer extends StatelessWidget {
               ),
               TextButton(
                 style:
-                    TextButton.styleFrom(backgroundColor: primaryColor,),
+                    TextButton.styleFrom(backgroundColor: fishColor,),
                 onPressed: sendClick,
                 child: const Text(
                   "Send",

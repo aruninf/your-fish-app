@@ -252,11 +252,12 @@ class Network {
     } else {
       _noInternetConnection();
     }
-    print("$uploadFileApi Url: 💥💥💥💥💥💥💥💥💥💥💥💥 ${response?.data["data"]}");
+    print("$uploadFileApi Response: 💥💥💥💥💥💥💥💥💥💥💥💥 $response");
     return response?.data["data"];
   }
 
   /// 💥💥💥💥💥💥💥💥💥💥💥💥 No Internet Connection 💥💥💥💥💥💥💥💥💥💥💥💥
+
   void _noInternetConnection() {
     DialogHelper.showErrorDialog(
         title: "Connection Error!",

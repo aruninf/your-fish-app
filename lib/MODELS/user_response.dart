@@ -47,6 +47,7 @@ class UserData {
   String? createdAt;
   String? updatedAt;
   int? totalPosts;
+  int? followingStatus;
 
   UserData(
       {this.id,
@@ -64,7 +65,9 @@ class UserData {
         this.socialId,
         this.createdAt,
         this.updatedAt,
-        this.totalPosts});
+        this.totalPosts,
+        this.followingStatus
+      });
 
   UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -83,6 +86,7 @@ class UserData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     totalPosts = json['total_posts'];
+    followingStatus = json['following_status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -103,6 +107,7 @@ class UserData {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['total_posts'] = this.totalPosts;
+    data['following_status'] = this.followingStatus;
     return data;
   }
 }

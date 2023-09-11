@@ -48,8 +48,7 @@ class UploadProfilePicture extends StatelessWidget {
                         DialogHelper.selectImageFrom(
                             onClick: (uri) async {
                               imageUrl.value =
-                                  await Network().uploadFile(uri!, 'profile') ??
-                                      '';
+                                  await Network().uploadFile(uri!, 'profile') ?? '';
                               //Get.find<UserController>().uploadFile.value = uri;
                               //Get.back();
                             },

@@ -4,10 +4,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:yourfish/MODELS/article_response.dart';
 import 'package:yourfish/MODELS/blog_response.dart';
 import 'package:yourfish/MODELS/faq_response.dart';
+import 'package:yourfish/MODELS/post_response.dart';
 import 'package:yourfish/NETWORKS/network_strings.dart';
 
 import '../MODELS/content_response.dart';
-import '../MODELS/saved_post_response.dart';
 import '../NETWORKS/network.dart';
 import '../UTILS/dialog_helper.dart';
 
@@ -27,7 +27,7 @@ class SettingController extends GetxController {
   var blogData=<BlogData>[].obs;
   var articleData=<ArticleData>[].obs;
   var faqData=<FaqData>[].obs;
-  var savedPost=<SavedPost>[].obs;
+  var savedPost=<PostData>[].obs;
   var contentData=<ContentData>[].obs;
   var currentValues = 68.0.obs;
 
@@ -39,8 +39,8 @@ class SettingController extends GetxController {
     var response = await Network().getRequest(endPoint: getSavedPostApi);
     if (response?.data != null) {
       isLoading.value=false;
-      SavedPostResponse blog = SavedPostResponse.fromJson(response?.data);
-      savedPost.value = blog.data ?? [];
+      var savedPostR = PostResponse.fromJson(response?.data);
+      savedPost.value = savedPostR.data ?? [];
     }
   }
 
