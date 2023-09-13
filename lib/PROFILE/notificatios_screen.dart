@@ -1,27 +1,14 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import '../CONTROLLERS/setting_controller.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 
-class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key});
+class NotificationScreen extends StatelessWidget {
+  NotificationScreen({super.key});
 
-  @override
-  State<NotificationScreen> createState() => _NotificationScreenState();
-}
-
-class _NotificationScreenState extends State<NotificationScreen> {
-  late List<String> listOfOn = [];
-  late List<String> listOfNotification = [
-    "New Message",
-    "New Fish Unlocked",
-    "100 Bites",
-    "Comment",
-    "New Location",
-    "New Follower",
-    "New Share on Post"
-  ];
+  final controller = Get.find<SettingController>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +24,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
               textColor: secondaryColor,
             ),
             Expanded(
-              child: ListView.builder(
+              child: Obx(() => ListView.builder(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                itemCount: listOfNotification.length,
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                itemCount: controller.listOfNotification.length,
                 itemBuilder: (context, index) {
                   return Container(
                     margin: const EdgeInsets.only(top: 16),
@@ -53,37 +40,40 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       child: Row(
                         children: [
                           CustomText(
-                            text: listOfNotification[index],
+                            text: controller.listOfNotification[index],
                             color: Colors.white,
                             sizeOfFont: 14,
                             weight: FontWeight.w800,
                           ),
                           const Spacer(),
-                          Switch(
+                          Obx(() => Switch(
                             activeTrackColor: fishColor,
                             activeColor: primaryColor,
-                            value: listOfOn.contains(listOfNotification[index]),
+                            value: controller.listOfOn.contains(controller.listOfNotification[index]),
                             onChanged: (value) {
-                              setState(() {
-                                // var data={
-                                //   "public_feed":listOfNotification[index]
-                                // };
-                                // controller.updatePublicFeedRadios(data);
-                                if (listOfOn
-                                    .contains(listOfNotification[index])) {
-                                  listOfOn.remove(listOfNotification[index]);
-                                } else {
-                                  listOfOn.add(listOfNotification[index]);
-                                }
-                              });
+                              if (controller.listOfOn.contains(controller.listOfNotification[index])) {
+                                controller.listOfOn.remove(controller.listOfNotification[index]);
+                              } else {
+                                controller.listOfOn.add(controller.listOfNotification[index]);
+                              }
+                              var data={
+                                "new_message": controller.listOfOn.contains("New Message"),
+                                "new_fish_unlocked": controller.listOfOn.contains("New Fish Unlocked"),
+                                "bites_100": controller.listOfOn.contains("100 Bites"),
+                                "comment": controller.listOfOn.contains("Comment"),
+                                "new_location": controller.listOfOn.contains("New Location"),
+                                "new_follower": controller.listOfOn.contains("New Follower"),
+                                "new_share_on_post": controller.listOfOn.contains("New Share on Post")
+                              };
+                              controller.updatePublicFeedRadios(data);
                             },
-                          )
+                          ))
                         ],
                       ),
                     ),
                   );
                 },
-              ),
+              )),
             ),
           ],
         ),

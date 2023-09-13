@@ -62,6 +62,8 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
       Duration.zero,
           () => controller.getAllUsers(data),
     );
+    searchController.value.text = "";
+
   }
 
   @override
@@ -73,11 +75,12 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
           child: CustomSearchField(
             hintText: 'Search',
             controller: searchController.value,
+            isClearIcon: true,
             onChanges: (p0) {
               var data = {
                 "sortBy": "asc",
                 "sortOn": "created_at",
-                "page": "1",
+                "page": 1,
                 "limit": "20",
                 "filter": p0
               };
@@ -85,8 +88,8 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
                 Duration.zero,
                     () => controller.getAllUsers(data),
               );
-              searchController.value.text = "";
             },
+            clear: getAllUsers,
           ),
         ),
         Expanded(
@@ -101,9 +104,9 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
                   top: 0, bottom: 8, left: 8, right: 8),
               itemBuilder: (context, index) =>
                   ListTile(
-                    onTap: () =>
-                        Get.to(() => const OneToOneChatScreen(),
-                            transition: Transition.rightToLeft),
+                    // onTap: () =>
+                    //     Get.to(() => const OneToOneChatScreen(),
+                    //         transition: Transition.rightToLeft),
                     dense: true,
                     contentPadding: const EdgeInsets.symmetric(
                         horizontal: 8, vertical: 1),
@@ -141,11 +144,8 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
                           child: TextButton(
                               onPressed: () async {
                                 var data = {
-                                  "request_sent_to":
-                                  controller.allUsers[index].id,
-                                  "followed_person_id":
-                                  controller.allUsers[index].id,
-                                  "follow_unfollow_status": (controller
+                                  "request_to":  controller.allUsers[index].id,
+                                  "request_status": (controller
                                       .allUsers[index].followingStatus == 0 || controller
                                       .allUsers[index].followingStatus==2)
                                       ? 1
@@ -153,7 +153,7 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
                                 };
                                 if (controller.allUsers[index]
                                     .followingStatus != 3) {
-                                  controller.userFollowUnfollow(data,1);
+                                  controller.sendRequest(data,1);
                                 }
                               },
                               style: TextButton.styleFrom(

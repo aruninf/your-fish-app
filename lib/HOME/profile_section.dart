@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
-import 'package:yourfish/HOME/profile/my_fish_unlock.dart';
+import 'package:yourfish/PROFILE/my_fish_unlock.dart';
 import 'package:yourfish/HOME/profile/my_gear.dart';
 import 'package:yourfish/HOME/profile/my_post.dart';
 import 'package:yourfish/PROFILE/edit_profile_screen.dart';
@@ -102,7 +102,7 @@ class ProfileSection extends StatelessWidget {
                   ),
                 ),
                 controller.selectedIndex.value == 'My Posts'
-                    ? const Padding(
+                    ? userController.allUsers.isNotEmpty ? const Padding(
                         padding:
                             EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                         child: Text(
@@ -113,19 +113,19 @@ class ProfileSection extends StatelessWidget {
                               fontSize: 16,
                               fontWeight: FontWeight.w600),
                         ),
-                      )
+                      ) : const SizedBox.shrink()
                     : const SizedBox.shrink(),
                 const SizedBox(
                   height: 8,
                 ),
                 controller.selectedIndex.value == 'My Posts'
-                    ? SizedBox(
-                        height: Get.height * 0.15,
+                    ? userController.allUsers.isNotEmpty ? SizedBox(
+                        height: Get.height * 0.14,
                         width: double.infinity,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: List.generate(
-                              controller.listOfProfileSection.length,
+                              userController.allUsers.length,
                               (index) => Container(
                                     alignment: Alignment.center,
                                     margin: const EdgeInsets.only(left: 12),
@@ -138,21 +138,36 @@ class ProfileSection extends StatelessWidget {
                                     child: Column(
                                       children: [
                                         ClipOval(
-                                          child: Image.asset(
-                                            'images/chat_image3.png',
+                                          child: Image.network(
+                                            userController.allUsers[index]
+                                                    .profilePic ??
+                                                "",
                                             height: 40,
                                             width: 40,
                                             fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) =>
+                                                    Image.asset(
+                                              'images/chat_image3.png',
+                                              height: 40,
+                                              width: 40,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(
                                           height: 5,
                                         ),
-                                        const CustomText(
-                                          text: "Sophie Will",
-                                          color: btnColor,
-                                          weight: FontWeight.w800,
-                                          sizeOfFont: 12,
+                                        SizedBox(
+                                          width: 60,
+                                          child: Text(
+                                            userController
+                                                    .allUsers[index].name ??
+                                                "",
+                                            textAlign: TextAlign.center,
+                                            maxLines: 1,
+                                            style: const TextStyle(color: btnColor,fontWeight: FontWeight.w800,fontSize: 12),
+                                          ),
                                         ),
                                         const SizedBox(
                                           height: 6,
@@ -160,7 +175,20 @@ class ProfileSection extends StatelessWidget {
                                         SizedBox(
                                           height: 28,
                                           child: TextButton(
-                                              onPressed: () {},
+                                              onPressed: ()async  {
+                                                var data = {
+                                                  "request_to":  userController.allUsers[index].id,
+                                                  "request_status": (userController
+                                                      .allUsers[index].followingStatus == 0 || userController
+                                                      .allUsers[index].followingStatus==2)
+                                                      ? 1
+                                                      : 2
+                                                };
+                                                if (userController.allUsers[index]
+                                                    .followingStatus != 3) {
+                                                  userController.sendRequest(data,1);
+                                                }
+                                              },
                                               style: TextButton.styleFrom(
                                                   backgroundColor: fishColor,
                                                   padding: EdgeInsets.zero,
@@ -168,9 +196,22 @@ class ProfileSection extends StatelessWidget {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8))),
-                                              child: const Text(
-                                                'Follow',
-                                                style: TextStyle(
+                                              child: Text(
+                                                (userController.allUsers[index]
+                                                                .followingStatus ==
+                                                            0 ||
+                                                        userController
+                                                                .allUsers[index]
+                                                                .followingStatus ==
+                                                            2)
+                                                    ? 'Follow'
+                                                    : userController
+                                                                .allUsers[index]
+                                                                .followingStatus ==
+                                                            1
+                                                        ? "Unfollow"
+                                                        : "Following",
+                                                style: const TextStyle(
                                                     fontSize: 10,
                                                     color: primaryColor,
                                                     fontWeight:
@@ -181,54 +222,50 @@ class ProfileSection extends StatelessWidget {
                                     ),
                                   )),
                         ),
-                      )
+                      ):const SizedBox.shrink()
                     : const SizedBox.shrink(),
                 const SizedBox(
                   height: 8,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: Get.height * 0.055,
-                    width: double.infinity,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: List.generate(
-                          controller.listOfProfileSection.length,
-                          (index) => Container(
-                                alignment: Alignment.center,
-                                margin: const EdgeInsets.only(left: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color:
-                                      controller.listOfProfileSection[index] ==
-                                              controller.selectedIndex.value
-                                          ? secondaryColor
-                                          : btnColor,
+                SizedBox(
+                  height: Get.height*0.05,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: List.generate(
+                        controller.listOfProfileSection.length,
+                        (index) => Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(horizontal: 16,vertical: 4),
+                              margin: const EdgeInsets.only(left: 12,bottom: 3),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color:
+                                    controller.listOfProfileSection[index] ==
+                                            controller.selectedIndex.value
+                                        ? secondaryColor
+                                        : btnColor,
+                              ),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(16),
+                                onTap: () {
+                                  controller.selectedIndex.value =
+                                      controller.listOfProfileSection[index];
+                                },
+                                child: CustomText(
+                                  text: controller
+                                      .listOfProfileSection[index],
+                                  weight: FontWeight.w700,
+                                  sizeOfFont: 13,
                                 ),
-                                child: InkWell(
-                                  onTap: () {
-                                    controller.selectedIndex.value =
-                                        controller.listOfProfileSection[index];
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 8),
-                                    child: CustomText(
-                                      text: controller
-                                          .listOfProfileSection[index],
-                                      weight: FontWeight.w700,
-                                      sizeOfFont: 13,
-                                    ),
-                                  ),
-                                ),
-                              )),
-                    ),
+                              ),
+                            )),
                   ),
                 ),
                 Expanded(
                     child: controller.selectedIndex.value == "My Posts"
-                        ? MyPostWidget(myPost: true,)
+                        ? MyPostWidget(
+                            myPost: true,
+                          )
                         : controller.selectedIndex.value == "My Map"
                             ? MyProfileMapWidget(
                                 isTopSpots: false,

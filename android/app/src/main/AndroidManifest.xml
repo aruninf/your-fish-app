@@ -72,7 +72,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="artesian_notifications" />
+            android:value="yourfish_notifications" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAynBIwL47RimOYbJk_9jQYalO4RA9tS6M" />

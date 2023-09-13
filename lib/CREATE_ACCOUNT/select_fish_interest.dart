@@ -7,28 +7,30 @@ import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../CUSTOM_WIDGETS/fish_selection_widget.dart';
+import '../MODELS/fish_response.dart';
 import '../UTILS/app_color.dart';
 
 class SelectFishInterest extends StatelessWidget {
   SelectFishInterest({super.key});
 
   final userController = Get.find<UserController>();
-
+  final search=TextEditingController();
   void callApi() async {
     var data={
       "sortBy": "asc",
       "sortOn": "id",
       "page": 1,
-      "limit": "20"
+      "limit": "20",
     };
-    Future.delayed(
-      Duration.zero,
-      () => userController.getFish(data),
-    );
     Future.delayed(
       Duration.zero,
           () => userController.getFishCategory(data),
     );
+    Future.delayed(
+      Duration.zero,
+      () => userController.getFish(data),
+    );
+    search.clear();
   }
 
   @override
@@ -49,10 +51,25 @@ class SelectFishInterest extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               child: CustomSearchField(
                 hintText: 'Search',
+                controller: search,
+                onChanges: (p0) async {
+                  var data={
+                    "sortBy": "asc",
+                    "sortOn": "id",
+                    "page": 1,
+                    "limit": "20",
+                    "filter":p0
+                  };
+                  Future.delayed(
+                    Duration.zero,
+                        () => userController.getFish(data),
+                  );
+                },
+                clear: callApi,
               ),
             ),
             const SizedBox(
@@ -72,8 +89,19 @@ class SelectFishInterest extends StatelessWidget {
                   ),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
-                    onTap: () {
+                    onTap: () async {
                        userController.selectedCategory.value=userController.fishCategory[index].id ?? 0;
+                       var data={
+                         "sortBy": "asc",
+                         "sortOn": "id",
+                         "page": 1,
+                         "limit": "20",
+                         "filter":userController.fishCategory[index].name ?? ""
+                       };
+                       Future.delayed(
+                         Duration.zero,
+                             () => userController.getFish(data),
+                       );
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

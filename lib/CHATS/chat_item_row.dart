@@ -25,7 +25,7 @@ class ChatItemRow extends StatelessWidget {
               documentReference: documentSnapshot!.reference.path,
             );
     } else {
-      return Container();
+      return const SizedBox.shrink();
     }
   }
 }

@@ -99,7 +99,7 @@ class _SearchSectionState extends State<SearchSection> {
           ),
           Expanded(
             child:
-                selectedIndex == 'Posts' ? AllPostWidget() : GetAllUserWidget(),
+                selectedIndex == 'Posts' ? const AllPostWidget() : GetAllUserWidget(),
           ),
         ],
       ),

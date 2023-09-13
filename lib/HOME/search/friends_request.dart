@@ -17,7 +17,7 @@ class FriendRequestScreen extends StatelessWidget {
     var data = {
       "sortBy": "asc",
       "sortOn": "created_at",
-      "page": "1",
+      "page": 1,
       "limit": "20"
     };
     Future.delayed(
@@ -82,11 +82,10 @@ class FriendRequestScreen extends StatelessWidget {
                         child: TextButton(
                             onPressed: () {
                               var data = {
-                                "request_sent_to": controller.allUsers[index].id,
-                                "followed_person_id": controller.allUsers[index].id,
-                                "follow_unfollow_status": 3
+                                "request_to":  controller.friendRequest[index].id,
+                                "request_status": 3
                               };
-                              controller.userFollowUnfollow(data,2);
+                              controller.sendRequest(data,2);
                             },
                             style: TextButton.styleFrom(
                                 backgroundColor: fishColor,
@@ -110,11 +109,10 @@ class FriendRequestScreen extends StatelessWidget {
                         child: TextButton(
                             onPressed: () {
                               var data = {
-                                "request_sent_to": controller.allUsers[index].id,
-                                "followed_person_id": controller.allUsers[index].id,
-                                "follow_unfollow_status": 4
+                                "request_to":  controller.friendRequest[index].id,
+                                "request_status": 4
                               };
-                              controller.userFollowUnfollow(data,2);
+                              controller.sendRequest(data,2);
                             },
                             style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,

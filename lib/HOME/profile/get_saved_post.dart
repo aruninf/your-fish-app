@@ -13,6 +13,7 @@ import '../../PROFILE/post_detail_screen.dart';
 
 class SavedPostWidget extends StatelessWidget {
   SavedPostWidget({super.key});
+
   final controller = Get.find<SettingController>();
 
   callSavedPostApi() async {
@@ -24,9 +25,8 @@ class SavedPostWidget extends StatelessWidget {
     };
     Future.delayed(
       Duration.zero,
-          () => controller.getSavedPost(data),
+      () => controller.getSavedPost(data),
     );
-
   }
 
   @override
@@ -46,48 +46,52 @@ class SavedPostWidget extends StatelessWidget {
             Expanded(
               child: Obx(() => controller.isLoading.value
                   ? const Center(
-                child: CircularProgressIndicator(),
-              )
+                      child: CircularProgressIndicator(),
+                    )
                   : controller.savedPost.isEmpty
-                  ? EmptyPostWidget(
-                onClick: ()=>callSavedPostApi,
-              )
-                  : GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                itemCount: controller.savedPost.length,
-                itemBuilder: (context, index) => InkWell(
-                  //onTap: () => Get.to(PostDetailScreen(postModel: controller.savedPost[index])),
-                  borderRadius: BorderRadius.circular(16),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Image.network(
-                            controller.savedPost[index].image ?? '',
-                            height: Get.width * 0.32,
-                            width: Get.width * 0.32,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Image.asset(
-                                  fishingImage,
-                                  height: Get.width * 0.32,
-                                  width: Get.width * 0.32,
-                                  fit: BoxFit.cover,
-                                ),
+                      ? EmptyPostWidget(
+                          onClick: () => callSavedPostApi,
+                        )
+                      : GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 8,
+                                  mainAxisSpacing: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          itemCount: controller.savedPost.length,
+                          itemBuilder: (context, index) => InkWell(
+                            onTap: () => Get.to(PostDetailScreen(
+                                postModel: controller.savedPost[index])),
+                            borderRadius: BorderRadius.circular(16),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: [
+                                    Image.network(
+                                      controller.savedPost[index].image ?? '',
+                                      height: Get.width * 0.32,
+                                      width: Get.width * 0.32,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              Image.asset(
+                                        fishingImage,
+                                        height: Get.width * 0.32,
+                                        width: Get.width * 0.32,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ],
+                                )),
                           ),
-                        ],
-                      )),
-                ),
-              )),
+                        )),
             ),
           ],
         ),
       ),
     );
   }
-
 }

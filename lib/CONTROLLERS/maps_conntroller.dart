@@ -8,19 +8,19 @@ import 'package:yourfish/CONTROLLERS/post_controller.dart';
 /// Google map implementation by Arun Android
 
 class MapController extends GetxController {
-  var locationController = Get.find<PostController>();
+  final locationController = Get.find<PostController>();
   final Completer<GoogleMapController> googleMapController =
       Completer<GoogleMapController>();
   List<Marker> markers = <Marker>[];
   late BitmapDescriptor myIcon;
   double cameraZoom=14.0;
 
-  var initialCameraPosition = const CameraPosition(
+  final initialCameraPosition = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 13.47,
   ).obs;
 
-  var cameraPosition =  const CameraPosition(
+  final cameraPosition =  const CameraPosition(
           bearing: 192.8334901395799,
           target: LatLng(37.43296265331129, -122.08832357078792),
           tilt: 59.440717697143555,

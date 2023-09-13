@@ -19,7 +19,7 @@ class SelectFishYouExperience extends StatelessWidget {
     var data={
       "sortBy": "asc",
       "sortOn": "created_at",
-      "page": "1",
+      "page": 1,
       "limit": "20"
     };
     Future.delayed(
@@ -46,10 +46,24 @@ class SelectFishYouExperience extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               child: CustomSearchField(
                 hintText: 'Search',
+                onChanges: (p0) {
+                  var data={
+                    "sortBy": "asc",
+                    "sortOn": "created_at",
+                    "page": 1,
+                    "limit": "20",
+                    "filter":p0
+                  };
+                  Future.delayed(
+                    Duration.zero,
+                        () => userController.getFish(data),
+                  );
+                },
+                clear: callApi,
               ),
             ),
             const SizedBox(

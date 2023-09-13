@@ -273,4 +273,9 @@ class Consts {
     var date = DateTime.parse(dateTime);
     return DateFormat('dd MMM yyyy').format(date);
   }
+
+  static String formatDateTimeToHHMM(String dateTime) {
+    var date = DateTime.parse(dateTime);
+    return DateFormat('hh:mm a').format(date);
+  }
 }

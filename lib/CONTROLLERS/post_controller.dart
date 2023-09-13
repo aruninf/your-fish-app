@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -18,18 +17,18 @@ import '../NETWORKS/network_strings.dart';
 import '../UTILS/dialog_helper.dart';
 
 class PostController extends GetxController {
-  var isLocationOn = false.obs;
-  var selectedCategories = [].obs;
-  var isLoading = false.obs;
-  var postData = <PostData>[].obs;
-  var chatsUser = <ChatUserData>[].obs;
-  var myPostData = <PostData>[].obs;
-  var userData = LoginData().obs;
-  var currentAddress = ''.obs;
-  var isLiked = false.obs;
-  var isFav = false.obs;
+  final isLocationOn = false.obs;
+  final selectedCategories = [].obs;
+  final isLoading = false.obs;
+  final postData = <PostData>[].obs;
+  final chatsUser = <ChatUserData>[].obs;
+  final myPostData = <PostData>[].obs;
+  final userData = LoginData().obs;
+  final currentAddress = ''.obs;
+  final isLiked = false.obs;
+  final isFav = false.obs;
 
-  var currentPosition = Position(
+  final currentPosition = Position(
           longitude: 0,
           latitude: 0,
           timestamp: DateTime.timestamp(),
@@ -39,7 +38,7 @@ class PostController extends GetxController {
           speed: 0.0,
           speedAccuracy: 0.0)
       .obs;
-  var selectedIndex = "My Posts".obs;
+  final selectedIndex = "My Posts".obs;
   final listOfProfileSection = [
     "My Posts",
     "My Map",
@@ -55,40 +54,62 @@ class PostController extends GetxController {
     super.onReady();
   }
 
-
   ///🧨🧨🧨🧨🧨🧨 Get Post data and Search post 🧨🧨🧨🧨🧨
 
   Future<void> getPosts(dynamic data) async {
-    if(data['page']==1){
+    if (data['page'] == 1) {
       postData.clear();
     }
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: getPostsApi, formData: data, isLoader: false);
     if (response?.data != null) {
       PostResponse post = PostResponse.fromJson(response?.data);
       postData.addAll(post.data ?? []);
-
     }
   }
-
 
   ///🧨🧨🧨🧨🧨🧨 Get Chat user 🧨🧨🧨🧨🧨
 
   Future<void> getChatsUser(dynamic data) async {
-    isLoading.value = true;
-    var response =
-        await Network().getRequest(endPoint: getChatUserApi);
+    //isLoading.value = true;
+    final response =
+        await Network().postRequest(endPoint: getChatUserApi, formData: data);
     if (response?.data != null) {
-      isLoading.value = false;
-      var post = ChatUserResponse.fromJson(response?.data);
+      //isLoading.value = false;
+      final post = ChatUserResponse.fromJson(response?.data);
       chatsUser.value = post.data ?? [];
     }
+  }
+
+  ///🧨🧨🧨🧨🧨🧨 Delete Chat user 🧨🧨🧨🧨🧨
+
+  Future<void> deleteChat(String matchId) async {
+    final data = {"match_id": matchId};
+    final response = await Network().postRequest(
+        endPoint: deleteChatUserApi, formData: data, isLoader: false);
+    if (response?.data != null) {
+      Get.closeAllSnackbars();
+      final data = {
+        "sortBy": "desc",
+        "sortOn": "created_at",
+        "page": "1",
+        "limit": "20"
+      };
+      getChatsUser(data);
+    }
+  }
+
+  ///🧨🧨🧨🧨🧨🧨 Update Chat user 🧨🧨🧨🧨🧨
+
+  Future<void> updateChat(dynamic data) async {
+    await Network()
+        .postRequest(endPoint: updateChatApi, formData: data, isLoader: false);
   }
 
   ///🧨🧨🧨🧨🧨🧨 Get user profile 🧨🧨🧨🧨🧨
 
   Future<void> getUserData() async {
-    var response = await Network().getRequest(endPoint: getUserDataApi);
+    final response = await Network().getRequest(endPoint: getUserDataApi);
     if (response?.data != null) {
       LoginResponse user = LoginResponse.fromJson(response?.data);
       userData.value = user.data ?? LoginData();
@@ -99,7 +120,7 @@ class PostController extends GetxController {
 
   Future<void> getMyPost(dynamic data) async {
     isLoading.value = true;
-    var response = await Network().getRequest(endPoint: getMyPostApi);
+    final response = await Network().getRequest(endPoint: getMyPostApi);
     if (response?.data != null) {
       isLoading.value = false;
       PostResponse post = PostResponse.fromJson(response?.data);
@@ -110,7 +131,7 @@ class PostController extends GetxController {
   /// 💥💥💥💥💥💥💥 Update User Profile 💥💥💥💥💥💥💥
 
   Future<void> updateProfile(dynamic data) async {
-    var response = await Network().postRequest(
+    final response = await Network().postRequest(
         endPoint: updateProfileApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
@@ -126,7 +147,7 @@ class PostController extends GetxController {
   ///🧨🧨🧨🧨🧨🧨 Create New Post 🧨🧨🧨🧨🧨
 
   Future<void> createPost(dynamic data) async {
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: addPostApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
@@ -134,10 +155,10 @@ class PostController extends GetxController {
         Get.back();
         Get.snackbar('Post created Successfully', '',
             colorText: Colors.green, snackPosition: SnackPosition.TOP);
-        var data = {
+        final data = {
           "sortBy": "desc",
           "sortOn": "created_at",
-          "page": "1",
+          "page": 1,
           "limit": "20"
         };
         getPosts(data);
@@ -151,7 +172,7 @@ class PostController extends GetxController {
   ///🧨🧨🧨🧨🧨🧨 Create New Post 🧨🧨🧨🧨🧨
 
   Future<void> deletePost(dynamic data) async {
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: deletePostApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
@@ -172,6 +193,7 @@ class PostController extends GetxController {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      await Geolocator.requestPermission();
       Get.snackbar(
           'Location services are disabled. Please enable the services!', '',
           colorText: Colors.deepOrangeAccent, snackPosition: SnackPosition.TOP);
@@ -232,8 +254,8 @@ class PostController extends GetxController {
   }
 
   addLiked(PostData postModel) {
-    isLiked.value=!isLiked.value;
-    var data = {
+    isLiked.value = !isLiked.value;
+    final data = {
       "request_type": "like",
       "post_id": postModel.id,
       "request_status": isLiked.value
@@ -242,8 +264,8 @@ class PostController extends GetxController {
   }
 
   saveLikeFavourite(dynamic data) async {
-    var response = await Network()
-        .postRequest(endPoint: likesFavouritesApi, formData: data, isLoader: true);
+    final response = await Network().postRequest(
+        endPoint: likesFavouritesApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
         Get.closeAllSnackbars();
@@ -257,22 +279,22 @@ class PostController extends GetxController {
   }
 
   openChat(PostData postModel) async {
-    var data={
+    final data = {
       "receiver_id": postModel.userId,
       "post_id": postModel.id,
     };
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: startChatApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
         Get.to(
-                () => SingleChatPage(
-              receiver: ReceiverModel(
-                  matchRoomId: "${response?.data['data']['match_id']}",receiverId: "${response?.data['data']['receiver_id']}"
-              ),
-              image: "${response?.data['data']['receiver_image']}",
-              matchName: "${response?.data['data']['receiver_name']}",
-            ),
+            () => SingleChatPage(
+                  receiver: ReceiverModel(
+                      matchRoomId: "${response?.data['data']['match_id']}",
+                      receiverId: "${response?.data['data']['receiver_id']}"),
+                  image: "${response?.data['data']['receiver_image']}",
+                  matchName: "${response?.data['data']['receiver_name']}",
+                ),
             transition: Transition.rightToLeft);
       } else {
         DialogHelper.showErrorDialog(
@@ -287,8 +309,8 @@ class PostController extends GetxController {
   }
 
   addFavourite(PostData postModel) {
-    isFav.value=!isFav.value;
-    var data = {
+    isFav.value = !isFav.value;
+    final data = {
       "request_type": "favourite",
       "post_id": postModel.id,
       "request_status": isFav.value

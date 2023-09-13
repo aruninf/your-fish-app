@@ -20,8 +20,8 @@ class SingleFishPostWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     //controller.isLiked.value=postModel.isLiked ?? false;
     //controller.isFav.value=postModel.isFavourite ?? false;
-    return  InkWell(
-      onTap: () => Get.to(PostDetailScreen(postModel: postModel)),
+    return InkWell(
+      onTap: () => Get.to(()=> PostDetailScreen(postModel: postModel)),
       borderRadius: BorderRadius.circular(16),
       child: Container(
         width: double.infinity,
@@ -48,24 +48,27 @@ class SingleFishPostWidget extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                (postModel.isPublic ==1) ? SizedBox(
-                  width: Get.width*0.35,
-                  child: TextButton.icon(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(alignment: Alignment.topRight),
-                      icon: const Icon(
-                        PhosphorIcons.map_pin,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                      label:  CustomText(
-                        text: postModel.address ?? '',
-                        weight: FontWeight.w400,
-                        sizeOfFont: 13,
-                        maxLin: 1,
-                        color: Colors.white,
-                      )),
-                ): const SizedBox.shrink()
+                (postModel.isPublic == 1)
+                    ? SizedBox(
+                        width: Get.width * 0.35,
+                        child: TextButton.icon(
+                            onPressed: () {},
+                            style: TextButton.styleFrom(
+                                alignment: Alignment.topRight),
+                            icon: const Icon(
+                              PhosphorIcons.map_pin,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            label: CustomText(
+                              text: postModel.address ?? '',
+                              weight: FontWeight.w400,
+                              sizeOfFont: 13,
+                              maxLin: 1,
+                              color: Colors.white,
+                            )),
+                      )
+                    : const SizedBox.shrink()
               ],
             ),
             ClipRRect(
@@ -83,63 +86,63 @@ class SingleFishPostWidget extends StatelessWidget {
                   ),
                 )),
             Obx(() => Row(
-              children: [
-                InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: () => controller.addLiked(postModel),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      fishIcon,
-                      height: 28,
-                      width: 28,
-                      color: controller.isLiked.value ? fishColor:  Colors.white,
+                  children: [
+                    InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => controller.addLiked(postModel),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          controller.isLiked.value
+                              ? PhosphorIcons.thumbs_up_fill
+                              : PhosphorIcons.thumbs_up,
+                          color: controller.isLiked.value
+                              ? fishColor
+                              : Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: () => controller.openChat(postModel),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      PhosphorIcons.chat,
-                      color: Colors.white,
+                    InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => controller.openChat(postModel),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          PhosphorIcons.chat,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                InkWell(
-                  borderRadius: BorderRadius.circular(8),
-
-                  onTap: () => controller.sharePost(postModel),
-
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      PhosphorIcons.share_network,
-                      color: Colors.white,
+                    InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => controller.sharePost(postModel),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          PhosphorIcons.share_network,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const Spacer(),
-                InkWell(
-                  borderRadius: BorderRadius.circular(8),
-
-                  onTap: () => controller.addFavourite(postModel),
-
-                  child:  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      controller.isFav.value ? PhosphorIcons.bookmark_simple_fill : PhosphorIcons.bookmark_simple,
-                      color:  controller.isFav.value ? fishColor:  Colors.white,
+                    const Spacer(),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => controller.addFavourite(postModel),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          controller.isFav.value
+                              ? PhosphorIcons.bookmark_simple_fill
+                              : PhosphorIcons.bookmark_simple,
+                          color:
+                              controller.isFav.value ? fishColor : Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            )),
+                  ],
+                )),
             CustomText(
-              text:
-              postModel.caption ?? ''  ,
+              text: postModel.caption ?? '',
               weight: FontWeight.w600,
               sizeOfFont: 14,
               maxLin: 2,
@@ -149,21 +152,23 @@ class SingleFishPostWidget extends StatelessWidget {
               height: 8,
             ),
             Wrap(
-                children:List.generate((postModel.tagFish ?? []).length, (index) =>  Container(
-                  margin: const EdgeInsets.only(right: 8,bottom: 8),
-                  decoration: BoxDecoration(
-                      color: Colors.white24,
-                      borderRadius: BorderRadius.circular(16)
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 4),
-                  child: CustomText(
-                    text: "#${(postModel.tagFish ?? [])[index].localName}",
-                    weight: FontWeight.w700,
-                    sizeOfFont: 13,
-                    color: secondaryColor,
-                  ),
-                ),)
-            )
+                children: List.generate(
+              (postModel.tagFish ?? []).length,
+              (index) => Container(
+                margin: const EdgeInsets.only(right: 8, bottom: 8),
+                decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(16)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                child: CustomText(
+                  text: "#${(postModel.tagFish ?? [])[index].localName}",
+                  weight: FontWeight.w700,
+                  sizeOfFont: 13,
+                  color: secondaryColor,
+                ),
+              ),
+            ))
           ],
         ),
       ),

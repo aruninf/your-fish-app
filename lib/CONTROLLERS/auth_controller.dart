@@ -21,12 +21,12 @@ import '../UTILS/utils.dart';
 /// 💥💥💥💥💥Created By Arun Android💥💥💥💥💥
 
 class AuthController extends GetxController {
-  var uploadFile = File('').obs;
-  var fcmToken="invalid_token".obs;
+  final uploadFile = File('').obs;
+  final fcmToken="invalid_token".obs;
   late String? socialType;
   late String? currentTimeZone;
-  var isPasswordVisible = true.obs;
-  var isPasswordVisible1 = true.obs;
+  final isPasswordVisible = true.obs;
+  final isPasswordVisible1 = true.obs;
 
   @override
   void onReady() async {
@@ -114,7 +114,7 @@ class AuthController extends GetxController {
     //     final AccessToken accessToken = result.accessToken!;
     //
     //     // sign into Firebase Auth
-    //     var userCredential = await FirebaseAuth.instance.signInWithCredential(
+    //     final userCredential = await FirebaseAuth.instance.signInWithCredential(
     //         FacebookAuthProvider.credential(accessToken.token));
     //     userSocialLogin(userCredential.user, 'facebook');
     //   }
@@ -156,7 +156,7 @@ class AuthController extends GetxController {
       );
 
       // Once signed in, return the UserCredential
-      var userCredential =
+      final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
       userSocialLogin(userCredential.user, 'google');
     } catch (e) {
@@ -171,7 +171,7 @@ class AuthController extends GetxController {
       Utility.setStringValue(emailKey, user.email ?? "");
       Utility.setStringValue(nameKey, user.displayName ?? "");
       dynamic data = {"social_type": socialType, "social_id": user.uid,"fcm_token":fcmToken.value};
-      var response =
+      final response =
           await Network().postRequest(endPoint: socialLoginApi, formData: data);
       if (response?.data != null) {
         LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
@@ -202,7 +202,7 @@ class AuthController extends GetxController {
     dynamic data = {
       "email": email,
     };
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: forgotPasswordApi, formData: data);
     if (response?.data != null) {
       Get.snackbar(response?.data['message'], '',
@@ -221,7 +221,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> deleteAccount(String reason) async {
-    var para = {"deleteReason": reason};
+    final para = {"deleteReason": reason};
     Get.find<UserController>().deleteAccount(para);
     FirebaseAuth.instance.signOut();
     Utility().clearAll();

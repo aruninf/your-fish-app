@@ -3,7 +3,6 @@ import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/CONTROLLERS/setting_controller.dart';
-import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/CREATE_POST/find_a_buddy_post_screen.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_text_style.dart';
 import 'package:yourfish/HOME/chats_section.dart';
@@ -29,28 +28,20 @@ class MainHome extends StatefulWidget {
 
 class _MainHomeState extends State<MainHome> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   int _page = 0;
   late List<String> address;
   var sController = Get.put(SettingController());
   var postController = Get.put(PostController());
 
   void _onItemTapped(int index) async {
-    if(index != 2){
+    if (index != 2) {
       setState(() {
         _page = index;
       });
     }
-
-    var data = {
-      "sortBy": "desc",
-      "sortOn": "id",
-      "page": 1,
-      "limit": "20"
-    };
+    var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "20"};
     if (index == 2) {
       modalBottomSheetMenu();
-      //Get.find<UserController>().getFish(data);
     } else if (index == 3) {
       postController.getPosts(data);
     } else {
@@ -65,27 +56,15 @@ class _MainHomeState extends State<MainHome> {
   }
 
   void getMyPost() {
-    var data = {
-      "sortBy": "desc",
-      "sortOn": "created_at",
-      "page": 1,
-      "limit": "10"
-    };
-    Future.delayed(
-      Duration.zero,
-      () => postController.getMyPost(data),
-    );
-    postController.getUserData();
+    var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "20"};
+    Future.delayed(Duration.zero, () {
+      postController.getMyPost(data);
+    });
   }
 
   @override
   void initState() {
-    var data = {
-      "sortBy": "desc",
-      "sortOn": "id",
-      "page": 1,
-      "limit": "10"
-    };
+    var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "10"};
     Future.delayed(
       Duration.zero,
       () async {
@@ -183,9 +162,9 @@ class _MainHomeState extends State<MainHome> {
         child: IndexedStack(
           index: _page,
           children: [
-            HomeSection(),
+            const HomeSection(),
             const ChatsSection(),
-            const SizedBox(),
+            const SizedBox.shrink(),
             const SearchSection(),
             ProfileSection(),
           ],
@@ -302,7 +281,8 @@ class _MainHomeState extends State<MainHome> {
         builder: (builder) {
           return SafeArea(
               child: Container(
-            padding: const EdgeInsets.only(top:4,right: 16,left: 16,bottom: 16),
+            padding:
+                const EdgeInsets.only(top: 4, right: 16, left: 16, bottom: 16),
             height: Get.height * 0.24,
             width: Get.width,
             color: Colors.transparent,
@@ -310,9 +290,13 @@ class _MainHomeState extends State<MainHome> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Align(
-                  alignment: Alignment.topRight,
-                    child: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.close,color: secondaryColor,))
-                ),
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                        onPressed: () => Get.back(),
+                        icon: const Icon(
+                          Icons.close,
+                          color: secondaryColor,
+                        ))),
                 SizedBox(
                   width: Get.width,
                   child: CommonButton(
@@ -320,8 +304,9 @@ class _MainHomeState extends State<MainHome> {
                     btnText: "Find a buddy",
                     btnTextColor: primaryColor,
                     onClick: () {
-                       Get.back();
-                       Get.to(() => FindABuddyPostScreen(), transition: Transition.rightToLeft);
+                      Get.back();
+                      Get.to(() => FindABuddyPostScreen(),
+                          transition: Transition.rightToLeft);
                     },
                   ),
                 ),
@@ -333,7 +318,8 @@ class _MainHomeState extends State<MainHome> {
                     btnTextColor: primaryColor,
                     onClick: () {
                       Get.back();
-                      Get.to(() => AddFishScreen(), transition: Transition.rightToLeft);
+                      Get.to(() => AddFishScreen(),
+                          transition: Transition.rightToLeft);
                     },
                   ),
                 )
@@ -402,7 +388,7 @@ class RightDrawerMenuWidget extends StatelessWidget {
                         Get.to(BlogsScreen(),
                             transition: Transition.leftToRight);
                       } else if (index1 == 4) {
-                        Get.to( ChatsScreen(),
+                        Get.to(const ChatsScreen(),
                             transition: Transition.leftToRight);
                       } else if (index1 == 5) {
                         Get.to(SettingsScreen(),

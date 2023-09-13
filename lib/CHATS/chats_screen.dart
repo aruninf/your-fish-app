@@ -11,20 +11,48 @@ import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import 'chat_model.dart';
 import 'one_to_one_chat_screen.dart';
 
-class ChatsScreen extends StatelessWidget {
-  ChatsScreen({super.key});
+class ChatsScreen extends StatefulWidget {
+  const ChatsScreen({super.key});
+
+  @override
+  State<ChatsScreen> createState() => _ChatsScreenState();
+}
+
+class _ChatsScreenState extends State<ChatsScreen> {
   final controller=Get.find<PostController>();
 
 
+  final scrollController = ScrollController();
+  var page = 1;
+  var searchController = TextEditingController();
+
+  @override
+  void initState() {
+
+    scrollController.addListener(() {
+      if ((scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent)) {
+        setState(() {
+          page += 1;
+          //add api for load the more data according to new page
+          getChats();
+        });
+      }
+    });
+    super.initState();
+  }
+
   void getChats()async {
+    page=1;
     var data = {
       "sortBy": "desc",
       "sortOn": "id",
-      "page": 1,
+      "page": page,
       "limit": "20"
     };
     Future.delayed(Duration.zero, () => controller.getChatsUser(data),);
   }
+
   @override
   Widget build(BuildContext context) {
     getChats();
@@ -62,8 +90,7 @@ class ChatsScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child:  Obx(() => controller.isLoading.value ?
-              const Center(child:  CircularProgressIndicator(),):
+              child:  Obx(() =>
               controller.chatsUser.isNotEmpty ?
               ListView.builder(
                 itemCount: controller.chatsUser.length,
@@ -108,14 +135,15 @@ class ChatsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const CustomText(
-                        text: "18:56",
+                       CustomText(
+                        text:  Consts.formatDateTimeToHHMM(
+                            controller.chatsUser[index].updatedAt ?? "").toLowerCase(),
                         color: Colors.white54,
                         sizeOfFont: 11,
                       ),
                       GestureDetector(
                           onTapDown: (de) {
-                            showPopupMenu(context, de);
+                            showPopupMenu(context, de,controller.chatsUser[index].matchId ?? "");
                           },
                           child: Icon(
                             Icons.more_horiz_rounded,
@@ -132,6 +160,7 @@ class ChatsScreen extends StatelessWidget {
           ],
         ),
       ),
+
       // body: Column(
       //   children: [
       //     const SizedBox(height: 6,),
@@ -321,7 +350,7 @@ class ChatsScreen extends StatelessWidget {
     );
   }
 
-  showPopupMenu(BuildContext context, TapDownDetails details) {
+  showPopupMenu(BuildContext context, TapDownDetails details, String matchId) {
     showMenu<String>(
       context: context,
       color: fishColor,
@@ -335,11 +364,12 @@ class ChatsScreen extends StatelessWidget {
         details.globalPosition.dy,
       ),
       items: [
-        const PopupMenuItem<String>(
+         PopupMenuItem<String>(
             value: '1',
             height: 30,
-            padding: EdgeInsets.only(left: 13),
-            child: Text(
+            onTap: () => controller.deleteChat(matchId),
+            padding: const EdgeInsets.only(left: 13),
+            child: const Text(
               'Delete Chat',
               style: TextStyle(color: secondaryColor),
             )),

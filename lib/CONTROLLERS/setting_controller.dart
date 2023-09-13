@@ -8,11 +8,25 @@ import 'package:yourfish/MODELS/post_response.dart';
 import 'package:yourfish/NETWORKS/network_strings.dart';
 
 import '../MODELS/content_response.dart';
+import '../MODELS/setting_response.dart';
 import '../NETWORKS/network.dart';
 import '../UTILS/dialog_helper.dart';
 
+
+/**
+ *
+ * Create notification service for Android & IOS
+ * Implement Notification and save Feed range Apis
+ * Implement Fish unlock and My Future Fish Apis
+ * Follow and Unfollow Request Done
+ * Implement who is following you and accept and deny
+ *
+ *
+ *
+ *
+ */
 class SettingController extends GetxController {
-  var selectedCategories = [].obs;
+  final selectedCategories = [].obs;
   final listOfSettings = [
     "Saved Posts",
     "Notifications",
@@ -22,86 +36,98 @@ class SettingController extends GetxController {
     "FAQ's",
     "Contact Us"
   ];
-  var listOfOpen = [].obs;
-  var isLoading=false.obs;
-  var blogData=<BlogData>[].obs;
-  var articleData=<ArticleData>[].obs;
-  var faqData=<FaqData>[].obs;
-  var savedPost=<PostData>[].obs;
-  var contentData=<ContentData>[].obs;
-  var currentValues = 68.0.obs;
 
+  final listOfOn = <String>[].obs;
+  final listOfNotification = [
+    "New Message",
+    "New Fish Unlocked",
+    "100 Bites",
+    "Comment",
+    "New Location",
+    "New Follower",
+    "New Share on Post"
+  ].obs;
+  final listOfOpen = [].obs;
+  final isLoading = false.obs;
+  final blogData = <BlogData>[].obs;
+  final articleData = <ArticleData>[].obs;
+  final faqData = <FaqData>[].obs;
+  final savedPost = <PostData>[].obs;
+  final contentData = <ContentData>[].obs;
+  final currentValues = 68.0.obs;
+  final settings = Settings().obs;
 
   /// 💥💥💥💥💥💥💥 Get Saved Post 💥💥💥💥💥💥💥
 
   Future<void> getSavedPost(dynamic data) async {
-    isLoading.value=true;
-    var response = await Network().getRequest(endPoint: getSavedPostApi);
+    isLoading.value = true;
+    final response = await Network().getRequest(endPoint: getSavedPostApi);
     if (response?.data != null) {
-      isLoading.value=false;
-      var savedPostR = PostResponse.fromJson(response?.data);
+      isLoading.value = false;
+      final savedPostR = PostResponse.fromJson(response?.data);
       savedPost.value = savedPostR.data ?? [];
     }
   }
 
-
   /// 💥💥💥💥💥💥💥 Get Blogs 💥💥💥💥💥💥💥
 
   Future<void> getBlogs(dynamic data) async {
-    isLoading.value=true;
-    var response = await Network().postRequest(endPoint: getBlogApi,formData: data);
+    isLoading.value = true;
+    final response =
+        await Network().postRequest(endPoint: getBlogApi, formData: data);
     if (response?.data != null) {
-      isLoading.value=false;
+      isLoading.value = false;
       BlogResponse blog = BlogResponse.fromJson(response?.data);
       blogData.value = blog.data ?? [];
     }
   }
 
   shareApp() async {
-    Share.share('check out my App https://appifanydevelopers.github.io/#/', subject: 'Look what I made!');
+    Share.share('check out my App https://appifanydevelopers.github.io/#/',
+        subject: 'Look what I made!');
   }
 
   /// 💥💥💥💥💥💥💥 Get Articles 💥💥💥💥💥💥💥
 
   Future<void> getArticles(dynamic data) async {
-    isLoading.value=true;
-    var response = await Network().postRequest(endPoint: getArticlesApi,formData: data);
+    isLoading.value = true;
+    final response =
+        await Network().postRequest(endPoint: getArticlesApi, formData: data);
     if (response?.data != null) {
-      isLoading.value=false;
+      isLoading.value = false;
       ArticleResponse blog = ArticleResponse.fromJson(response?.data);
       articleData.value = blog.data ?? [];
-
     }
   }
 
   /// 💥💥💥💥💥💥💥 Get Faq 💥💥💥💥💥💥💥
 
   Future<void> getFaq(dynamic data) async {
-    isLoading.value=true;
-    var response = await Network().postRequest(endPoint: getFaqApi,formData: data);
+    isLoading.value = true;
+    final response =
+        await Network().postRequest(endPoint: getFaqApi, formData: data);
     if (response?.data != null) {
-      isLoading.value=false;
+      isLoading.value = false;
       FaqResponse blog = FaqResponse.fromJson(response?.data);
       faqData.value = blog.data ?? [];
-
     }
   }
 
   /// 💥💥💥💥💥💥💥 Get Static content 💥💥💥💥💥💥💥
 
   getContent() async {
-    isLoading.value=true;
-    var response = await Network().getRequest(endPoint: getContentApi);
+    isLoading.value = true;
+    final response = await Network().getRequest(endPoint: getContentApi);
     if (response?.data != null) {
-      isLoading.value=false;
+      isLoading.value = false;
       ContentResponse content = ContentResponse.fromJson(response?.data);
       contentData.value = content.data ?? [];
     }
   }
 
   Future<void> sendMessageToAdmin(dynamic data) async {
-    var response = await Network().postRequest(
-        endPoint: contactUsApi, formData: data, isLoader: true);
+    final response = await Network()
+        .postRequest(endPoint: contactUsApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
         Get.back();
@@ -114,10 +140,12 @@ class SettingController extends GetxController {
     }
   }
 
-  void updatePublicFeedRadios(dynamic data) async {
-    var response = await Network().postRequest(endPoint: settingApi, formData: data, isLoader: true);
+  updatePublicFeedRadios(dynamic data) async {
+    final response = await Network()
+        .postRequest(endPoint: settingApi, formData: data, isLoader: false);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
+        Get.closeAllSnackbars();
         Get.snackbar('Update Successfully', '',
             colorText: Colors.green, snackPosition: SnackPosition.TOP);
       } else {
@@ -127,4 +155,34 @@ class SettingController extends GetxController {
     }
   }
 
+  getSettingData() async {
+    listOfOn.clear();
+    final response = await Network().getRequest(endPoint: getSettingDataApi);
+    if (response?.data != null) {
+      final settingResponse = SettingResponse.fromJson(response?.data);
+      settings.value = settingResponse.data ?? Settings();
+      currentValues.value=double.parse(settings.value.publicFeed ?? '0');
+      if ((settings.value.newMessage ?? 0) == 1) {
+        listOfOn.add(listOfNotification[0]);
+      }
+      if ((settings.value.newFishUnlocked ?? 0) == 1) {
+        listOfOn.add(listOfNotification[1]);
+      }
+      if ((settings.value.bites100 ?? 0) == 1) {
+        listOfOn.add(listOfNotification[2]);
+      }
+      if ((settings.value.comment ?? 0) == 1) {
+        listOfOn.add(listOfNotification[3]);
+      }
+      if ((settings.value.newLocation ?? 0) == 1) {
+        listOfOn.add(listOfNotification[4]);
+      }
+      if ((settings.value.newFollower ?? 0) == 1) {
+        listOfOn.add(listOfNotification[5]);
+      }
+      if ((settings.value.newShareOnPost ?? 0) == 1) {
+        listOfOn.add(listOfNotification[6]);
+      }
+    }
+  }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/user_controller.dart';
+import 'package:yourfish/UTILS/app_images.dart';
 
-import '../../CONTROLLERS/post_controller.dart';
-import '../../UTILS/consts.dart';
+import '../CONTROLLERS/post_controller.dart';
+import '../UTILS/consts.dart';
 
 class MyFishUnlockedWidget extends StatelessWidget {
   MyFishUnlockedWidget({super.key});
@@ -13,16 +14,16 @@ class MyFishUnlockedWidget extends StatelessWidget {
     var data={
       "sortBy": "asc",
       "sortOn": "created_at",
-      "page": "1",
+      "page": 1,
       "limit": "20"
     };
-    Future.delayed(Duration.zero,() => controller.getFish(data),);
+    Future.delayed(Duration.zero,() => controller.getUnlockFish(data),);
   }
   @override
   Widget build(BuildContext context) {
     getMyUnlockFish();
-    return GridView.builder(
-      itemCount: fishData.length,
+    return Obx(() => GridView.builder(
+      itemCount: controller.fishUnlockData.length,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -39,16 +40,22 @@ class MyFishUnlockedWidget extends StatelessWidget {
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  fishData[index].fishImage ?? '',
+                child: Image.network(
+                  controller.fishUnlockData[index].fishImage ?? '',
                   height: Get.width * 0.25,
                   fit: BoxFit.cover,
                   width: double.infinity,
+                  errorBuilder: (context, error, stackTrace) => Image.asset(
+                    fishingImage,
+                    height: Get.width * 0.25,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
                 )),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                fishData[index].fishName ?? '',
+                controller.fishUnlockData[index].localName ?? '',
                 maxLines: 1,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
@@ -58,6 +65,6 @@ class MyFishUnlockedWidget extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }

@@ -9,6 +9,7 @@ class ImageViewDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+
       content: Container(
         width: double.maxFinite,
         height: 300, // Adjust the height as needed

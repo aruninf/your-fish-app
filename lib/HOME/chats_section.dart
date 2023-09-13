@@ -105,7 +105,7 @@ class _ChatsSectionState extends State<ChatsSection>
                     weight: FontWeight.w700,
                   ),
                   subtitle: CustomText(
-                    text: controller.chatsUser[index].receiverName ?? '',
+                    text: controller.chatsUser[index].lastMessage ?? '',
                     color: Colors.white70,
                     sizeOfFont: 13,
                   ),
@@ -113,14 +113,15 @@ class _ChatsSectionState extends State<ChatsSection>
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const CustomText(
-                        text: "18:56",
+                       CustomText(
+                        text:  Consts.formatDateTimeToHHMM(
+                            controller.chatsUser[index].updatedAt ?? "").toLowerCase(),
                         color: Colors.white54,
                         sizeOfFont: 11,
                       ),
                       GestureDetector(
                           onTapDown: (de) {
-                            showPopupMenu(context, de);
+                            showPopupMenu(context, de,controller.chatsUser[index].matchId);
                           },
                           child: Icon(
                             Icons.more_horiz_rounded,
@@ -326,7 +327,7 @@ class _ChatsSectionState extends State<ChatsSection>
     );
   }
 
-  showPopupMenu(BuildContext context, TapDownDetails details) {
+  showPopupMenu(BuildContext context, TapDownDetails details, String? matchId) {
     showMenu<String>(
       context: context,
       color: fishColor,
@@ -340,11 +341,12 @@ class _ChatsSectionState extends State<ChatsSection>
         details.globalPosition.dy,
       ),
       items: [
-        const PopupMenuItem<String>(
+         PopupMenuItem<String>(
             value: '1',
             height: 30,
-            padding: EdgeInsets.only(left: 13),
-            child: Text(
+            onTap: () => controller.deleteChat(matchId ?? ""),
+            padding: const EdgeInsets.only(left: 13),
+            child: const Text(
               'Delete Chat',
               style: TextStyle(color: secondaryColor),
             )),

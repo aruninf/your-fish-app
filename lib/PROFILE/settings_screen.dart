@@ -14,19 +14,29 @@ import 'help_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({super.key});
+
   final controller = Get.put(SettingController());
-  void callFaqApi()async {
+
+  void callFaqApi() async {
     var data = {
       "sortBy": "desc",
       "sortOn": "created_at",
       "page": "1",
       "limit": "20"
     };
-    Future.delayed(Duration.zero,() => controller.getFaq(data),);
+    Future.delayed(
+      Duration.zero,
+      () => controller.getFaq(data),
+    );
   }
-  void callPrivacyPolicyApi()async {
-    Future.delayed(Duration.zero,() => controller.getContent(),);
+
+  void callPrivacyPolicyApi() async {
+    Future.delayed(
+      Duration.zero,
+      () => controller.getContent(),
+    );
   }
+
   callBlogArticleApi() async {
     var data = {
       "sortBy": "desc",
@@ -36,16 +46,24 @@ class SettingsScreen extends StatelessWidget {
     };
     Future.delayed(
       Duration.zero,
-          () => controller.getBlogs(data),
+      () => controller.getBlogs(data),
     );
     Future.delayed(
       Duration.zero,
-          () => controller.getArticles(data),
+      () => controller.getArticles(data),
+    );
+  }
+
+  void getSetting() {
+    Future.delayed(
+      Duration.zero,
+      () => controller.getSettingData(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    getSetting();
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
@@ -88,8 +106,8 @@ class SettingsScreen extends StatelessWidget {
                           controller.currentValues.value = value;
                         },
                         onChangeEnd: (value) {
-                          var data={
-                            "public_feed":controller.currentValues.value
+                          var data = {
+                            "public_feed": controller.currentValues.value
                           };
                           controller.updatePublicFeedRadios(data);
                         },
@@ -146,42 +164,35 @@ class SettingsScreen extends StatelessWidget {
                       color: btnColor, borderRadius: BorderRadius.circular(16)),
                   child: ListTile(
                     onTap: () {
-
-                      if(index==0){
-                        Get.to( SavedPostWidget(),
+                      if (index == 0) {
+                        Get.to(SavedPostWidget(),
                             transition: Transition.rightToLeft);
-                      }else if(index==1){
-                        Get.to(const NotificationScreen(),
+                      } else if (index == 1) {
+                        Get.to(NotificationScreen(),
                             transition: Transition.rightToLeft);
-                      }else if(index==2){
+                      } else if (index == 2) {
                         controller.shareApp();
-                      }
-                      else if(index==3){
+                      } else if (index == 3) {
                         callPrivacyPolicyApi();
                         Get.to(
                             PrivacyAndTermsScreen(
                               title: "Terms & Conditions",
-                            ),transition: Transition.rightToLeft);
-                      }
-                      else if(index==4){
+                            ),
+                            transition: Transition.rightToLeft);
+                      } else if (index == 4) {
                         callPrivacyPolicyApi();
-                          Get.to(
-                              PrivacyAndTermsScreen(
-                                title: "Privacy Policy",
-                              ),transition: Transition.rightToLeft);
-                      }
-                      else if(index==5){
+                        Get.to(
+                            PrivacyAndTermsScreen(
+                              title: "Privacy Policy",
+                            ),
+                            transition: Transition.rightToLeft);
+                      } else if (index == 5) {
                         callFaqApi();
-                            Get.to(FAQScreen(),
-                                transition:
-                                Transition.rightToLeft);
-                      }else {
-
-                        Get.to( HelpSupportScreen(),
-                            transition:
-                            Transition.rightToLeft);
+                        Get.to(FAQScreen(), transition: Transition.rightToLeft);
+                      } else {
+                        Get.to(HelpSupportScreen(),
+                            transition: Transition.rightToLeft);
                       }
-
                     },
                     dense: true,
                     title: CustomText(
@@ -257,8 +268,6 @@ class SettingsScreen extends StatelessWidget {
       ),
     );
   }
-
-
 }
 
 void customDialog({String? title, String? message, String? confirmBtnText}) {
@@ -301,7 +310,7 @@ void customDialog({String? title, String? message, String? confirmBtnText}) {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               foregroundColor: const Color(0xFFFFFFFF),
-                              backgroundColor: Colors.grey,
+                              backgroundColor: Colors.white,
                               minimumSize: const Size(0, 45),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -310,7 +319,7 @@ void customDialog({String? title, String? message, String? confirmBtnText}) {
                             onPressed: () => Get.back(),
                             child: const Text(
                               'Cancel',
-                              style: TextStyle(color: Colors.black38),
+                              style: TextStyle(color: primaryColor),
                             ),
                           ),
                         ),

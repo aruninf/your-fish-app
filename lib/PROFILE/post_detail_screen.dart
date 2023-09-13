@@ -97,14 +97,13 @@ class PostDetailScreen extends StatelessWidget {
                             onTap: () => controller.addLiked(postModel),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                fishIcon,
-                                height: 28,
-                                width: 28,
+                              child: Icon(
+                                controller.isLiked.value
+                                    ? PhosphorIcons.thumbs_up_fill
+                                    : PhosphorIcons.thumbs_up,
                                 color: controller.isLiked.value
                                     ? fishColor
-                                    : Colors.white,
-                              ),
+                                    : Colors.white,)
                             ),
                           ),
                           InkWell(
@@ -147,34 +146,33 @@ class PostDetailScreen extends StatelessWidget {
                           ),
                         ],
                       )),
+
+                  Wrap(
+                      children: List.generate(
+                        (postModel.tagFish ?? []).length,
+                            (index) => Container(
+                          margin: const EdgeInsets.only(right: 8, bottom: 8),
+                          decoration: BoxDecoration(
+                              color: Colors.white24,
+                              borderRadius: BorderRadius.circular(16)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
+                          child: CustomText(
+                            text: "#${(postModel.tagFish ?? [])[index].localName}",
+                            weight: FontWeight.w700,
+                            sizeOfFont: 13,
+                            color: secondaryColor,
+                          ),
+                        ),
+                      )),
                   CustomText(
                     text: postModel.caption ?? '',
                     weight: FontWeight.w600,
                     sizeOfFont: 14,
-                    maxLin: 2,
                     color: Colors.white,
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Wrap(
-                      children: List.generate(
-                    (postModel.tagFish ?? []).length,
-                    (index) => Container(
-                      margin: const EdgeInsets.only(right: 8, bottom: 8),
-                      decoration: BoxDecoration(
-                          color: Colors.white24,
-                          borderRadius: BorderRadius.circular(16)),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 4),
-                      child: CustomText(
-                        text: "#${(postModel.tagFish ?? [])[index].localName}",
-                        weight: FontWeight.w700,
-                        sizeOfFont: 13,
-                        color: secondaryColor,
-                      ),
-                    ),
-                  ))
+
+
                 ],
               ),
             )

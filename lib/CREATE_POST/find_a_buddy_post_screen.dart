@@ -22,8 +22,15 @@ class FindABuddyPostScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final captionsController = TextEditingController();
 
+  void getTags() {
+    var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "100"};
+    Future.delayed(Duration.zero,()=> Get.find<UserController>().getFish(data),);
+  }
+
   @override
   Widget build(BuildContext context) {
+    getTags();
+
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
@@ -268,7 +275,7 @@ class FindABuddyPostScreen extends StatelessWidget {
             if (_formKey.currentState!.validate()) {
               var data = {
                 "isPublic": controller.isLocationOn.value,
-                "type":2,
+                "type": 2,
                 "latitude": controller.currentPosition.value.latitude,
                 "longitude": controller.currentPosition.value.longitude,
                 "address": (controller.userData.value.address ?? '').isNotEmpty

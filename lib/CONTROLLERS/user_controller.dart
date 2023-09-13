@@ -22,24 +22,26 @@ import '../NETWORKS/network_strings.dart';
 import '../UTILS/utils.dart';
 
 class UserController extends GetxController {
-  var selectedCategories = [].obs;
-  var selectedCategory= 0.obs;
-  var selectedFishInterest = [].obs;
-  var selectedFishingLocation = [].obs;
-  var selectedFishExp = [].obs;
-  var selectedFishTag = <FishData>[].obs;
-  var allUsers = <UserData>[].obs;
-  var friendRequest = <UserData>[].obs;
-  var selectedFishGear = [].obs;
-  var isDataLoading = false.obs;
-  var isPasswordVisible = true.obs;
-  var selectDob = ''.obs;
+  final selectedCategories = [].obs;
+  final selectedCategory= 0.obs;
+  final selectedFishInterest = [].obs;
+  final selectedFishingLocation = [].obs;
+  final selectedFishExp = [].obs;
+  final selectedFishTag = <FishData>[].obs;
+  final allUsers = <UserData>[].obs;
+  final friendRequest = <UserData>[].obs;
+  final selectedFishGear = [].obs;
+  final isDataLoading = false.obs;
+  final isPasswordVisible = true.obs;
+  final selectDob = ''.obs;
   String? gender;
   DateTime selectedDate = DateTime.now();
-  var fishData = <FishData>[].obs;
-  var fishingLocation = <FishingLocationData>[].obs;
-  var fishCategory = <Category>[].obs;
-  var fishingGear = <GearData>[].obs;
+  final fishData = <FishData>[].obs;
+  final fishUnlockData = <FishData>[].obs;
+  final futureFishData = <FishData>[].obs;
+  final fishingLocation = <FishingLocationData>[].obs;
+  final fishCategory = <Category>[].obs;
+  final fishingGear = <GearData>[].obs;
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -58,7 +60,7 @@ class UserController extends GetxController {
   /// 🍔🍔🍔🍔🍔Login Function 🍔🍔🍔🍔🍔🍔
 
   Future<void> userLogin(dynamic data) async {
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: loginApi, formData: data, isLoader: true);
     if (response?.data != null) {
       LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
@@ -83,7 +85,7 @@ class UserController extends GetxController {
   ///🧨🧨🧨🧨🧨🧨 User Register 🧨🧨🧨🧨🧨
 
   Future<void> userRegister(dynamic data) async {
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: registerApi, formData: data, isLoader: true);
     if (response?.data != null) {
       LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
@@ -102,12 +104,50 @@ class UserController extends GetxController {
 
   Future<void> getFish(dynamic data) async {
     isDataLoading.value = true;
-    var response =
+    if(data['page']==1){
+      fishData.clear();
+    }
+    final response =
         await Network().postRequest(endPoint: getFishApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
       FishResponse fish = FishResponse.fromJson(response?.data);
-      fishData.value = fish.data ?? [];
+      fishData.addAll(fish.data ?? []);
+    }
+  }
+
+
+
+  /// 💥💥💥💥💥💥💥 Get Future Fish 💥💥💥💥💥💥💥
+
+  Future<void> getFutureFish(dynamic data) async {
+    isDataLoading.value = true;
+    if(data['page']==1){
+      futureFishData.clear();
+    }
+    final response =
+    await Network().getRequest(endPoint: getMyFutureFishApi);
+    if (response?.data != null) {
+      isDataLoading.value = false;
+      FishResponse fish = FishResponse.fromJson(response?.data);
+      futureFishData.addAll(fish.data ?? []);
+    }
+  }
+
+
+  /// 💥💥💥💥💥💥💥 Get Unlock Fish 💥💥💥💥💥💥💥
+
+  Future<void> getUnlockFish(dynamic data) async {
+    isDataLoading.value = true;
+    if(data['page']==1){
+      fishUnlockData.clear();
+    }
+    final response =
+    await Network().getRequest(endPoint: getUnlockFishApi);
+    if (response?.data != null) {
+      isDataLoading.value = false;
+      FishResponse fish = FishResponse.fromJson(response?.data);
+      fishUnlockData.addAll(fish.data ?? []);
     }
   }
 
@@ -115,12 +155,15 @@ class UserController extends GetxController {
 
   Future<void> getAllUsers(dynamic data) async {
     isDataLoading.value = true;
-    var response =
+    if(data['page']==1){
+      allUsers.clear();
+    }
+    final response =
         await Network().postRequest(endPoint: getAllUserApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
-      var sp = UserResponse.fromJson(response?.data);
-      allUsers.value = sp.data ?? [];
+      final sp = UserResponse.fromJson(response?.data);
+      allUsers.addAll(sp.data ?? []);
     }
   }
 
@@ -128,25 +171,25 @@ class UserController extends GetxController {
 
   Future<void> getFriendRequest(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network().postRequest(
+    if(data['page']==1){
+      friendRequest.clear();
+    }
+    final response = await Network().postRequest(
         endPoint: getFriendRequestsListApi, formData: data, isLoader: false);
     if (response?.data != null) {
       isDataLoading.value = false;
-      var sp = UserResponse.fromJson(response?.data);
-      friendRequest.value = sp.data ?? [];
+      final sp = UserResponse.fromJson(response?.data);
+      friendRequest.addAll(sp.data ?? []);
     }
   }
 
   /// 💥💥💥💥💥💥💥 User Follow, Unfollow  and Friend Request Api (Accept,deny,) 💥💥💥💥💥💥💥
 
-  Future<void> userFollowUnfollow(dynamic data, int type) async {
+  Future<void> sendRequest(dynamic data, int type) async {
     //isDataLoading.value = true;
 
-    var response = await Network()
-        .postRequest(endPoint: storeFollowUnfollowApi, formData: data,isLoader: true);
-    if (data["follow_unfollow_status"] == 1) {
-      await Network().postRequest(endPoint: sendRequestApi, formData: data,isLoader: false);
-    }
+    final response = await Network()
+        .postRequest(endPoint: sendRequestApi, formData: data,isLoader: true);
     if (response?.data != null) {
       Get.closeAllSnackbars();
       Get.snackbar(response?.data['message'], '',
@@ -157,15 +200,17 @@ class UserController extends GetxController {
       } else {
         getFriendRequest(
             {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "20"});
+        getAllUsers(
+            {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "20"});
       }
     }
   }
 
   openChat(UserData userData) async {
-    var data = {
+    final data = {
       "receiver_id": userData.id,
     };
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: startChatApi, formData: data, isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
@@ -189,7 +234,7 @@ class UserController extends GetxController {
 
   Future<void> getFishLocation(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: getFishingLocationApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
@@ -202,7 +247,7 @@ class UserController extends GetxController {
 
   Future<void> getFishGear(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: getFishingGearApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
@@ -215,7 +260,7 @@ class UserController extends GetxController {
 
   Future<void> getFishCategory(dynamic data) async {
     isDataLoading.value = true;
-    var response = await Network()
+    final response = await Network()
         .postRequest(endPoint: getFishCategoryApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
@@ -228,7 +273,7 @@ class UserController extends GetxController {
 
   Future<void> updateOnBoarding(dynamic data, int step) async {
     isDataLoading.value = false;
-    var response = await Network().postRequest(
+    final response = await Network().postRequest(
         endPoint: updateOnBoardingApi, formData: data, isLoader: true);
     if (response?.data != null) {
       //print("updateProfile=================${response?.data}");
@@ -255,7 +300,7 @@ class UserController extends GetxController {
   ///🧨🧨🧨🧨🧨🧨 User Delete Account 🧨🧨🧨🧨🧨
 
   deleteAccount(Map<String, String> param) async {
-    await Network().postRequest(endPoint: logoutApi, formData: param);
+    await Network().postRequest(endPoint: deleteAccountApi, formData: param);
   }
 
   ///🧨🧨🧨🧨🧨🧨 User Logout 🧨🧨🧨🧨🧨

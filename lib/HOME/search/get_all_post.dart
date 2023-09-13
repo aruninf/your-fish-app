@@ -67,6 +67,7 @@ class _AllPostWidgetState extends State<AllPostWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           child: CustomSearchField(
             hintText: 'Search',
+            isClearIcon: true,
             onChanges: (p0) {
               page = 1;
               var data = {
@@ -78,6 +79,7 @@ class _AllPostWidgetState extends State<AllPostWidget> {
               };
               controller.getPosts(data);
               searchController.text = "";
+
             },
           ),
         ),
@@ -115,7 +117,7 @@ class _AllPostWidgetState extends State<AllPostWidget> {
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     itemCount: controller.postData.length,
                     itemBuilder: (context, index) => InkWell(
-                      onTap: () => Get.to(PostDetailScreen(postModel: controller.postData[index])),
+                      onTap: () => Get.to(()=> PostDetailScreen(postModel: controller.postData[index])),
                       borderRadius: BorderRadius.circular(16),
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),

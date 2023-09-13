@@ -320,16 +320,16 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
       timeStamp: ids,
       isDeleted: false,
     ).toJson();
-    _textController.clear();
-    // var param = {
-    //   "receiverId": widget.receiver?.matchRoomId,
-    //   "message": messageType == 2 ? "📷" : message.trim(),
-    //   "matchId": widget.receiver!.receiverId
-    // };
+
+    var param = {
+    "match_id": widget.receiver?.matchRoomId,
+    "message": messageType == 2 ? "📷" : message.trim(),
+    };
+    postController.updateChat(param);
     controller.sendMessage("${widget.receiver?.matchRoomId}", req);
-    //NotificationController.sendMsgNotification(param);
     scrollController.animateTo(0,
         duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    _textController.clear();
   }
 
   Future<void> uploadImage(File? image) async {

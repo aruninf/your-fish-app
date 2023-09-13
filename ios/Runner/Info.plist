@@ -87,20 +87,14 @@
           <string>fbauth2</string>
           <string>fbshareextension</string>
         </array>
-        <key>LSRequiresIPhoneOS</key>
-        <true/>
-       <key>NSPhotoLibraryUsageDescription</key>
-       <string>App needs access to photo lib for profile images</string>
-       <key>NSCameraUsageDescription</key>
-       <string>To capture profile photo please grant camera access</string>
+
 
        <key>NSLocationWhenInUseUsageDescription</key>
        <string>This app needs access to location when open.</string>
        <key>NSLocationAlwaysUsageDescription</key>
        <string>This app needs access to location when in the background.</string>
 
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

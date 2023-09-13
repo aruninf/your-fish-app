@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'CONTROLLERS/auth_controller.dart';
 import 'CONTROLLERS/user_controller.dart';
 import 'CREATE_ACCOUNT/on_boarding_screen.dart';
 import 'CREATE_ACCOUNT/splash_screen.dart';
+import 'UTILS/notification.service.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -27,6 +29,19 @@ void main() async {
     Get.put(AuthController());
     Get.put(UserController());
   });
+  final messaging = FirebaseMessaging.instance;
+  await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  // initialize notification service
+  await NotificationService.initialize();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

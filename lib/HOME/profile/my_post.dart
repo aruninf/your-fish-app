@@ -7,17 +7,50 @@ import 'package:yourfish/UTILS/app_images.dart';
 
 import '../../CONTROLLERS/post_controller.dart';
 
-class MyPostWidget extends StatelessWidget {
+class MyPostWidget extends StatefulWidget {
   MyPostWidget({super.key, required this.myPost});
-  final controller = Get.find<PostController>();
+
   final bool myPost;
+
+  @override
+  State<MyPostWidget> createState() => _MyPostWidgetState();
+}
+
+class _MyPostWidgetState extends State<MyPostWidget> {
+  final controller = Get.find<PostController>();
+
+  final scrollController = ScrollController();
+  var page = 1;
+  var searchController = TextEditingController();
+
+  @override
+  void initState() {
+    scrollController.addListener(() {
+      if ((scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent)) {
+        setState(() {
+          page += 1;
+          //add api for load the more data according to new page
+          Future.delayed(
+            Duration.zero,
+                () async {
+              var data = {
+                "sortBy": "desc",
+                "sortOn": "created_at",
+                "page": page,
+                "limit": "10",
+              };
+              await controller.getMyPost(data);
+            },
+          );
+        });
+      }
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    return Obx(() => controller.isLoading.value
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : controller.myPostData.isEmpty
+    return Obx(() =>  controller.myPostData.isEmpty
             ? const Center(
                 child: Text(
                   "Not Post Yet!",
@@ -48,122 +81,128 @@ class MyPostWidget extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-                       myPost ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              InkWell(
-                                borderRadius: BorderRadius.circular(8),
-                                onTap: () => Get.to(()=>AddFishScreen()),
-                                child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: fishColor),
-                                    child: const Icon(
-                                      CupertinoIcons.eyedropper,
-                                      color: Colors.white,
-                                      size: 15,
-                                    )),
-                              ),
-                              const Spacer(),
-                              InkWell(
-                                borderRadius: BorderRadius.circular(8),
-                                onTap: () {
-                                  /// Confirmation Dialog/////////////////////////
-                                  Get.dialog(
-                                    Dialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
+                        widget.myPost
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(8),
+                                      onTap: () =>
+                                          Get.to(() => AddFishScreen()),
                                       child: Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 16,
-                                            bottom: 8,
-                                            left: 16,
-                                            right: 16),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Text(
-                                              'Delete Post',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            const Text(
-                                              'Are you sure want to delete post?',
-                                              style: TextStyle(
-                                                fontSize: 14,
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              color: Colors.transparent),
+                                          child: const SizedBox.shrink()),
+                                    ),
+                                    const Spacer(),
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(8),
+                                      onTap: () {
+                                        /// Confirmation Dialog/////////////////////////
+                                        Get.dialog(
+                                          Dialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12)),
+                                            child: Container(
+                                              padding: const EdgeInsets.only(
+                                                  top: 16,
+                                                  bottom: 8,
+                                                  left: 16,
+                                                  right: 16),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const Text(
+                                                    'Delete Post',
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  const Text(
+                                                    'Are you sure want to delete post?',
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          if (Get.isDialogOpen!)
+                                                            Get.back();
+                                                        },
+                                                        child: const Text(
+                                                          'Cancel',
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          var data = {
+                                                            "id": controller
+                                                                .myPostData[
+                                                                    index]
+                                                                .id
+                                                          };
+                                                          controller
+                                                              .deletePost(data);
+
+                                                          if (Get
+                                                              .isDialogOpen!) {
+                                                            Get.back();
+                                                          }
+                                                          controller.myPostData
+                                                              .removeAt(index);
+                                                        },
+                                                        child: const Text(
+                                                          'Delete',
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    if (Get.isDialogOpen!)
-                                                      Get.back();
-                                                  },
-                                                  child: const Text(
-                                                    'Cancel',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                    ),
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    var data = {
-                                                      "id": controller
-                                                          .myPostData[index].id
-                                                    };
-                                                    controller.deletePost(data);
-
-                                                    if (Get.isDialogOpen!) {
-                                                      Get.back();
-                                                    }
-                                                    controller
-                                                        .myPostData.removeAt(index);
-                                                  },
-                                                  child: const Text(
-                                                    'Delete',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              color: fishColor),
+                                          child: const Icon(
+                                            CupertinoIcons.delete,
+                                            color: Colors.white,
+                                            size: 15,
+                                          )),
                                     ),
-                                  );
-                                },
-                                child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: fishColor),
-                                    child: const Icon(
-                                      CupertinoIcons.delete,
-                                      color: Colors.white,
-                                      size: 15,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ):const SizedBox.shrink()
+                                  ],
+                                ),
+                              )
+                            : const SizedBox.shrink()
                       ],
                     )),
               ));

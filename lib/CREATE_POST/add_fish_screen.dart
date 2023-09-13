@@ -22,8 +22,13 @@ class AddFishScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final captionsController = TextEditingController();
 
+  void getTags() {
+    var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "100"};
+    Future.delayed(Duration.zero,()=> Get.find<UserController>().getFish(data),);
+  }
   @override
   Widget build(BuildContext context) {
+    getTags();
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
