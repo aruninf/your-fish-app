@@ -58,7 +58,7 @@ class FindABuddyPostItem extends StatelessWidget {
               SizedBox(
                 height: 30,
                 child: TextButton(
-                  onPressed: () => controller.openChat(postModel),
+                  onPressed: () => controller.openChat("${postModel.userId}"),
                   style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(

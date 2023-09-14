@@ -100,15 +100,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 padding: const EdgeInsets.only(
                     top: 8, bottom: 8, left: 12, right: 12),
                 itemBuilder: (context, index) => ListTile(
-                  onTap: () => Get.to(
-                          () => SingleChatPage(
-                        receiver: ReceiverModel(
-                            matchRoomId: "${controller.chatsUser[index].matchId}",receiverId: "${controller.chatsUser[index].receiverId}"
-                        ),
-                        image: "https://funylife.in/wp-content/uploads/2023/04/13_Cute-Girl-Pic-WWW.FUNYLIFE.IN_-1024x1024.jpg",
-                        matchName: "${controller.chatsUser[index].receiverName}",
-                      ),
-                      transition: Transition.rightToLeft),
+                  onTap: () => controller.openChat("${controller.chatsUser[index].receiverId}"),
                   dense: true,
                   contentPadding:
                   const EdgeInsets.symmetric(horizontal: 8, vertical: 1),

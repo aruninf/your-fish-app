@@ -13,18 +13,9 @@ import '../NETWORKS/network.dart';
 import '../UTILS/dialog_helper.dart';
 
 
-/**
- *
- * Create notification service for Android & IOS
- * Implement Notification and save Feed range Apis
- * Implement Fish unlock and My Future Fish Apis
- * Follow and Unfollow Request Done
- * Implement who is following you and accept and deny
- *
- *
- *
- *
- */
+
+
+
 class SettingController extends GetxController {
   final selectedCategories = [].obs;
   final listOfSettings = [
@@ -54,7 +45,7 @@ class SettingController extends GetxController {
   final faqData = <FaqData>[].obs;
   final savedPost = <PostData>[].obs;
   final contentData = <ContentData>[].obs;
-  final currentValues = 68.0.obs;
+  final currentValues = 50.0.obs;
   final settings = Settings().obs;
 
   /// 💥💥💥💥💥💥💥 Get Saved Post 💥💥💥💥💥💥💥

@@ -273,6 +273,19 @@ class FindABuddyPostScreen extends StatelessWidget {
           btnText: "Post",
           onClick: () {
             if (_formKey.currentState!.validate()) {
+              controller.getCurrentPosition();
+              if (controller.currentPosition.value.latitude==0) {
+                Get.snackbar('Required!',
+                    'Please enable your location',
+                    colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+                return;
+              }
+              if (controller.currentPosition.value.longitude==0) {
+                Get.snackbar('Required!',
+                    'Please enable your location',
+                    colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+                return;
+              }
               var data = {
                 "isPublic": controller.isLocationOn.value,
                 "type": 2,

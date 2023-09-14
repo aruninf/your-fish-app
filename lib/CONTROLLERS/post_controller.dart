@@ -241,7 +241,7 @@ class PostController extends GetxController {
   ///💥💥💥💥💥💥💥  Get Address from Lat Long 💥💥💥💥💥💥💥
 
   Future<void> getAddressFromLatLng(Position position) async {
-    //print("User Location 💥💥💥💥💥💥💥 ${position.latitude},${position.longitude}");
+    ///print("User Location 💥💥💥💥💥💥💥 ${position.latitude},${position.longitude}");
     await placemarkFromCoordinates(
             currentPosition.value.latitude, currentPosition.value.longitude)
         .then((List<Placemark> placemarks) {
@@ -278,10 +278,9 @@ class PostController extends GetxController {
     }
   }
 
-  openChat(PostData postModel) async {
+  openChat(String receiverId) async {
     final data = {
-      "receiver_id": postModel.userId,
-      "post_id": postModel.id,
+      "receiver_id": receiverId,
     };
     final response = await Network()
         .postRequest(endPoint: startChatApi, formData: data, isLoader: true);

@@ -20,7 +20,8 @@ class _ChatsSectionState extends State<ChatsSection>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  final controller=Get.find<PostController>();
+  final controller = Get.find<PostController>();
+
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
@@ -67,73 +68,77 @@ class _ChatsSectionState extends State<ChatsSection>
               child: CustomSearchField(hintText: 'Search'),
             ),
             Expanded(
-              child:  Obx(() => controller.isLoading.value ?
-              const Center(child:  CircularProgressIndicator(),):
-              controller.chatsUser.isNotEmpty ?
-              ListView.builder(
-                itemCount: controller.chatsUser.length,
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(
-                    top: 8, bottom: 8, left: 12, right: 12),
-                itemBuilder: (context, index) => ListTile(
-                  onTap: () => Get.to(
-                          () => SingleChatPage(
-                        receiver: ReceiverModel(
-                            matchRoomId: "${controller.chatsUser[index].matchId}",receiverId: "${controller.chatsUser[index].receiverId}"
-                        ),
-                        image: "https://funylife.in/wp-content/uploads/2023/04/13_Cute-Girl-Pic-WWW.FUNYLIFE.IN_-1024x1024.jpg",
-                        matchName: "${controller.chatsUser[index].receiverName}",
-                      ),
-                      transition: Transition.rightToLeft),
-                  dense: true,
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                  leading: ClipOval(
-                    child: Image.asset(
-                      chatsList1[index].profileImage ?? '',
-                      height: 45,
-                      width: 45,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  title: CustomText(
-                    text: controller.chatsUser[index].receiverName ?? '',
-                    color: btnColor,
-                    sizeOfFont: 14,
-                    weight: FontWeight.w700,
-                  ),
-                  subtitle: CustomText(
-                    text: controller.chatsUser[index].lastMessage ?? '',
-                    color: Colors.white70,
-                    sizeOfFont: 13,
-                  ),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                       CustomText(
-                        text:  Consts.formatDateTimeToHHMM(
-                            controller.chatsUser[index].updatedAt ?? "").toLowerCase(),
-                        color: Colors.white54,
-                        sizeOfFont: 11,
-                      ),
-                      GestureDetector(
-                          onTapDown: (de) {
-                            showPopupMenu(context, de,controller.chatsUser[index].matchId);
-                          },
-                          child: Icon(
-                            Icons.more_horiz_rounded,
-                            color: secondaryColor.withOpacity(0.6),
-                            size: 16,
-                          ))
-                    ],
-                  ),
-                ),
-              ):const Center(child: Text("No record found!",
-                style: TextStyle(color: secondaryColor),),)
-              ),
+              child: Obx(() => controller.isLoading.value
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : controller.chatsUser.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: controller.chatsUser.length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.only(
+                              top: 8, bottom: 8, left: 12, right: 12),
+                          itemBuilder: (context, index) => ListTile(
+                            onTap: () => controller.openChat(
+                                "${controller.chatsUser[index].receiverId}"),
+                            dense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 1),
+                            leading: ClipOval(
+                              child: Image.asset(
+                                chatsList1[index].profileImage ?? '',
+                                height: 45,
+                                width: 45,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            title: CustomText(
+                              text: controller.chatsUser[index].receiverName ??
+                                  '',
+                              color: btnColor,
+                              sizeOfFont: 14,
+                              weight: FontWeight.w700,
+                            ),
+                            subtitle: CustomText(
+                              text:
+                                  controller.chatsUser[index].lastMessage ?? '',
+                              color: Colors.white70,
+                              sizeOfFont: 13,
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CustomText(
+                                  text: Consts.formatDateTimeToHHMM(controller
+                                              .chatsUser[index].updatedAt ??
+                                          "")
+                                      .toLowerCase(),
+                                  color: Colors.white54,
+                                  sizeOfFont: 11,
+                                ),
+                                GestureDetector(
+                                    onTapDown: (de) {
+                                      showPopupMenu(context, de,
+                                          controller.chatsUser[index].matchId);
+                                    },
+                                    child: Icon(
+                                      Icons.more_horiz_rounded,
+                                      color: secondaryColor.withOpacity(0.6),
+                                      size: 16,
+                                    ))
+                              ],
+                            ),
+                          ),
+                        )
+                      : const Center(
+                          child: Text(
+                            "No record found!",
+                            style: TextStyle(color: secondaryColor),
+                          ),
+                        )),
             ),
           ],
         ),
@@ -341,7 +346,7 @@ class _ChatsSectionState extends State<ChatsSection>
         details.globalPosition.dy,
       ),
       items: [
-         PopupMenuItem<String>(
+        PopupMenuItem<String>(
             value: '1',
             height: 30,
             onTap: () => controller.deleteChat(matchId ?? ""),

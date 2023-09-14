@@ -104,7 +104,7 @@ class SingleFishPostWidget extends StatelessWidget {
                     ),
                     InkWell(
                       borderRadius: BorderRadius.circular(8),
-                      onTap: () => controller.openChat(postModel),
+                      onTap: () => controller.openChat("${postModel.userId}"),
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Icon(

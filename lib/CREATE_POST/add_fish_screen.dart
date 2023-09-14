@@ -24,8 +24,12 @@ class AddFishScreen extends StatelessWidget {
 
   void getTags() {
     var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "100"};
-    Future.delayed(Duration.zero,()=> Get.find<UserController>().getFish(data),);
+    Future.delayed(
+      Duration.zero,
+      () => Get.find<UserController>().getFish(data),
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     getTags();
@@ -271,21 +275,31 @@ class AddFishScreen extends StatelessWidget {
           btnText: "Post",
           onClick: () {
             if (_formKey.currentState!.validate()) {
-              var data = {
-                "isPublic": controller.isLocationOn.value,
-                "type":1,
-                "latitude": controller.currentPosition.value.latitude,
-                "longitude": controller.currentPosition.value.longitude,
-                "address": (controller.userData.value.address ?? '').isNotEmpty
-                    ? controller.userData.value.address
-                    : controller.currentAddress.value,
-                "tag_fish": userController.selectedFishTag
-                    .map((element) => element.id)
-                    .toList(),
-                "image": imageUrl.value,
-                "caption": captionsController.text.trim()
-              };
-              controller.createPost(data);
+              controller.getCurrentPosition();
+
+              if (controller.currentPosition.value.latitude != 0 &&
+                  controller.currentPosition.value.longitude != 0) {
+                var data = {
+                  "isPublic": controller.isLocationOn.value,
+                  "type": 1,
+                  "latitude": controller.currentPosition.value.latitude,
+                  "longitude": controller.currentPosition.value.longitude,
+                  "address":
+                      (controller.userData.value.address ?? '').isNotEmpty
+                          ? controller.userData.value.address
+                          : controller.currentAddress.value,
+                  "tag_fish": userController.selectedFishTag
+                      .map((element) => element.id)
+                      .toList(),
+                  "image": imageUrl.value,
+                  "caption": captionsController.text.trim()
+                };
+                controller.createPost(data);
+              } else {
+                Get.snackbar('Required!', 'Please enable your location',
+                    colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+                return;
+              }
             }
           },
         ),

@@ -17,8 +17,8 @@ class AddYourGear extends StatelessWidget {
   void callApi() async {
     var data={
       "sortBy": "asc",
-      "sortOn": "created_at",
-      "page": "1",
+      "sortOn": "id",
+      "page": 1,
       "limit": "20"
     };
     Future.delayed(

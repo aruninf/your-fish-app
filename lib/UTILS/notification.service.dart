@@ -49,7 +49,7 @@ class NotificationService {
 
     await localNotifications.initialize(
       const InitializationSettings(
-        android: AndroidInitializationSettings("@drawable/ic_stat_app_icon"),
+        android: AndroidInitializationSettings("@mipmap/ic_launcher"),
         iOS: IOSInitializationSettings()
       ),
       onSelectNotification: _onSelectNotification,

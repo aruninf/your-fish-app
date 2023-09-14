@@ -111,7 +111,7 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
                     });
               } else {
                 return const Center(
-                  child: Text('No messages...'),
+                  child: Text('No messages...',style: TextStyle(color: secondaryColor),),
                 );
               }
             } else {

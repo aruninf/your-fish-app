@@ -10,7 +10,7 @@ import '../../UTILS/app_color.dart';
 import '../../UTILS/app_images.dart';
 
 class GetAllUserWidget extends StatefulWidget {
-  GetAllUserWidget({super.key});
+  const GetAllUserWidget({super.key});
 
   @override
   State<GetAllUserWidget> createState() => _GetAllUserWidgetState();
@@ -34,12 +34,12 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
           //add api for load the more data according to new page
           Future.delayed(
             Duration.zero,
-                () async {
+            () async {
               var data = {
                 "sortBy": "desc",
                 "sortOn": "created_at",
                 "page": page,
-                "limit": "10",
+                "limit": "20",
               };
               await controller.getAllUsers(data);
             },
@@ -60,10 +60,9 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
     };
     Future.delayed(
       Duration.zero,
-          () => controller.getAllUsers(data),
+      () => controller.getAllUsers(data),
     );
     searchController.value.text = "";
-
   }
 
   @override
@@ -86,129 +85,142 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
               };
               Future.delayed(
                 Duration.zero,
-                    () => controller.getAllUsers(data),
+                () => controller.getAllUsers(data),
               );
             },
             clear: getAllUsers,
           ),
         ),
         Expanded(
-          child: Obx(() =>
-          controller.allUsers.isNotEmpty
+          child: Obx(() => controller.allUsers.isNotEmpty
               ? RefreshIndicator(
-            child: ListView.builder(
-              itemCount: controller.allUsers.length,
-              controller: scrollController,
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.only(
-                  top: 0, bottom: 8, left: 8, right: 8),
-              itemBuilder: (context, index) =>
-                  ListTile(
-                    // onTap: () =>
-                    //     Get.to(() => const OneToOneChatScreen(),
-                    //         transition: Transition.rightToLeft),
-                    dense: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 1),
-                    leading: ClipOval(
-                      child: Image.network(
-                        '${controller.allUsers[index].profilePic}',
-                        height: 48,
-                        width: 48,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Image.asset(
-                              fishPlaceHolder,
-                              height: 48,
-                              width: 48,
-                              fit: BoxFit.cover,
-                            ),
+                  child: ListView.builder(
+                    itemCount: controller.allUsers.length,
+                    controller: scrollController,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.only(
+                        top: 0, bottom: 8, left: 8, right: 8),
+                    itemBuilder: (context, index) => ListTile(
+                      // onTap: () =>
+                      //     Get.to(() => const OneToOneChatScreen(),
+                      //         transition: Transition.rightToLeft),
+                      dense: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 1),
+                      leading: ClipOval(
+                        child: Image.network(
+                          '${controller.allUsers[index].profilePic}',
+                          height: 48,
+                          width: 48,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Image.asset(
+                            fishPlaceHolder,
+                            height: 48,
+                            width: 48,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      title: CustomText(
+                        text: '${controller.allUsers[index].name}',
+                        color: Colors.white,
+                      ),
+                      subtitle: CustomText(
+                        text: '${controller.allUsers[index].handle}',
+                        color: Colors.white,
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          /// When user deny your friend request Status = 4 Follow button will hide
+                          controller.allUsers[index].followingStatus == 4
+                              ? const SizedBox.shrink()
+                              : SizedBox(
+                                  height: 30,
+                                  child: TextButton(
+                                      onPressed: () async {
+                                        var data = {
+                                          "request_to":
+                                              controller.allUsers[index].id,
+                                          "request_status": (controller
+                                                          .allUsers[index]
+                                                          .followingStatus ==
+                                                      0 ||
+                                                  controller.allUsers[index]
+                                                          .followingStatus ==
+                                                      2)
+                                              ? 1
+                                              : 2
+                                        };
+                                        if (controller.allUsers[index]
+                                                .followingStatus !=
+                                            3) {
+                                          controller.sendRequest(data, 1);
+                                        }
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: fishColor,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8))),
+                                      child: Text(
+                                        (controller.allUsers[index]
+                                                        .followingStatus ==
+                                                    0 ||
+                                                controller.allUsers[index]
+                                                        .followingStatus ==
+                                                    2)
+                                            ? 'Follow'
+                                            : controller.allUsers[index]
+                                                        .followingStatus ==
+                                                    1
+                                                ? "Unfollow"
+                                                : "Following",
+                                        style: const TextStyle(
+                                            fontSize: 12,
+                                            color: primaryColor,
+                                            fontWeight: FontWeight.w600),
+                                      )),
+                                ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          SizedBox(
+                            height: 30,
+                            child: TextButton(
+                                onPressed: () => controller
+                                    .openChat(controller.allUsers[index]),
+                                style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        side: const BorderSide(
+                                            width: 1, color: Colors.white))),
+                                child: const Text(
+                                  'Chat',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600),
+                                )),
+                          ),
+                        ],
                       ),
                     ),
-                    title: CustomText(
-                      text: '${controller.allUsers[index].name}',
-                      color: Colors.white,
-                    ),
-                    subtitle: CustomText(
-                      text: '${controller.allUsers[index].handle}',
-                      color: Colors.white,
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        /// When user deny your friend request Status = 4 Follow button will hide
-                        controller.allUsers[index].followingStatus == 4
-                            ? const SizedBox.shrink()
-                            : SizedBox(
-                          height: 30,
-                          child: TextButton(
-                              onPressed: () async {
-                                var data = {
-                                  "request_to":  controller.allUsers[index].id,
-                                  "request_status": (controller
-                                      .allUsers[index].followingStatus == 0 || controller
-                                      .allUsers[index].followingStatus==2)
-                                      ? 1
-                                      : 2
-                                };
-                                if (controller.allUsers[index]
-                                    .followingStatus != 3) {
-                                  controller.sendRequest(data,1);
-                                }
-                              },
-                              style: TextButton.styleFrom(
-                                  backgroundColor: fishColor,
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(8))),
-                              child: Text(
-                                (controller.allUsers[index].followingStatus == 0 || controller.allUsers[index].followingStatus==2)
-                                    ? 'Follow'
-                                    : controller.allUsers[index].followingStatus == 1 ? "Unfollow" : "Following" ,
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    color: primaryColor,
-                                    fontWeight: FontWeight.w600),
-                              )),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        SizedBox(
-                          height: 30,
-                          child: TextButton(
-                              onPressed: () =>
-                                  controller
-                                      .openChat(controller.allUsers[index]),
-                              style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      side: const BorderSide(
-                                          width: 1, color: Colors.white))),
-                              child: const Text(
-                                'Chat',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600),
-                              )),
-                        ),
-                      ],
-                    ),
                   ),
-            ),
-            onRefresh: () async {
-              getAllUsers();
-            },
-          )
+                  onRefresh: () async {
+                    getAllUsers();
+                  },
+                )
               : const Center(
-            child: Text(
-              "No Record Found!",
-              style: TextStyle(color: secondaryColor),
-            ),
-          )),
+                  child: Text(
+                    "No Record Found!",
+                    style: TextStyle(color: secondaryColor),
+                  ),
+                )),
         ),
       ],
     );

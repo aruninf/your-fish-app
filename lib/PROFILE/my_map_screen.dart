@@ -42,8 +42,8 @@ class MyProfileMapWidget extends StatelessWidget {
                 mapType: MapType.normal,
                 markers: Set<Marker>.of(mapController.markers),
                 initialCameraPosition: mapController.initialCameraPosition.value,
-                onMapCreated: (GoogleMapController controller) {
-                  mapController.googleMapController.complete(controller);
+                onMapCreated: (GoogleMapController controller) async {
+                 mapController.googleMapController.complete(controller);
                 },
               )),
             ),
