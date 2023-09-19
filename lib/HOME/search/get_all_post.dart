@@ -8,6 +8,7 @@ import 'package:yourfish/UTILS/app_images.dart';
 import '../../CONTROLLERS/post_controller.dart';
 import '../../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../../CUSTOM_WIDGETS/custom_search_field.dart';
+import '../../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../../PROFILE/post_detail_screen.dart';
 import '../home/empty_post_widget.dart';
 
@@ -127,12 +128,10 @@ class _AllPostWidgetState extends State<AllPostWidget> {
                             width: Get.width * 0.32,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
-                                Image.asset(
-                              fishingImage,
-                              height: Get.width * 0.32,
-                              width: Get.width * 0.32,
-                              fit: BoxFit.cover,
-                            ),
+                                ImagePlaceHolderWidget(
+                                  height: Get.width * 0.32,
+                                  width: Get.width * 0.32,
+                                ),
                           )),
                     ),
                   ),
@@ -142,3 +141,5 @@ class _AllPostWidgetState extends State<AllPostWidget> {
     );
   }
 }
+
+

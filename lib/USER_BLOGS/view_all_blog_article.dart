@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/setting_controller.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_search_field.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import 'package:yourfish/USER_BLOGS/blog_detail_screen.dart';
 
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
@@ -16,7 +17,8 @@ class ViewAllScreen extends StatefulWidget {
   State<ViewAllScreen> createState() => _ViewAllScreenState();
 }
 
-class _ViewAllScreenState extends State<ViewAllScreen>  with SingleTickerProviderStateMixin {
+class _ViewAllScreenState extends State<ViewAllScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -42,11 +44,11 @@ class _ViewAllScreenState extends State<ViewAllScreen>  with SingleTickerProvide
     };
     Future.delayed(
       Duration.zero,
-          () => controller.getBlogs(data),
+      () => controller.getBlogs(data),
     );
     Future.delayed(
       Duration.zero,
-          () => controller.getArticles(data),
+      () => controller.getArticles(data),
     );
   }
 
@@ -55,14 +57,15 @@ class _ViewAllScreenState extends State<ViewAllScreen>  with SingleTickerProvide
     callApi();
     return Scaffold(
       backgroundColor: primaryColor,
-
       body: SafeArea(
         child: Column(
           children: [
             const CustomAppBar(
               textColor: secondaryColor,
             ),
-            const SizedBox(height: 6,),
+            const SizedBox(
+              height: 6,
+            ),
             Container(
               height: 40,
               decoration: BoxDecoration(
@@ -81,25 +84,22 @@ class _ViewAllScreenState extends State<ViewAllScreen>  with SingleTickerProvide
                 ),
                 labelColor: primaryColor,
                 unselectedLabelColor: Colors.white70,
-
                 isScrollable: true,
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorPadding: EdgeInsets.zero,
                 labelPadding: EdgeInsets.zero,
                 indicatorColor: Colors.transparent,
                 dividerColor: Colors.transparent,
-                labelStyle: const TextStyle(
-                  fontWeight: FontWeight.w700
-                ),
-                tabs:  [
+                labelStyle: const TextStyle(fontWeight: FontWeight.w700),
+                tabs: [
                   SizedBox(
-                    width: Get.width*0.45,
+                    width: Get.width * 0.45,
                     child: const Tab(
                       text: 'Articles',
                     ),
                   ),
                   SizedBox(
-                    width: Get.width*0.45,
+                    width: Get.width * 0.45,
                     child: const Tab(
                       text: 'Blogs',
                     ),
@@ -107,7 +107,6 @@ class _ViewAllScreenState extends State<ViewAllScreen>  with SingleTickerProvide
                 ],
               ),
             ),
-
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -115,22 +114,36 @@ class _ViewAllScreenState extends State<ViewAllScreen>  with SingleTickerProvide
                   ListView.builder(
                     itemCount: controller.articleData.length,
                     physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(top: 8,bottom: 8,left: 8,right: 8),
+                    padding: const EdgeInsets.only(
+                        top: 8, bottom: 8, left: 8, right: 8),
                     itemBuilder: (context, index) => ListTile(
-                      onTap: ()=> Get.to(()=> ArticlesDetailScreen(articleData: controller.articleData[index]),
+                      onTap: () => Get.to(
+                          () => ArticlesDetailScreen(
+                              articleData: controller.articleData[index]),
                           transition: Transition.rightToLeft),
                       dense: true,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 1),
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                       child: Image.network('${controller.articleData[index].image}',height: 55,width: 55,fit: BoxFit.cover,),
+                        child: Image.network(
+                          '${controller.articleData[index].image}',
+                          height: 55,
+                          width: 55,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const ImagePlaceHolderWidget(
+                            height: 55,
+                            width: 55,
+                          ),
+                        ),
                       ),
-                      title:  CustomText(
+                      title: CustomText(
                         text: '${controller.articleData[index].title}',
                         color: secondaryColor,
                         sizeOfFont: 16,
                       ),
-                      subtitle:  CustomText(
+                      subtitle: CustomText(
                         text: '${controller.articleData[index].article}',
                         color: btnColor,
                         maxLin: 3,
@@ -140,31 +153,45 @@ class _ViewAllScreenState extends State<ViewAllScreen>  with SingleTickerProvide
                   ListView.builder(
                     itemCount: controller.blogData.length,
                     physics: const BouncingScrollPhysics(),
-                    padding:
-                    const EdgeInsets.only(top: 8,bottom: 8,left: 8,right: 8),
+                    padding: const EdgeInsets.only(
+                        top: 8, bottom: 8, left: 8, right: 8),
                     itemBuilder: (context, index) => ListTile(
-                      onTap: ()=> Get.to(()=> BlogDetailScreen(blogData: controller.blogData[index]),
+                      onTap: () => Get.to(
+                          () => BlogDetailScreen(
+                              blogData: controller.blogData[index]),
                           transition: Transition.rightToLeft),
                       dense: true,
-                      contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.network('${controller.blogData[index].image}',height: 55,width: 55,fit: BoxFit.cover,),
+                        child: Image.network(
+                          '${controller.blogData[index].image}',
+                          height: 55,
+                          width: 55,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                          const ImagePlaceHolderWidget(
+                            height: 55,
+                            width: 55,
+                          ),
+                        ),
                       ),
-                      title:  CustomText(
-                        text: controller.blogData[index].heading ??'',
+                      title: CustomText(
+                        text: controller.blogData[index].heading ?? '',
                         color: secondaryColor,
                         sizeOfFont: 16,
                       ),
-                      subtitle: CustomText(text: controller.blogData[index].description ?? '',color: btnColor,maxLin: 3,),
-
+                      subtitle: CustomText(
+                        text: controller.blogData[index].description ?? '',
+                        color: btnColor,
+                        maxLin: 3,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-
           ],
         ),
       ),

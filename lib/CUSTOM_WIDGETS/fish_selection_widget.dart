@@ -3,6 +3,8 @@ import 'package:yourfish/UTILS/app_images.dart';
 import '../MODELS/fish_response.dart';
 import '../UTILS/app_color.dart';
 import 'package:get/get.dart';
+
+import 'image_place_holder_widget.dart';
 class FishItemSelectWidget extends StatelessWidget {
   const FishItemSelectWidget({super.key,required this.fishData,required this.selectedFishInterest});
 
@@ -40,10 +42,8 @@ class FishItemSelectWidget extends StatelessWidget {
                   height: Get.width * 0.25,
                   fit: BoxFit.cover,
                   width: double.infinity,
-                  errorBuilder: (context, error, stackTrace) => Image.asset(
-                    fishPlaceHolder,
+                  errorBuilder: (context, error, stackTrace) => ImagePlaceHolderWidget(
                     height: Get.width * 0.25,
-                    fit: BoxFit.cover,
                     width: double.infinity,
                   ),
                 )),

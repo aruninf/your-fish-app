@@ -6,6 +6,7 @@ import 'package:yourfish/UTILS/consts.dart';
 
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
+import '../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../UTILS/app_color.dart';
 
 class MyFutureFishWidget extends StatelessWidget {
@@ -54,10 +55,8 @@ class MyFutureFishWidget extends StatelessWidget {
                         height: Get.width * 0.25,
                         fit: BoxFit.cover,
                         width: double.infinity,
-                        errorBuilder: (context, error, stackTrace) => Image.asset(
-                          fishingImage,
+                        errorBuilder: (context, error, stackTrace) => ImagePlaceHolderWidget(
                           height: Get.width * 0.25,
-                          fit: BoxFit.cover,
                           width: double.infinity,
                         ),
                       )),

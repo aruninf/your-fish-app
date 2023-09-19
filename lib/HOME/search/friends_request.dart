@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/image_place_holder_widget.dart';
 
 import '../../CONTROLLERS/user_controller.dart';
 import '../../CUSTOM_WIDGETS/custom_app_bar.dart';
@@ -61,11 +62,9 @@ class FriendRequestScreen extends StatelessWidget {
                       width: 48,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
-                          Image.asset(
-                            fishPlaceHolder,
+                          const ImagePlaceHolderWidget(
                             height: 48,
                             width: 48,
-                            fit: BoxFit.cover,
                           ),
                     ),
                   ),

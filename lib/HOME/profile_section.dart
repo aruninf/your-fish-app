@@ -8,6 +8,7 @@ import 'package:yourfish/PROFILE/edit_profile_screen.dart';
 
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
+import '../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../PROFILE/my_future_fish.dart';
 import '../PROFILE/my_map_screen.dart';
 import '../UTILS/app_color.dart';
@@ -47,16 +48,12 @@ class ProfileSection extends StatelessWidget {
                               height: 50,
                               width: 50,
                               errorBuilder: (context, error, stackTrace) =>
-                                  Image.asset(
-                                'images/chat_image2.png',
-                                fit: BoxFit.cover,
+                                  const ImagePlaceHolderWidget(
                                 height: 50,
                                 width: 50,
                               ),
                             )
-                          : Image.asset(
-                              'images/chat_image2.png',
-                              fit: BoxFit.cover,
+                          : const ImagePlaceHolderWidget(
                               height: 50,
                               width: 50,
                             ),
@@ -102,148 +99,176 @@ class ProfileSection extends StatelessWidget {
                   ),
                 ),
                 controller.selectedIndex.value == 'My Posts'
-                    ? userController.allUsers.isNotEmpty ? const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                        child: Text(
-                          'Suggested Friends',
-                          style: TextStyle(
-                              color: secondaryColor,
-                              fontFamily: "Rodetta",
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ) : const SizedBox.shrink()
+                    ? userController.allUsers.isNotEmpty
+                        ? const Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 4),
+                            child: Text(
+                              'Suggested Friends',
+                              style: TextStyle(
+                                  color: secondaryColor,
+                                  fontFamily: "Rodetta",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          )
+                        : const SizedBox.shrink()
                     : const SizedBox.shrink(),
                 const SizedBox(
                   height: 8,
                 ),
                 controller.selectedIndex.value == 'My Posts'
-                    ? userController.allUsers.isNotEmpty ? SizedBox(
-                        height: Get.height * 0.14,
-                        width: double.infinity,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: List.generate(
-                              userController.allUsers.length,
-                              (index) => Container(
-                                    alignment: Alignment.center,
-                                    margin: const EdgeInsets.only(left: 12),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 8),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                            width: 0.67, color: Colors.white)),
-                                    child: Column(
-                                      children: [
-                                        ClipOval(
-                                          child: Image.network(
-                                            userController.allUsers[index]
-                                                    .profilePic ??
-                                                "",
-                                            height: 40,
-                                            width: 40,
-                                            fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) =>
-                                                    Image.asset(
-                                              'images/chat_image3.png',
-                                              height: 40,
-                                              width: 40,
-                                              fit: BoxFit.cover,
+                    ? userController.allUsers.isNotEmpty
+                        ? SizedBox(
+                            height: Get.height * 0.14,
+                            width: double.infinity,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: List.generate(
+                                  userController.allUsers.length,
+                                  (index) => Container(
+                                        alignment: Alignment.center,
+                                        margin: const EdgeInsets.only(left: 12),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 8),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                                width: 0.67,
+                                                color: Colors.white)),
+                                        child: Column(
+                                          children: [
+                                            ClipOval(
+                                              child: Image.network(
+                                                userController.allUsers[index]
+                                                        .profilePic ??
+                                                    "",
+                                                height: 40,
+                                                width: 40,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
+                                                    const ImagePlaceHolderWidget(
+                                                  height: 40,
+                                                  width: 40,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        SizedBox(
-                                          width: 60,
-                                          child: Text(
-                                            userController
-                                                    .allUsers[index].name ??
-                                                "",
-                                            textAlign: TextAlign.center,
-                                            maxLines: 1,
-                                            style: const TextStyle(color: btnColor,fontWeight: FontWeight.w800,fontSize: 12),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 6,
-                                        ),
-                                        SizedBox(
-                                          height: 28,
-                                          child: TextButton(
-                                              onPressed: ()async  {
-                                                var data = {
-                                                  "request_to":  userController.allUsers[index].id,
-                                                  "request_status": (userController
-                                                      .allUsers[index].followingStatus == 0 || userController
-                                                      .allUsers[index].followingStatus==2)
-                                                      ? 1
-                                                      : 2
-                                                };
-                                                if (userController.allUsers[index]
-                                                    .followingStatus != 3) {
-                                                  userController.sendRequest(data,1);
-                                                }
-                                              },
-                                              style: TextButton.styleFrom(
-                                                  backgroundColor: fishColor,
-                                                  padding: EdgeInsets.zero,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8))),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            SizedBox(
+                                              width: 60,
                                               child: Text(
-                                                (userController.allUsers[index]
-                                                                .followingStatus ==
-                                                            0 ||
-                                                        userController
-                                                                .allUsers[index]
-                                                                .followingStatus ==
-                                                            2)
-                                                    ? 'Follow'
-                                                    : userController
-                                                                .allUsers[index]
-                                                                .followingStatus ==
-                                                            1
-                                                        ? "Unfollow"
-                                                        : "Following",
+                                                userController
+                                                        .allUsers[index].name ??
+                                                    "",
+                                                textAlign: TextAlign.center,
+                                                maxLines: 1,
                                                 style: const TextStyle(
-                                                    fontSize: 10,
-                                                    color: primaryColor,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              )),
+                                                    color: btnColor,
+                                                    fontWeight: FontWeight.w800,
+                                                    fontSize: 12),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 6,
+                                            ),
+                                            SizedBox(
+                                              height: 28,
+                                              child: TextButton(
+                                                  onPressed: () async {
+                                                    var data = {
+                                                      "request_to":
+                                                          userController
+                                                              .allUsers[index]
+                                                              .id,
+                                                      "request_status": (userController
+                                                                      .allUsers[
+                                                                          index]
+                                                                      .followingStatus ==
+                                                                  0 ||
+                                                              userController
+                                                                      .allUsers[
+                                                                          index]
+                                                                      .followingStatus ==
+                                                                  2)
+                                                          ? 1
+                                                          : 2
+                                                    };
+                                                    if (userController
+                                                            .allUsers[index]
+                                                            .followingStatus !=
+                                                        3) {
+                                                      userController
+                                                          .sendRequest(data, 1);
+                                                    }
+                                                  },
+                                                  style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          fishColor,
+                                                      padding: EdgeInsets.zero,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8))),
+                                                  child: Text(
+                                                    (userController
+                                                                    .allUsers[
+                                                                        index]
+                                                                    .followingStatus ==
+                                                                0 ||
+                                                            userController
+                                                                    .allUsers[
+                                                                        index]
+                                                                    .followingStatus ==
+                                                                2)
+                                                        ? 'Follow'
+                                                        : userController
+                                                                    .allUsers[
+                                                                        index]
+                                                                    .followingStatus ==
+                                                                1
+                                                            ? "Unfollow"
+                                                            : "Following",
+                                                    style: const TextStyle(
+                                                        fontSize: 10,
+                                                        color: primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w800),
+                                                  )),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  )),
-                        ),
-                      ):const SizedBox.shrink()
+                                      )),
+                            ),
+                          )
+                        : const SizedBox.shrink()
                     : const SizedBox.shrink(),
                 const SizedBox(
                   height: 8,
                 ),
                 SizedBox(
-                  height: Get.height*0.05,
+                  height: Get.height * 0.05,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: List.generate(
                         controller.listOfProfileSection.length,
                         (index) => Container(
                               alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(horizontal: 16,vertical: 4),
-                              margin: const EdgeInsets.only(left: 12,bottom: 3),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 4),
+                              margin:
+                                  const EdgeInsets.only(left: 12, bottom: 3),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
-                                color:
-                                    controller.listOfProfileSection[index] ==
-                                            controller.selectedIndex.value
-                                        ? secondaryColor
-                                        : btnColor,
+                                color: controller.listOfProfileSection[index] ==
+                                        controller.selectedIndex.value
+                                    ? secondaryColor
+                                    : btnColor,
                               ),
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(16),
@@ -252,8 +277,7 @@ class ProfileSection extends StatelessWidget {
                                       controller.listOfProfileSection[index];
                                 },
                                 child: CustomText(
-                                  text: controller
-                                      .listOfProfileSection[index],
+                                  text: controller.listOfProfileSection[index],
                                   weight: FontWeight.w700,
                                   sizeOfFont: 13,
                                 ),

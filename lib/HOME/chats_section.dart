@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CHATS/chat_model.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
+import 'package:yourfish/UTILS/app_images.dart';
 
 import '../CHATS/single_chat_page.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
@@ -22,11 +23,38 @@ class _ChatsSectionState extends State<ChatsSection>
 
   final controller = Get.find<PostController>();
 
+  final scrollController = ScrollController();
+  var page = 1;
+  var searchController = TextEditingController();
+
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
+
+    scrollController.addListener(() {
+      if ((scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent)) {
+        setState(() {
+          page += 1;
+          //add api for load the more data according to new page
+          getChats();
+        });
+      }
+    });
     super.initState();
   }
+
+  void getChats()async {
+    page=1;
+    var data = {
+      "sortBy": "desc",
+      "sortOn": "id",
+      "page": page,
+      "limit": "20"
+    };
+    Future.delayed(Duration.zero, () => controller.getChatsUser(data),);
+  }
+
 
   @override
   void dispose() {
@@ -63,9 +91,23 @@ class _ChatsSectionState extends State<ChatsSection>
             const SizedBox(
               height: 8,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-              child: CustomSearchField(hintText: 'Search'),
+             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+              child: CustomSearchField(hintText: 'Search',
+                controller: searchController,
+
+                onChanges: (p0) {
+                  var data = {
+                    "sortBy": "desc",
+                    "sortOn": "id",
+                    "page": 1,
+                    "limit": "20",
+                    "filter":p0
+                  };
+                  Future.delayed(Duration.zero, () => controller.getChatsUser(data),);
+                },
+
+              ),
             ),
             Expanded(
               child: Obx(() => controller.isLoading.value
@@ -88,7 +130,7 @@ class _ChatsSectionState extends State<ChatsSection>
                                 horizontal: 8, vertical: 1),
                             leading: ClipOval(
                               child: Image.asset(
-                                chatsList1[index].profileImage ?? '',
+                                fishPlaceHolder,
                                 height: 45,
                                 width: 45,
                                 fit: BoxFit.cover,

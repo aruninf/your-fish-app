@@ -5,6 +5,7 @@ import 'package:yourfish/PROFILE/post_detail_screen.dart';
 
 import '../../CONTROLLERS/post_controller.dart';
 import '../../CUSTOM_WIDGETS/custom_text_style.dart';
+import '../../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../../MODELS/post_response.dart';
 import '../../UTILS/app_color.dart';
 import '../../UTILS/app_images.dart';
@@ -78,11 +79,10 @@ class SingleFishPostWidget extends StatelessWidget {
                   width: double.infinity,
                   height: Get.height * 0.4,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Image.asset(
-                    fishingImage,
+                  errorBuilder: (context, error, stackTrace) => ImagePlaceHolderWidget(
                     width: double.infinity,
                     height: Get.height * 0.4,
-                    fit: BoxFit.cover,
+
                   ),
                 )),
             Obx(() => Row(

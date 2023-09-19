@@ -49,6 +49,7 @@ const String getMyPostApi="get-my-post";
 const String logoutApi="logout";
 const String deleteAccountApi="delete-account";
 const String getContentApi="get-combined-data";
+const String getTopSpotsApi="get-top-spots";
 
 const String sendRequestApi="request";
 const String getFriendRequestsListApi="request-list";

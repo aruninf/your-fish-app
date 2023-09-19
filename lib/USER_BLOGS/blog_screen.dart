@@ -7,6 +7,7 @@ import 'package:yourfish/USER_BLOGS/view_all_blog_article.dart';
 
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
+import '../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../UTILS/app_color.dart';
 import 'article_detail_screen.dart';
 
@@ -64,8 +65,8 @@ class BlogsScreen extends StatelessWidget {
                         ),
                         const Spacer(),
                         TextButton(
-                            onPressed: () => Get.to(()=>const ViewAllScreen()),
-
+                            onPressed: () =>
+                                Get.to(() => const ViewAllScreen()),
                             child: const Text(
                               "View All",
                               style: TextStyle(
@@ -110,10 +111,8 @@ class BlogsScreen extends StatelessWidget {
                                           width: double.infinity,
                                           errorBuilder:
                                               (context, error, stackTrace) =>
-                                                  Image.asset(
-                                            'images/red_fish.png',
+                                                  ImagePlaceHolderWidget(
                                             height: Get.width * 0.33,
-                                            fit: BoxFit.fill,
                                             width: double.infinity,
                                           ),
                                         )),
@@ -147,7 +146,8 @@ class BlogsScreen extends StatelessWidget {
                         ),
                         const Spacer(),
                         TextButton(
-                            onPressed: () => Get.to(()=>const ViewAllScreen()),
+                            onPressed: () =>
+                                Get.to(() => const ViewAllScreen()),
                             child: const Text(
                               "View All",
                               style: TextStyle(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../CONTROLLERS/post_controller.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
+import '../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../MODELS/post_response.dart';
 import '../UTILS/app_color.dart';
 import '../UTILS/app_images.dart';
@@ -14,6 +15,7 @@ class PostDetailScreen extends StatelessWidget {
 
   final PostData postModel;
   final controller = Get.find<PostController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,11 +85,9 @@ class PostDetailScreen extends StatelessWidget {
                         height: Get.height * 0.4,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) =>
-                            Image.asset(
-                          fishingImage,
+                            ImagePlaceHolderWidget(
                           width: double.infinity,
                           height: Get.height * 0.4,
-                          fit: BoxFit.cover,
                         ),
                       )),
                   Obx(() => Row(
@@ -96,19 +96,20 @@ class PostDetailScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                             onTap: () => controller.addLiked(postModel),
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                controller.isLiked.value
-                                    ? PhosphorIcons.thumbs_up_fill
-                                    : PhosphorIcons.thumbs_up,
-                                color: controller.isLiked.value
-                                    ? fishColor
-                                    : Colors.white,)
-                            ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  controller.isLiked.value
+                                      ? PhosphorIcons.thumbs_up_fill
+                                      : PhosphorIcons.thumbs_up,
+                                  color: controller.isLiked.value
+                                      ? fishColor
+                                      : Colors.white,
+                                )),
                           ),
                           InkWell(
                             borderRadius: BorderRadius.circular(8),
-                            onTap: () => controller.openChat("${postModel.userId}"),
+                            onTap: () =>
+                                controller.openChat("${postModel.userId}"),
                             child: const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Icon(
@@ -146,33 +147,30 @@ class PostDetailScreen extends StatelessWidget {
                           ),
                         ],
                       )),
-
                   Wrap(
                       children: List.generate(
-                        (postModel.tagFish ?? []).length,
-                            (index) => Container(
-                          margin: const EdgeInsets.only(right: 8, bottom: 8),
-                          decoration: BoxDecoration(
-                              color: Colors.white24,
-                              borderRadius: BorderRadius.circular(16)),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4),
-                          child: CustomText(
-                            text: "#${(postModel.tagFish ?? [])[index].localName}",
-                            weight: FontWeight.w700,
-                            sizeOfFont: 13,
-                            color: secondaryColor,
-                          ),
-                        ),
-                      )),
+                    (postModel.tagFish ?? []).length,
+                    (index) => Container(
+                      margin: const EdgeInsets.only(right: 8, bottom: 8),
+                      decoration: BoxDecoration(
+                          color: Colors.white24,
+                          borderRadius: BorderRadius.circular(16)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
+                      child: CustomText(
+                        text: "#${(postModel.tagFish ?? [])[index].localName}",
+                        weight: FontWeight.w700,
+                        sizeOfFont: 13,
+                        color: secondaryColor,
+                      ),
+                    ),
+                  )),
                   CustomText(
                     text: postModel.caption ?? '',
                     weight: FontWeight.w600,
                     sizeOfFont: 14,
                     color: Colors.white,
                   ),
-
-
                 ],
               ),
             )

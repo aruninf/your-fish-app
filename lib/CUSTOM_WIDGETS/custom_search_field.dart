@@ -7,12 +7,13 @@ class CustomSearchField extends StatelessWidget {
   const CustomSearchField({
     super.key,
     this.controller,
-    required this.hintText, this.onChanges, this.clear,this.isClearIcon
+    required this.hintText, this.onChanges, this.clear,this.isClearIcon, this.onEditingComplete
   });
 
   final TextEditingController? controller;
   final String hintText;
   final Function(String)? onChanges;
+  final Function()? onEditingComplete;
   final VoidCallback? clear;
   final bool? isClearIcon;
 
@@ -40,7 +41,8 @@ class CustomSearchField extends StatelessWidget {
           textInputAction: TextInputAction.search,
           controller: controller,
           onFieldSubmitted: onChanges,
-
+          //onEditingComplete: onEditingComplete,
+          //onChanged: onChanges,
           style: const TextStyle(
               fontWeight: FontWeight.w500, fontSize: 13),
           decoration: InputDecoration(

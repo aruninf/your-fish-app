@@ -107,33 +107,33 @@ class AuthController extends GetxController {
   ///💥💥💥💥💥💥💥💥💥💥💥 Sign In With FaceBook 💥💥💥💥💥💥💥💥💥💥💥💥💥
 
   Future<void> signInWithFaceBook() async {
-    // try {
-    //   final LoginResult result = await FacebookAuth.instance.login();
-    //   if (result.status == LoginStatus.success) {
-    //     // you are logged in, get the access token.
-    //     final AccessToken accessToken = result.accessToken!;
-    //
-    //     // sign into Firebase Auth
-    //     final userCredential = await FirebaseAuth.instance.signInWithCredential(
-    //         FacebookAuthProvider.credential(accessToken.token));
-    //     userSocialLogin(userCredential.user, 'facebook');
-    //   }
-    //   if (result.status == LoginStatus.cancelled) {
-    //     print('Login cancelled');
-    //     Get.snackbar('Error!', 'Login cancelled',
-    //         colorText: Colors.orange, snackPosition: SnackPosition.TOP);
-    //   }
-    //   if (result.status == LoginStatus.failed) {
-    //     print('💥 Login failed!');
-    //     print(result.message);
-    //     Get.snackbar('Error!', 'Login Failed',
-    //         colorText: Colors.orange, snackPosition: SnackPosition.TOP);
-    //   }
-    // } catch (err) {
-    //   print(err.toString());
-    //   Get.snackbar('Error!', err.toString(),
-    //       colorText: Colors.orange, snackPosition: SnackPosition.TOP);
-    // }
+    try {
+      final LoginResult result = await FacebookAuth.instance.login(permissions: ["email","public_profile"]);
+      if (result.status == LoginStatus.success) {
+        // you are logged in, get the access token.
+        final AccessToken accessToken = result.accessToken!;
+
+        // sign into Firebase Auth
+        final userCredential = await FirebaseAuth.instance.signInWithCredential(
+            FacebookAuthProvider.credential(accessToken.token));
+        userSocialLogin(userCredential.user, 'facebook');
+      }
+      if (result.status == LoginStatus.cancelled) {
+        print('Login cancelled');
+        Get.snackbar('Error!', 'Login cancelled',
+            colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+      }
+      if (result.status == LoginStatus.failed) {
+        print('💥 Login failed!');
+        print(result.message);
+        Get.snackbar('Error!', 'Login Failed',
+            colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+      }
+    } catch (err) {
+      print(err.toString());
+      Get.snackbar('Error!', err.toString(),
+          colorText: Colors.orange, snackPosition: SnackPosition.TOP);
+    }
     Get.snackbar('Error!', 'Login Failed',
         colorText: Colors.orange, snackPosition: SnackPosition.TOP);
   }

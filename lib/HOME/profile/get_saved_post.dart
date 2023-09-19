@@ -9,6 +9,7 @@ import 'package:yourfish/UTILS/app_images.dart';
 
 import '../../CONTROLLERS/post_controller.dart';
 import '../../CUSTOM_WIDGETS/custom_app_bar.dart';
+import '../../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../../PROFILE/post_detail_screen.dart';
 
 class SavedPostWidget extends StatelessWidget {
@@ -77,11 +78,9 @@ class SavedPostWidget extends StatelessWidget {
                                       fit: BoxFit.cover,
                                       errorBuilder:
                                           (context, error, stackTrace) =>
-                                              Image.asset(
-                                        fishingImage,
+                                              ImagePlaceHolderWidget(
                                         height: Get.width * 0.32,
                                         width: Get.width * 0.32,
-                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ],

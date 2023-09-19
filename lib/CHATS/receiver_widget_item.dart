@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:yourfish/UTILS/app_color.dart';
 import 'package:yourfish/UTILS/consts.dart';
 
+import '../CUSTOM_WIDGETS/image_place_holder_widget.dart';
+import '../UTILS/app_images.dart';
 import 'chat_model.dart';
 
 class ReceiverWidgetItem extends StatelessWidget {
@@ -28,9 +30,8 @@ class ReceiverWidgetItem extends StatelessWidget {
                       bottomLeft: Radius.circular(0),
                       bottomRight: Radius.circular(8),
                     )),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                margin: const EdgeInsets.only(left: 5.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 6.0, vertical: 3.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -44,8 +45,17 @@ class ReceiverWidgetItem extends StatelessWidget {
                             image: NetworkImage(
                               chatModel.message ?? '',
                             ),
-                            placeholder: const AssetImage(
-                                "images/fishing_rod.png"),
+                              placeholder: const AssetImage(
+                                  fishPlaceHolder),
+                              imageErrorBuilder:
+                                  (context, error, stackTrace) {
+                                return Image.asset(
+                                  fishPlaceHolder,
+                                  fit: BoxFit.cover,
+                                  height: 250,
+                                  width: double.infinity,
+                                );
+                              }
                           ),
                         )
                         : Column(

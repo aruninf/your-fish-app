@@ -12,9 +12,20 @@ class MyProfileMapWidget extends StatelessWidget {
   MyProfileMapWidget({super.key, this.isTopSpots});
 
   final bool? isTopSpots;
-  final mapController=Get.put(MapController());
+  final mapController = Get.put(MapController());
+
+  void getTopSpots() async {
+    Future.delayed(
+      Duration.zero,
+      () {
+        mapController.getTopSpots({"type": (isTopSpots ?? false) ? 1 : 2});
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    getTopSpots();
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
@@ -36,22 +47,21 @@ class MyProfileMapWidget extends StatelessWidget {
                 : const SizedBox.shrink(),
             Expanded(
               child: Obx(() => GoogleMap(
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                mapToolbarEnabled: true,
-                mapType: MapType.normal,
-                markers: Set<Marker>.of(mapController.markers),
-                initialCameraPosition: mapController.initialCameraPosition.value,
-                onMapCreated: (GoogleMapController controller) async {
-                 mapController.googleMapController.complete(controller);
-                },
-              )),
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    mapToolbarEnabled: true,
+                    mapType: MapType.normal,
+                    markers: Set<Marker>.of(mapController.markers),
+                    initialCameraPosition:
+                        mapController.initialCameraPosition.value,
+                    onMapCreated: (GoogleMapController controller) async {
+                      mapController.googleMapController.complete(controller);
+                    },
+                  )),
             ),
           ],
         ),
       ),
     );
   }
-
-
 }

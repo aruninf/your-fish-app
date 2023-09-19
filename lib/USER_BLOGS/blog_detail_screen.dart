@@ -4,6 +4,7 @@ import 'package:yourfish/MODELS/blog_response.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 import 'package:yourfish/UTILS/app_strings.dart';
 
+import '../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../UTILS/app_color.dart';
 
 
@@ -88,11 +89,9 @@ class BlogDetailScreen extends StatelessWidget {
                           height: Get.height * 0.12,
                           width: Get.width * 0.45,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Image.asset(
-                            fishingImage,
+                          errorBuilder: (context, error, stackTrace) => ImagePlaceHolderWidget(
                             height: Get.height * 0.12,
                             width: Get.width * 0.45,
-                            fit: BoxFit.cover,
                           ),
                         ),
                       ),

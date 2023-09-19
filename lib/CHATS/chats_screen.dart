@@ -8,6 +8,7 @@ import 'package:yourfish/UTILS/consts.dart';
 import '../CONTROLLERS/post_controller.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
+import '../UTILS/app_images.dart';
 import 'chat_model.dart';
 import 'one_to_one_chat_screen.dart';
 
@@ -106,7 +107,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
                   const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
                   leading: ClipOval(
                     child: Image.asset(
-                      chatsList1[index].profileImage ?? '',
+                      fishPlaceHolder,
                       height: 45,
                       width: 45,
                       fit: BoxFit.cover,

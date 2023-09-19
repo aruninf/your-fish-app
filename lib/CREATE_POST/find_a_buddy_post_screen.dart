@@ -294,6 +294,8 @@ class FindABuddyPostScreen extends StatelessWidget {
                 "address": (controller.userData.value.address ?? '').isNotEmpty
                     ? controller.userData.value.address
                     : controller.currentAddress.value,
+                "zip_code":controller.addressPinCode.value,
+
                 "tag_fish": userController.selectedFishTag
                     .map((element) => element.id)
                     .toList(),

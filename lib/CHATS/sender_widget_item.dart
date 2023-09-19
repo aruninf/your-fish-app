@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:yourfish/UTILS/app_color.dart';
+import 'package:yourfish/UTILS/app_images.dart';
 import 'package:yourfish/UTILS/consts.dart';
 
 import 'chat_model.dart';
@@ -35,7 +36,7 @@ class SenderWidgetItem extends StatelessWidget {
                         bottomRight: Radius.circular(0),
                       )),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 6.0),
+                      horizontal: 6.0, vertical: 3.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
@@ -48,11 +49,11 @@ class SenderWidgetItem extends StatelessWidget {
                                   width: double.infinity,
                                   image: NetworkImage(chatModel.message ?? ''),
                                   placeholder: const AssetImage(
-                                      "images/fishing_rod.png"),
+                                      fishPlaceHolder),
                                   imageErrorBuilder:
                                       (context, error, stackTrace) {
                                     return Image.asset(
-                                      "images/fishing_rod.png",
+                                      fishPlaceHolder,
                                       fit: BoxFit.cover,
                                       height: 250,
                                       width: double.infinity,

@@ -25,6 +25,7 @@ class PostController extends GetxController {
   final myPostData = <PostData>[].obs;
   final userData = LoginData().obs;
   final currentAddress = ''.obs;
+  final addressPinCode = ''.obs;
   final isLiked = false.obs;
   final isFav = false.obs;
 
@@ -248,6 +249,7 @@ class PostController extends GetxController {
       Placemark place = placemarks[0];
       currentAddress.value =
           '${place.subLocality}, ${place.subAdministrativeArea}';
+      addressPinCode.value = place.postalCode ?? "";
     }).catchError((e) {
       debugPrint(e);
     });

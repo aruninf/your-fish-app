@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/image_place_holder_widget.dart';
 
 import '../../CHATS/one_to_one_chat_screen.dart';
 import '../../CONTROLLERS/user_controller.dart';
@@ -114,11 +115,9 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
                           width: 48,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
-                              Image.asset(
-                            fishPlaceHolder,
+                              const ImagePlaceHolderWidget(
                             height: 48,
                             width: 48,
-                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
