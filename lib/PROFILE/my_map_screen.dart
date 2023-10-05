@@ -18,6 +18,7 @@ class MyProfileMapWidget extends StatelessWidget {
     Future.delayed(
       Duration.zero,
       () {
+        /// type for top spots my and all 1 for all and 2 for me
         mapController.getTopSpots({"type": (isTopSpots ?? false) ? 1 : 2});
       },
     );

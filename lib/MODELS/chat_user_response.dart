@@ -42,6 +42,7 @@ class ChatUserData {
   String? updatedAt;
   String? senderName;
   String? receiverName;
+  String? receiverProfile;
 
   ChatUserData(
       {this.id,
@@ -54,7 +55,9 @@ class ChatUserData {
         this.createdAt,
         this.updatedAt,
         this.senderName,
-        this.receiverName});
+        this.receiverName,
+        this.receiverProfile
+      });
 
   ChatUserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -68,6 +71,7 @@ class ChatUserData {
     updatedAt = json['updated_at'];
     senderName = json['sender_name'];
     receiverName = json['receiver_name'];
+    receiverProfile=json['receiver_profile'];
   }
 
   Map<String, dynamic> toJson() {
@@ -83,6 +87,7 @@ class ChatUserData {
     data['updated_at'] = this.updatedAt;
     data['sender_name'] = this.senderName;
     data['receiver_name'] = this.receiverName;
+    data['receiver_profile'] = this.receiverProfile;
     return data;
   }
 }

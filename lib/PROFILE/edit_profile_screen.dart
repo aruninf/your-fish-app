@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_search_field.dart';
 import 'package:yourfish/MODELS/login_response.dart';
+import 'package:yourfish/UTILS/app_images.dart';
 
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
@@ -87,16 +88,14 @@ class EditProfileScreen extends StatelessWidget {
                                 children: [
                                   imageUrl.value.isEmpty
                                       ? Image.network(
-                                          controller
-                                                  .userData.value.profilePic ??
-                                              '',
+                                          controller.userData.value.profilePic ?? '',
                                           fit: BoxFit.cover,
                                           height: 60,
                                           width: 60,
                                           errorBuilder:
                                               (context, error, stackTrace) =>
                                                   Image.asset(
-                                            'images/chat_image2.png',
+                                            fishPlaceHolder,
                                             height: 60,
                                             width: 60,
                                             fit: BoxFit.cover,
@@ -110,7 +109,7 @@ class EditProfileScreen extends StatelessWidget {
                                           errorBuilder:
                                               (context, error, stackTrace) =>
                                                   Image.asset(
-                                            'images/chat_image2.png',
+                                            fishPlaceHolder,
                                             height: 60,
                                             width: 60,
                                             fit: BoxFit.cover,

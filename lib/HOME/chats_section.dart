@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CHATS/chat_model.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
 import '../CHATS/single_chat_page.dart';
@@ -44,17 +45,14 @@ class _ChatsSectionState extends State<ChatsSection>
     super.initState();
   }
 
-  void getChats()async {
-    page=1;
-    var data = {
-      "sortBy": "desc",
-      "sortOn": "id",
-      "page": page,
-      "limit": "20"
-    };
-    Future.delayed(Duration.zero, () => controller.getChatsUser(data),);
+  void getChats() async {
+    page = 1;
+    var data = {"sortBy": "desc", "sortOn": "id", "page": page, "limit": "20"};
+    Future.delayed(
+      Duration.zero,
+      () => controller.getChatsUser(data),
+    );
   }
-
 
   @override
   void dispose() {
@@ -91,22 +89,24 @@ class _ChatsSectionState extends State<ChatsSection>
             const SizedBox(
               height: 8,
             ),
-             Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-              child: CustomSearchField(hintText: 'Search',
+              child: CustomSearchField(
+                hintText: 'Search',
                 controller: searchController,
-
                 onChanges: (p0) {
                   var data = {
                     "sortBy": "desc",
                     "sortOn": "id",
                     "page": 1,
                     "limit": "20",
-                    "filter":p0
+                    "filter": p0
                   };
-                  Future.delayed(Duration.zero, () => controller.getChatsUser(data),);
+                  Future.delayed(
+                    Duration.zero,
+                    () => controller.getChatsUser(data),
+                  );
                 },
-
               ),
             ),
             Expanded(
@@ -129,11 +129,16 @@ class _ChatsSectionState extends State<ChatsSection>
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 1),
                             leading: ClipOval(
-                              child: Image.asset(
-                                fishPlaceHolder,
+                              child: Image.network(
+                                "${controller.chatsUser[index].receiverProfile}",
                                 height: 45,
                                 width: 45,
                                 fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const ImagePlaceHolderWidget(
+                                  height: 45,
+                                  width: 45,
+                                ),
                               ),
                             ),
                             title: CustomText(

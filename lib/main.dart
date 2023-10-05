@@ -21,8 +21,6 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp().then((value) {
@@ -39,7 +37,6 @@ void main() async {
     provisional: false,
     sound: true,
   );
-
   // initialize notification service
   await NotificationService.initialize();
   SystemChrome.setPreferredOrientations([
@@ -52,7 +49,9 @@ void main() async {
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
       statusBarBrightness: Brightness.dark));
+
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
