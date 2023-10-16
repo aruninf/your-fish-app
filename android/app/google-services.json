@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1090655552004",
+    "project_id": "yourfish-app",
+    "storage_bucket": "yourfish-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090655552004:android:66d66ce05d0aed1f152b51",
+        "android_client_info": {
+          "package_name": "com.yourfish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090655552004-7mvjovp0p6l1gpqj13csbfdnaeaenrok.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yourfish",
+            "certificate_hash": "33169a3360cfc5a20618c059e0c87a073cb0fb9c"
+          }
+        },
+        {
+          "client_id": "1090655552004-qhch6aru84sdchj5c3fuaf6nh2ml9ft5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZfQ5MJS_nxciABXe-l6SX9mcYuihxFPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090655552004-qhch6aru84sdchj5c3fuaf6nh2ml9ft5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1090655552004-84mj50fuqgp3o15t3vpacajsil5eptac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yourfish"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
