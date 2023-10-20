@@ -24,26 +24,30 @@ class CustomAppBar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: fishColor,
-                ),
-                onPressed: () => Get.back(),
-              ),
+              (isMenu ?? true)
+                  ? IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: fishColor,
+                      ),
+                      onPressed: () => Get.back(),
+                    )
+                  : const SizedBox.shrink(),
               Image.asset(
                 fishTextImage,
                 height: 70,
                 width: 120,
                 color: logoColor ?? secondaryColor,
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  color: (isMenu ?? false) ? fishColor : primaryColor,
-                ),
-                onPressed: () {},
-              ),
+              (isMenu ?? false)
+                  ? IconButton(
+                      icon: const Icon(
+                        Icons.menu,
+                        color: fishColor,
+                      ),
+                      onPressed: () {},
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
           SizedBox(

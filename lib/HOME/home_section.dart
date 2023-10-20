@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/HOME/home/find_a_buddy_post_item.dart';
-import 'package:yourfish/MODELS/post_response.dart';
 
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
-import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 import 'home/empty_post_widget.dart';
 import 'home/single_post_item.dart';
@@ -28,7 +24,6 @@ class _HomeSectionState extends State<HomeSection> {
 
   @override
   void initState() {
-
     scrollController.addListener(() {
       if ((scrollController.position.pixels ==
           scrollController.position.maxScrollExtent)) {
@@ -77,7 +72,7 @@ class _HomeSectionState extends State<HomeSection> {
                   "filter": p0
                 };
                 postController.getPosts(data);
-                searchController.text="";
+                searchController.text = "";
               },
             ),
           ),
@@ -85,7 +80,7 @@ class _HomeSectionState extends State<HomeSection> {
               child: Obx(() => postController.postData.isNotEmpty
                   ? RefreshIndicator(
                       onRefresh: () async {
-                        page=1;
+                        page = 1;
                         var data = {
                           "sortBy": "desc",
                           "sortOn": "created_at",
@@ -110,8 +105,16 @@ class _HomeSectionState extends State<HomeSection> {
                                   );
                           } else if (index == postController.postData.length &&
                               index > 0) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
+                            return FutureBuilder(
+                              future:
+                                  Future.delayed(const Duration(seconds: 5)),
+                              builder: (context, snapshot) =>
+                                  snapshot.connectionState ==
+                                          ConnectionState.done
+                                      ? const SizedBox.shrink()
+                                      : const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
                             );
                           } else {
                             return const SizedBox.shrink();
@@ -119,20 +122,18 @@ class _HomeSectionState extends State<HomeSection> {
                         },
                       ))
                   : EmptyPostWidget(
-                onClick: () async {
-                  var data = {
-                    "sortBy": "desc",
-                    "sortOn": "created_at",
-                    "page": 1,
-                    "limit": "10",
-                  };
-                  await postController.getPosts(data);
-                },
-              )
-              )),
+                      onClick: () async {
+                        var data = {
+                          "sortBy": "desc",
+                          "sortOn": "created_at",
+                          "page": 1,
+                          "limit": "10",
+                        };
+                        await postController.getPosts(data);
+                      },
+                    ))),
         ],
       ),
     );
   }
 }
-

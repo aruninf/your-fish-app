@@ -31,7 +31,7 @@ class FindABuddyPostItem extends StatelessWidget {
             children: [
               ClipOval(
                 child: Image.network(
-                  postModel.image ?? '',
+                  postModel.userProfilePic ?? '',
                   height: 35,
                   width: 35,
                   fit: BoxFit.cover,
@@ -47,7 +47,9 @@ class FindABuddyPostItem extends StatelessWidget {
                 width: 8,
               ),
               Text(
-                postModel.userHandle ?? '',
+                postModel.userHandle!.contains("@")
+                    ? "${postModel.userHandle}"
+                    : "@${postModel.userHandle}",
                 style: const TextStyle(
                     fontFamily: "Rodetta",
                     fontWeight: FontWeight.w600,
@@ -55,7 +57,7 @@ class FindABuddyPostItem extends StatelessWidget {
                     color: secondaryColor),
               ),
               const Spacer(),
-              SizedBox(
+              controller.userData.value.id!=postModel.userId ? SizedBox(
                 height: 30,
                 child: TextButton(
                   onPressed: () => controller.openChat("${postModel.userId}"),
@@ -73,7 +75,7 @@ class FindABuddyPostItem extends StatelessWidget {
                         color: Colors.white),
                   ),
                 ),
-              ),
+              ) : const SizedBox.shrink(),
             ],
           ),
           const SizedBox(

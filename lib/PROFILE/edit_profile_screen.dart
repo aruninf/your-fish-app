@@ -90,28 +90,28 @@ class EditProfileScreen extends StatelessWidget {
                                       ? Image.network(
                                           controller.userData.value.profilePic ?? '',
                                           fit: BoxFit.cover,
-                                          height: 60,
-                                          width: 60,
+                                          height: 55,
+                                          width: 55,
                                           errorBuilder:
                                               (context, error, stackTrace) =>
                                                   Image.asset(
                                             fishPlaceHolder,
-                                            height: 60,
-                                            width: 60,
+                                            height: 55,
+                                            width: 55,
                                             fit: BoxFit.cover,
                                           ),
                                         )
                                       : Image.network(
                                           imageUrl.value ?? '',
-                                          height: 60,
-                                          width: 60,
+                                          height: 55,
+                                          width: 55,
                                           fit: BoxFit.cover,
                                           errorBuilder:
                                               (context, error, stackTrace) =>
                                                   Image.asset(
                                             fishPlaceHolder,
-                                            height: 60,
-                                            width: 60,
+                                            height: 55,
+                                            width: 55,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -128,6 +128,8 @@ class EditProfileScreen extends StatelessWidget {
                           ),
                           title: TextFormField(
                             controller: nameController,
+                            textInputAction: TextInputAction.done,
+
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(
@@ -153,6 +155,8 @@ class EditProfileScreen extends StatelessWidget {
                         ),
                         TextFormField(
                           controller: locationController,
+                          textInputAction: TextInputAction.done,
+
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(

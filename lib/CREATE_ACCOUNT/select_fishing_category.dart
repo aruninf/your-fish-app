@@ -124,7 +124,7 @@ class SelectFishingCategory extends StatelessWidget {
           btnText: "NEXT",
           onClick: () {
             if (controller.selectedCategories.isEmpty) {
-              Get.snackbar('Required!', 'Select at-least one',
+              Get.snackbar('Required!', 'Select at least one',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
               return;
             }

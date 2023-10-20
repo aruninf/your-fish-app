@@ -60,21 +60,19 @@ class Network {
               sendTimeout: Duration(milliseconds: receivingTimeOut),
               receiveTimeout: Duration(milliseconds: receivingTimeOut),
             ));
-        //print(response);
+        ////print(response);
       } on DioException catch (e) {
         log("Error 💥💥💥💥💥💥💥💥 :${e.response.toString()}");
         if (e.response?.statusCode == 403) {
           Utility().clearAll();
           getx.Get.offAll(SignInScreen());
         }
-        DialogHelper.showErrorDialog(
-            title: "Server response", description: e.response?.data['message']);
+        DialogHelper.showErrorDialog(title: "Server response", description: e.response?.data['message']);
       }
     } else {
       _noInternetConnection();
     }
-    print(
-        "➡️➡️➡️ API ➡️➡️➡️${API_BASE_URL + endPoint}\n\n➡️➡️➡️ Request ➡️➡️➡️$queryParameters\n\n✅✅✅ Response ✅✅✅$response");
+    //print("➡️➡️➡️ API ➡️➡️➡️${API_BASE_URL + endPoint}\n\n➡️➡️➡️ Request ➡️➡️➡️$queryParameters\n\n✅✅✅ Response ✅✅✅$response");
 
     return response;
   }
@@ -108,7 +106,7 @@ class Network {
         DialogHelper.hideLoading();
       } on DioException catch (e) {
         DialogHelper.hideLoading();
-        print("$endPoint Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
+        //print("$endPoint Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
         if (e.response?.statusCode == 403) {
           Utility().clearAll();
           getx.Get.offAll(SignInScreen());
@@ -119,8 +117,7 @@ class Network {
     } else {
       _noInternetConnection();
     }
-    print(
-        "➡️➡️➡️ API ➡️➡️➡️${API_BASE_URL + endPoint}\n\n➡️➡️➡️ Request ➡️➡️➡️$formData\n\n✅✅✅ Response ✅✅✅$response");
+    //print("➡️➡️➡️ API ➡️➡️➡️${API_BASE_URL + endPoint}\n\n➡️➡️➡️ Request ➡️➡️➡️$formData\n\n✅✅✅ Response ✅✅✅$response");
 
     return response;
   }
@@ -155,7 +152,7 @@ class Network {
         DialogHelper.hideLoading();
       } on DioException catch (e) {
         DialogHelper.hideLoading();
-        print("$endPoint Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
+        //print("$endPoint Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
         if (e.response?.statusCode == 403) {
           Utility().clearAll();
           getx.Get.offAll(SignInScreen());
@@ -166,8 +163,7 @@ class Network {
     } else {
       _noInternetConnection();
     }
-    print(
-        "➡️➡️➡️ API ➡️➡️➡️${API_BASE_URL + endPoint}\n\n➡️➡️➡️ Request ➡️➡️➡️$formData\n\n✅✅✅ Response ✅✅✅$response");
+    //print("➡️➡️➡️ API ➡️➡️➡️${API_BASE_URL + endPoint}\n\n➡️➡️➡️ Request ➡️➡️➡️$formData\n\n✅✅✅ Response ✅✅✅$response");
     return response;
   }
 
@@ -191,9 +187,9 @@ class Network {
                 },
                 sendTimeout: Duration(milliseconds: receivingTimeOut),
                 receiveTimeout: Duration(milliseconds: receivingTimeOut)));
-        //print(response);
+        ////print(response);
       } on DioException catch (e) {
-        print("$endPoint Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
+        //print("$endPoint Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
         if (e.response?.statusCode == 403) {
           Utility().clearAll();
           getx.Get.offAll(SignInScreen());
@@ -239,7 +235,7 @@ class Network {
             ));
         DialogHelper.hideLoading();
       } on DioException catch (e) {
-        print("$uploadFileApi Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
+        //print("$uploadFileApi Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
 
         DialogHelper.hideLoading();
         if (e.response?.statusCode == 403) {
@@ -252,7 +248,7 @@ class Network {
     } else {
       _noInternetConnection();
     }
-    print("$uploadFileApi Response: 💥💥💥💥💥💥💥💥💥💥💥💥 $response");
+    //print("$uploadFileApi Response: 💥💥💥💥💥💥💥💥💥💥💥💥 $response");
     return response?.data["data"];
   }
 

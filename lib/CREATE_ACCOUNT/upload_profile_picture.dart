@@ -60,7 +60,7 @@ class UploadProfilePicture extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                               child: Image.network(
                                 imageUrl.value,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.fill,
                               ))
                           : const Column(
                               mainAxisSize: MainAxisSize.min,

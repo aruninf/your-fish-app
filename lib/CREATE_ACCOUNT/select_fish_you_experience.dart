@@ -105,7 +105,7 @@ class SelectFishYouExperience extends StatelessWidget {
           btnText: "NEXT",
           onClick: () {
             if (userController.selectedFishExp.isEmpty) {
-              Get.snackbar('Required!', 'Select at-least one',
+              Get.snackbar('Required!', 'Select at least one',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
               return;
             }

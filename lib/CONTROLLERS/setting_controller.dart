@@ -149,9 +149,11 @@ class SettingController extends GetxController {
   getSettingData() async {
     listOfOn.clear();
     final response = await Network().getRequest(endPoint: getSettingDataApi);
-    if (response?.data != null) {
+    if (response?.data != null ) {
       final settingResponse = SettingResponse.fromJson(response?.data);
+
       settings.value = settingResponse.data ?? Settings();
+
       currentValues.value=double.parse(settings.value.publicFeed ?? '0');
       if ((settings.value.newMessage ?? 0) == 1) {
         listOfOn.add(listOfNotification[0]);

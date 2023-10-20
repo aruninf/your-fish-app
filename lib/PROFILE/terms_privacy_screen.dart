@@ -4,16 +4,22 @@ import 'package:get/get.dart';
 import '../CONTROLLERS/setting_controller.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../UTILS/app_color.dart';
-import '../UTILS/app_strings.dart';
 
 class PrivacyAndTermsScreen extends StatelessWidget {
   PrivacyAndTermsScreen({super.key, required this.title});
 
   final String title;
-  final controller=Get.put(SettingController());
+  final controller = Get.put(SettingController());
 
+  void callPrivacyPolicyApi() async {
+    Future.delayed(
+      Duration.zero,
+          () => controller.getContent(),
+    );
+  }
   @override
   Widget build(BuildContext context) {
+    callPrivacyPolicyApi();
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
@@ -38,15 +44,17 @@ class PrivacyAndTermsScreen extends StatelessWidget {
                     child: SizedBox(
                       height: Get.height,
                       width: Get.width,
-                      child:  Obx(() =>  controller.isLoading.value ? const Center(child: CircularProgressIndicator()) : Text(
-                        '${ title == 'Terms & Conditions' ? controller.contentData[0].content : controller.contentData[1].content }',
-                        textAlign: TextAlign.justify,
-                        style: const TextStyle(
-                          height: 1.4,
-                          fontSize: 13,
-                          color: Colors.white,
-                        ),
-                      )),
+                      child: Obx(() => controller.isLoading.value
+                          ? const Center(child: CircularProgressIndicator())
+                          : Text(
+                              '${title == 'Terms & Conditions' ? controller.contentData[0].content : controller.contentData[1].content}',
+                              textAlign: TextAlign.justify,
+                              style: const TextStyle(
+                                height: 1.4,
+                                fontSize: 13,
+                                color: Colors.white,
+                              ),
+                            )),
                     ),
                   ),
                 ),

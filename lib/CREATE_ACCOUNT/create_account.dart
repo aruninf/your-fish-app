@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/auth_controller.dart';
@@ -10,11 +11,14 @@ import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_field.dart';
 import '../CUSTOM_WIDGETS/gender_dropdown.dart';
 import '../UTILS/app_color.dart';
-import 'create_password.dart';
 
 class CreateAccountScreen extends StatelessWidget {
   CreateAccountScreen(
-      {super.key, required this.socialId, required this.socialType,this.email,this.name});
+      {super.key,
+      required this.socialId,
+      required this.socialType,
+      this.email,
+      this.name});
 
   final String socialId;
   final String socialType;
@@ -30,11 +34,10 @@ class CreateAccountScreen extends StatelessWidget {
   final dobController = TextEditingController();
   final numberController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
-    emailController.text=email ?? '';
-    nameController.text=name ?? '';
+    emailController.text = email ?? '';
+    nameController.text = name ?? '';
     return Scaffold(
       resizeToAvoidBottomInset: false,
       //extendBody: true,
@@ -58,7 +61,7 @@ class CreateAccountScreen extends StatelessWidget {
                           height: 16,
                         ),
                         CommonTextField(
-                          hintText: name ??  'Name',
+                          hintText: name ?? 'Name',
                           controller: nameController,
                           maxLength: 16,
                         ),
@@ -86,8 +89,7 @@ class CreateAccountScreen extends StatelessWidget {
                           height: 12,
                         ),
                         Obx(() {
-                          dobController.text =
-                              userController.selectDob.value;
+                          dobController.text = userController.selectDob.value;
                           return Wrap(
                             direction: Axis.horizontal,
                             children: [
@@ -99,11 +101,10 @@ class CreateAccountScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(16.0),
                                     ),
                                     child: TextFormField(
-                                        onTap: () =>
-                                            userController.selectDate(context),
-                                        controller:
-                                            dobController,
+                                        onTap: () => userController.selectDate(context),
+                                        controller: dobController,
                                         readOnly: true,
+                                        textInputAction: TextInputAction.done,
                                         keyboardType: TextInputType.text,
                                         maxLines: 1,
                                         style: const TextStyle(
@@ -143,7 +144,10 @@ class CreateAccountScreen extends StatelessWidget {
                           ),
                           child: TextFormField(
                               controller: numberController,
-                              keyboardType: TextInputType.number,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      signed: true, decimal: true),
+                              textInputAction: TextInputAction.done,
                               //obscureText:(isPassword ?? false) ? uController.isPasswordVisible.value : false,
                               maxLines: 1,
                               maxLength: 10,
@@ -235,9 +239,13 @@ class CreateAccountScreen extends StatelessWidget {
               'dob': dobController.text.trim(),
               'gender': userController.gender ?? 'Male',
               'phone_number': numberController.text.trim(),
+              'phone': numberController.text.trim(),
+
+              /// for validate the phone number
               'fcm_token': Get.find<AuthController>().fcmToken.value
             };
             if (socialType != 'email' && socialId.isNotEmpty) {
+              ///if user is social login then we set a default password 12345678
               var newData = {'password': "12345678", ...data};
               Get.to(
                   () => UploadProfilePicture(
@@ -245,8 +253,7 @@ class CreateAccountScreen extends StatelessWidget {
                       ),
                   transition: Transition.rightToLeft);
             } else {
-              Get.to(() => CreatePasswordScreen(data: data),
-                  transition: Transition.rightToLeft);
+              userController.userValidate(data);
             }
           },
         ),

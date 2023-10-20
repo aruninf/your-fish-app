@@ -41,6 +41,7 @@ class CustomSearchField extends StatelessWidget {
           textInputAction: TextInputAction.search,
           controller: controller,
           onFieldSubmitted: onChanges,
+
           //onEditingComplete: onEditingComplete,
           //onChanged: onChanges,
           style: const TextStyle(

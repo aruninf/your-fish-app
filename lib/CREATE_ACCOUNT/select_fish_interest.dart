@@ -47,6 +47,8 @@ class SelectFishInterest extends StatelessWidget {
             const CustomAppBar(
               heading: 'Select Fish you are\ninterested in catching',
               textColor: fishColor,
+              isMenu: false ,
+
             ),
             const SizedBox(
               height: 16,
@@ -76,49 +78,49 @@ class SelectFishInterest extends StatelessWidget {
               height: 16,
             ),
 
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(userController.fishCategory.length, (index) => Container(
-                  margin: const EdgeInsets.only(top: 0, left: 16,right: 8,bottom: 6),
-                  decoration: BoxDecoration(
-                    color: userController.fishCategory[index].id ==userController.selectedCategory.value
-                        ? secondaryColor
-                        : btnColor,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    onTap: () async {
-                       userController.selectedCategory.value=userController.fishCategory[index].id ?? 0;
-                       var data={
-                         "sortBy": "asc",
-                         "sortOn": "id",
-                         "page": 1,
-                         "limit": "20",
-                         "filter":userController.fishCategory[index].name ?? ""
-                       };
-                       Future.delayed(
-                         Duration.zero,
-                             () => userController.getFish(data),
-                       );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 12),
-                      child: CustomText(
-                        text: userController.fishCategory[index].name ?? '',
-                        sizeOfFont: 16,
-                        weight: FontWeight.bold,
-                        color: userController.fishCategory[index].id ==userController.selectedCategory.value
-                            ? fishColor
-                            : primaryColor,
-                      ),
-                    ),
-                  ),
-                )),
-              ),
-            ),
+            // SingleChildScrollView(
+            //   scrollDirection: Axis.horizontal,
+            //   child: Row(
+            //     children: List.generate(userController.fishCategory.length, (index) => Container(
+            //       margin: const EdgeInsets.only(top: 0, left: 16,right: 8,bottom: 6),
+            //       decoration: BoxDecoration(
+            //         color: userController.fishCategory[index].id ==userController.selectedCategory.value
+            //             ? secondaryColor
+            //             : btnColor,
+            //         borderRadius: BorderRadius.circular(16),
+            //       ),
+            //       child: InkWell(
+            //         borderRadius: BorderRadius.circular(16),
+            //         onTap: () async {
+            //            userController.selectedCategory.value=userController.fishCategory[index].id ?? 0;
+            //            var data={
+            //              "sortBy": "asc",
+            //              "sortOn": "id",
+            //              "page": 1,
+            //              "limit": "20",
+            //              "filter":userController.fishCategory[index].name ?? ""
+            //            };
+            //            Future.delayed(
+            //              Duration.zero,
+            //                  () => userController.getFish(data),
+            //            );
+            //         },
+            //         child: Padding(
+            //           padding: const EdgeInsets.symmetric(
+            //               horizontal: 14, vertical: 12),
+            //           child: CustomText(
+            //             text: userController.fishCategory[index].name ?? '',
+            //             sizeOfFont: 16,
+            //             weight: FontWeight.bold,
+            //             color: userController.fishCategory[index].id ==userController.selectedCategory.value
+            //                 ? fishColor
+            //                 : primaryColor,
+            //           ),
+            //         ),
+            //       ),
+            //     )),
+            //   ),
+            // ),
 
             Expanded(
                 child: userController.isDataLoading.value
@@ -161,7 +163,7 @@ class SelectFishInterest extends StatelessWidget {
           btnText: "NEXT",
           onClick: () async {
             if (userController.selectedFishInterest.isEmpty) {
-              Get.snackbar('Required!', 'Select at-least one',
+              Get.snackbar('Required!', 'Select at least one',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
               return;
             }

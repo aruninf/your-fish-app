@@ -91,6 +91,7 @@ class _MainHomeState extends State<MainHome> {
                 _page = 0;
               });
             } else if (index1 == 1) {
+              getMyPost();
               setState(() {
                 _page = 4;
               });
@@ -378,21 +379,19 @@ class RightDrawerMenuWidget extends StatelessWidget {
                     onTap: () {
                       Get.back();
                       if (index1 == 2) {
-                        Get.to(MyProfileMapWidget(isTopSpots: true),
-                            transition: Transition.leftToRight);
+                        Get.to(()=> MyProfileMapWidget(isTopSpots: true));
                       } else if (index1 == 0) {
                         onClick(0);
                       } else if (index1 == 1) {
                         onClick(1);
                       } else if (index1 == 3) {
-                        Get.to(BlogsScreen(),
-                            transition: Transition.leftToRight);
+                        Get.to(()=> BlogsScreen());
+
                       } else if (index1 == 4) {
-                        Get.to(const ChatsScreen(),
-                            transition: Transition.leftToRight);
+                        Get.to(()=> const ChatsScreen());
+
                       } else if (index1 == 5) {
-                        Get.to(SettingsScreen(),
-                            transition: Transition.leftToRight);
+                        Get.to(()=> SettingsScreen());
                       }
                     },
                     dense: true,

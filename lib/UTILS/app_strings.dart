@@ -10,7 +10,7 @@ const String textText2 =
 
 const String textTitle3 = "PERSONAL FISHING \nRECORD";
 const String textText3 =
-    "Our app lets fishing enthusiasts \ncreate a fun and personalized record of their fishing adventures. Share your catches, gear, and fishing trips \nwith other users.";
+    "Our app lets fishing enthusiasts \ncreate a fun and personalized record of their fishing adventures. Share your catches, gear, and fishing tips \nwith other users.";
 
 const String next = "NEXT";
 

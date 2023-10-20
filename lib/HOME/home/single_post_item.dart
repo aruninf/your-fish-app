@@ -8,8 +8,6 @@ import '../../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../../MODELS/post_response.dart';
 import '../../UTILS/app_color.dart';
-import '../../UTILS/app_images.dart';
-import 'find_a_buddy_post_item.dart';
 
 class SingleFishPostWidget extends StatelessWidget {
   SingleFishPostWidget({super.key, required this.postModel});
@@ -22,7 +20,7 @@ class SingleFishPostWidget extends StatelessWidget {
     //controller.isLiked.value=postModel.isLiked ?? false;
     //controller.isFav.value=postModel.isFavourite ?? false;
     return InkWell(
-      onTap: () => Get.to(()=> PostDetailScreen(postModel: postModel)),
+      onTap: () => Get.to(() => PostDetailScreen(postModel: postModel)),
       borderRadius: BorderRadius.circular(16),
       child: Container(
         width: double.infinity,
@@ -40,7 +38,9 @@ class SingleFishPostWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    "${postModel.userHandle}",
+                    postModel.userHandle!.contains("@")
+                        ? "${postModel.userHandle}"
+                        : "@${postModel.userHandle}",
                     style: const TextStyle(
                         fontFamily: "Rodetta",
                         fontWeight: FontWeight.w700,
@@ -50,25 +50,22 @@ class SingleFishPostWidget extends StatelessWidget {
                 ),
                 const Spacer(),
                 (postModel.isPublic == 1)
-                    ? SizedBox(
-                        width: Get.width * 0.35,
-                        child: TextButton.icon(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                                alignment: Alignment.topRight),
-                            icon: const Icon(
-                              PhosphorIcons.map_pin,
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                            label: CustomText(
-                              text: postModel.address ?? '',
-                              weight: FontWeight.w400,
-                              sizeOfFont: 13,
-                              maxLin: 1,
-                              color: Colors.white,
-                            )),
-                      )
+                    ? TextButton.icon(
+                        onPressed: () {},
+                        style:
+                            TextButton.styleFrom(alignment: Alignment.topRight),
+                        icon: const Icon(
+                          PhosphorIcons.map_pin,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        label: CustomText(
+                          text: (postModel.address ?? '').split(",").first,
+                          weight: FontWeight.w400,
+                          sizeOfFont: 13,
+                          maxLin: 1,
+                          color: Colors.white,
+                        ))
                     : const SizedBox.shrink()
               ],
             ),
@@ -79,10 +76,10 @@ class SingleFishPostWidget extends StatelessWidget {
                   width: double.infinity,
                   height: Get.height * 0.4,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => ImagePlaceHolderWidget(
+                  errorBuilder: (context, error, stackTrace) =>
+                      ImagePlaceHolderWidget(
                     width: double.infinity,
                     height: Get.height * 0.4,
-
                   ),
                 )),
             Obx(() => Row(
@@ -102,17 +99,20 @@ class SingleFishPostWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(8),
-                      onTap: () => controller.openChat("${postModel.userId}"),
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(
-                          PhosphorIcons.chat,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                    controller.userData.value.id != postModel.userId
+                        ? InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: () =>
+                                controller.openChat("${postModel.userId}"),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(
+                                PhosphorIcons.chat,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                     InkWell(
                       borderRadius: BorderRadius.circular(8),
                       onTap: () => controller.sharePost(postModel),

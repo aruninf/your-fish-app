@@ -37,7 +37,7 @@ class _GenderDropdownState extends State<GenderDropdown> {
           borderRadius: BorderRadius.circular(10),
           isExpanded: true,
           value: dropdownValue ?? 'Male',
-          items: ['Male', 'Female', 'Non-Binary','Other','Prefer not to say'].map((String? item) {
+          items: ['Male', 'Female','Other',].map((String? item) {
             return DropdownMenuItem(
                 value: item!,
                 child: Text(item, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),)

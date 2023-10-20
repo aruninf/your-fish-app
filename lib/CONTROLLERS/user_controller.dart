@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -11,9 +12,11 @@ import 'package:yourfish/UTILS/dialog_helper.dart';
 import '../CHATS/chat_model.dart';
 import '../CHATS/single_chat_page.dart';
 import '../CREATE_ACCOUNT/add_your_gear.dart';
+import '../CREATE_ACCOUNT/create_password.dart';
 import '../CREATE_ACCOUNT/select_fish_interest.dart';
 import '../CREATE_ACCOUNT/select_fishing_category.dart';
 import '../CREATE_ACCOUNT/select_fishing_location.dart';
+import '../CREATE_ACCOUNT/upload_profile_picture.dart';
 import '../MODELS/fishing_location_response.dart';
 import '../MODELS/gear_response.dart';
 import '../MODELS/login_response.dart';
@@ -44,17 +47,54 @@ class UserController extends GetxController {
   final fishingGear = <GearData>[].obs;
 
   Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+
+    showCupertinoModalPopup(
         context: context,
-        initialDate: DateTime(2001),
-        firstDate: DateTime(1960),
-        lastDate: DateTime(2004));
-    if (picked != null && picked != selectedDate) {
-      selectedDate = picked;
-      final DateFormat format = DateFormat('yyyy-MM-dd');
-      final String formatted = format.format(selectedDate);
-      selectDob.value = formatted;
-    }
+        builder: (_) => Container(
+          height: Get.height*0.3,
+          decoration: BoxDecoration(
+              borderRadius:BorderRadius.circular(16),
+              color: Colors.white
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  TextButton(
+                    child: const Text(
+                      "Cancel",
+                    ),
+                    onPressed: () => Get.back(),
+                  ),
+                  TextButton(
+                    child: const Text(
+                      "Done",style: TextStyle(color: Colors.blueAccent,fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () => Get.back(),
+                  ),
+                ],
+              ),
+              Flexible(
+                child: SizedBox(
+                  height: Get.height*0.29,
+                  child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.date,
+                      dateOrder: DatePickerDateOrder.dmy,
+                      initialDateTime: DateTime.now(),
+                      onDateTimeChanged: (val) {
+                        if (val != selectedDate) {
+                          selectedDate = val;
+                          final DateFormat format = DateFormat('yyyy-MM-dd');
+                          final String formatted = format.format(selectedDate);
+                          selectDob.value = formatted;
+                        }
+                      }),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   /// 🍔🍔🍔🍔🍔Login Function 🍔🍔🍔🍔🍔🍔
@@ -66,6 +106,8 @@ class UserController extends GetxController {
       LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
       if (loginResponse.status ?? false) {
         Utility.setStringValue(tokenKey, loginResponse.token ?? "");
+        Utility().saveIntValue(userIdKey, loginResponse.data?.id ?? 0);
+
         if (loginResponse.data?.gearId != null) {
           Utility().saveBoolValue(isLoginKey, true);
           Get.offAll(() => const MainHome());
@@ -82,6 +124,22 @@ class UserController extends GetxController {
     }
   }
 
+  ///🧨🧨🧨🧨🧨🧨 email/number Validation API 🧨🧨🧨🧨🧨
+
+  Future<void> userValidate(dynamic newData) async {
+    final response = await Network().postRequest(
+        endPoint: validateEmailPhoneApi, formData: newData, isLoader: true);
+    if (response?.data != null) {
+      if (response?.data['message'] != "") {
+        Get.snackbar(response?.data['message'], '',
+            colorText: Colors.deepOrange, snackPosition: SnackPosition.TOP);
+      } else {
+        Get.to(() => CreatePasswordScreen(data: newData),
+            transition: Transition.rightToLeft);
+      }
+    }
+  }
+
   ///🧨🧨🧨🧨🧨🧨 User Register 🧨🧨🧨🧨🧨
 
   Future<void> userRegister(dynamic data) async {
@@ -91,6 +149,7 @@ class UserController extends GetxController {
       LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
       if (loginResponse.status ?? false) {
         Utility.setStringValue(tokenKey, loginResponse.token ?? "");
+        Utility().saveIntValue(userIdKey, loginResponse.data?.id ?? 0);
         Get.offAll(() => SelectFishInterest(),
             transition: Transition.rightToLeft);
       } else {
@@ -248,7 +307,7 @@ class UserController extends GetxController {
   Future<void> getFishGear(dynamic data) async {
     isDataLoading.value = true;
     final response = await Network()
-        .postRequest(endPoint: getFishingGearApi, formData: data);
+        .getRequest(endPoint: getFishingGearApi);
     if (response?.data != null) {
       isDataLoading.value = false;
       GearResponse fish = GearResponse.fromJson(response?.data);

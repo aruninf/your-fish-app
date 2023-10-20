@@ -14,20 +14,18 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true"
+        android:allowBackup="true"
+        android:usesCleartextTraffic="true"
         android:label="Your Fish">
         <activity
             android:name=".MainActivity"
-            android:allowBackup="true"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
-            android:hardwareAccelerated="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="Your Fish"
             android:launchMode="singleTop"
-            android:requestLegacyExternalStorage="true"
             android:theme="@style/LaunchTheme"
-            android:usesCleartextTraffic="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:hardwareAccelerated="true">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -75,8 +73,8 @@
             android:value="yourfish_notifications" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAynBIwL47RimOYbJk_9jQYalO4RA9tS6M" />
-
+            android:value="AIzaSyAiGUDfOoN7UeUxt_VbOdFuvoBM2J4614Q" />
+        <!--  "AIzaSyAynBIwL47RimOYbJk_9jQYalO4RA9tS6M" -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

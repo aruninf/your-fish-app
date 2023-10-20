@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:yourfish/CREATE_ACCOUNT/create_account.dart';
 import 'package:yourfish/CREATE_ACCOUNT/sign_in.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_text_style.dart';
+import 'package:yourfish/PROFILE/terms_privacy_screen.dart';
 import 'package:yourfish/UTILS/app_color.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
@@ -62,7 +63,7 @@ class GetStartScreen extends StatelessWidget {
                     btnTextColor: primaryColor,
                     btnText: "Sign Up",
                     onClick: () => Get.to(
-                        () =>  CreateAccountScreen(
+                        () => CreateAccountScreen(
                               socialId: '',
                               socialType: 'email',
                             ),
@@ -72,11 +73,30 @@ class GetStartScreen extends StatelessWidget {
                 SizedBox(
                   height: Get.height * 0.04,
                 ),
-                const CustomText(
-                  text: 'Login in with...',
-                  color: secondaryColor,
-                  sizeOfFont: 14,
-                  weight: FontWeight.w700,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: Get.width * 0.2,
+                      height: 0.7,
+                      color: btnColor,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CustomText(
+                        text: 'Or Continue with',
+                        color: secondaryColor,
+                        sizeOfFont: 14,
+                        weight: FontWeight.w700,
+                      ),
+                    ),
+                    Container(
+                      width: Get.width * 0.2,
+                      height: 0.7,
+                      color: btnColor,
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: Get.height * 0.02,
@@ -124,13 +144,35 @@ class GetStartScreen extends StatelessWidget {
                         : const SizedBox.shrink(),
                   ],
                 ),
-                SizedBox(
-                  height: Get.height * 0.02,
+                const SizedBox(
+                  height: 16,
+                ),
+                InkWell(
+                  onTap: () => Get.to(PrivacyAndTermsScreen(title: "Privacy Policy")),
+                  child: RichText(
+                      textAlign: TextAlign.center,
+                      text: const TextSpan(children: [
+                        TextSpan(
+                            text: "By Continue you agree to the our",
+                            style: TextStyle(color: btnColor)),
+                        TextSpan(
+                            text: " Privacy Policy",
+                            style: TextStyle(
+                                color: fishColor, fontWeight: FontWeight.w600)),
+                        TextSpan(text: " and ", style: TextStyle(color: btnColor)),
+                        TextSpan(
+                            text: "Terms and Conditions.",
+                            style: TextStyle(
+                                color: fishColor, fontWeight: FontWeight.w600))
+                      ])),
+                ),
+                const SizedBox(
+                  height: 16,
                 ),
                 Image.asset(
                   fishTextImage,
-                  height: Get.width * 0.5,
-                  width: Get.width * 0.5,
+                  height: Get.width * 0.3,
+                  width: Get.width * 0.4,
                   color: secondaryColor,
                 ),
               ]),

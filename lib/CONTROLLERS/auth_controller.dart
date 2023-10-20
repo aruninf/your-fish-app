@@ -43,7 +43,7 @@ class AuthController extends GetxController {
     }
     await getToken();
     //String? token = await Utility.getStringValue(tokenKey);
-    print("token==========$token");
+    ////print("token==========$token");
     super.onReady();
   }
 
@@ -51,7 +51,7 @@ class AuthController extends GetxController {
     // Get firebase token
     mess.FirebaseMessaging.instance.getToken().then((token) {
       fcmToken.value = token ?? "";
-      //print("fcmToken==============${fcmToken.value}");
+      ////print("fcmToken==============${fcmToken.value}");
     });
   }
 
@@ -87,18 +87,18 @@ class AuthController extends GetxController {
 
           userSocialLogin(userCredential.user, 'apple');
         } on FirebaseAuthException catch (error) {
-          print(error.message);
+          //print(error.message);
           Get.snackbar('Error!', 'Apple authorization failed: ${error.message}',
               colorText: Colors.orange, snackPosition: SnackPosition.TOP);
         }
       case AuthorizationStatus.error:
-        print('Apple authorization failed: ${res.error?.localizedDescription}');
+        //print('Apple authorization failed: ${res.error?.localizedDescription}');
         Get.snackbar('Error!',
             'Apple authorization failed: ${res.error?.localizedDescription}',
             colorText: Colors.orange, snackPosition: SnackPosition.TOP);
 
       case AuthorizationStatus.cancelled:
-        print('Apple sign in cancelled');
+        //print('Apple sign in cancelled');
         Get.snackbar('Error!', 'Apple sign in cancelled',
             colorText: Colors.orange, snackPosition: SnackPosition.TOP);
     }
@@ -119,18 +119,18 @@ class AuthController extends GetxController {
         userSocialLogin(userCredential.user, 'facebook');
       }
       if (result.status == LoginStatus.cancelled) {
-        print('Login cancelled');
+        //print('Login cancelled');
         Get.snackbar('Error!', 'Login cancelled',
             colorText: Colors.orange, snackPosition: SnackPosition.TOP);
       }
       if (result.status == LoginStatus.failed) {
-        print('💥 Login failed!');
-        print(result.message);
+        //print('💥 Login failed!');
+        //print(result.message);
         Get.snackbar('Error!', 'Login Failed',
             colorText: Colors.orange, snackPosition: SnackPosition.TOP);
       }
     } catch (err) {
-      print(err.toString());
+      //print(err.toString());
       Get.snackbar('Error!', err.toString(),
           colorText: Colors.orange, snackPosition: SnackPosition.TOP);
     }
@@ -160,7 +160,7 @@ class AuthController extends GetxController {
           await FirebaseAuth.instance.signInWithCredential(credential);
       userSocialLogin(userCredential.user, 'google');
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       Get.snackbar('Error!', 'Login Failed',
           colorText: Colors.orange, snackPosition: SnackPosition.TOP);
     }
@@ -177,6 +177,7 @@ class AuthController extends GetxController {
         LoginResponse loginResponse = LoginResponse.fromJson(response?.data);
         if (loginResponse.status ?? false) {
           Utility.setStringValue(tokenKey, loginResponse.token ?? "");
+          Utility().saveIntValue(userIdKey, loginResponse.data?.id ?? 0);
           if (loginResponse.data?.gearId != null) {
             Utility().saveBoolValue(isLoginKey, true);
             Get.offAll(() => const MainHome());

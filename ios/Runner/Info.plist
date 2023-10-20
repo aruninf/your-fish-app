@@ -24,66 +24,49 @@
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
 	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>fb357757382720687</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.692922201837-rbe5td5be50ojpco4atok9rj0s21263d</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.yourfish</string>
-				<string>com.googleusercontent.apps.692922201837-rbe5td5be50ojpco4atok9rj0s21263d</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>com.yourfish</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.yourfish</string>
-			</array>
-		</dict>
-	</array>
+          <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+              <string>fb699892988696754</string>
+            </array>
+          </dict>
+          <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+              <string>com.googleusercontent.apps.1090655552004-84mj50fuqgp3o15t3vpacajsil5eptac</string>
+            </array>
+          </dict>
+          <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+              <string>com.yourfish</string>
+              <string>com.googleusercontent.apps.1090655552004-84mj50fuqgp3o15t3vpacajsil5eptac</string>
+            </array>
+          </dict>
+          <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLName</key>
+            <string>com.yourfish</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+              <string>com.yourfish</string>
+            </array>
+          </dict>
+     </array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>FacebookAppID</key>
-	<string>357757382720687</string>
 	<key>FacebookClientToken</key>
 	<string>561ff7015b3916c07209ba2b2e099bfc</string>
-	<key>FacebookDisplayName</key>
-	<string>Your Fish</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fbapi20130214</string>
-		<string>fbapi20130410</string>
-		<string>fbapi20130702</string>
-		<string>fbapi20131010</string>
-		<string>fbapi20131219</string>
-		<string>fbapi20140410</string>
-		<string>fbapi20140116</string>
-		<string>fbapi20150313</string>
-		<string>fbapi20150629</string>
-		<string>fbapi20160328</string>
-		<string>fbauth</string>
-		<string>fb-messenger-share-api</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
-	</array>
+
+    <key>FacebookAppID</key>
+    <string>699892988696754</string>
+    <key>FacebookDisplayName</key>
+    <string>Your Fish App</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>

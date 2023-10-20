@@ -25,17 +25,26 @@ class MapController extends GetxController {
     zoom: 13.47,
   ).obs;
 
-  final cameraPosition = const CameraPosition(
-          bearing: 192.8334901395799,
-          target: LatLng(37.43296265331129, -122.08832357078792),
-          tilt: 59.440717697143555,
-          zoom: 13.47)
-      .obs;
+  // final cameraPosition = const CameraPosition(
+  //         bearing: 192.8334901395799,
+  //         target: LatLng(37.43296265331129, -122.08832357078792),
+  //         tilt: 59.440717697143555,
+  //         zoom: 13.47)
+  //     .obs;
 
   Future<void> currentPosition() async {
     final GoogleMapController controller = await googleMapController.future;
     await controller.animateCamera(
         CameraUpdate.newCameraPosition(initialCameraPosition.value));
+  }
+
+  Future<void> movePosition(double lat, double long) async {
+    final GoogleMapController controller = await googleMapController.future;
+    await controller
+        .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: LatLng(lat, long),
+      zoom: 13.47,
+    )));
   }
 
   @override
@@ -51,12 +60,12 @@ class MapController extends GetxController {
       zoom: cameraZoom,
     );
 
-    cameraPosition.value = CameraPosition(
-        bearing: 192.8334901395799,
-        target: LatLng(locationController.currentPosition.value.latitude,
-            locationController.currentPosition.value.longitude),
-        tilt: 9.0,
-        zoom: cameraZoom);
+    // cameraPosition.value = CameraPosition(
+    //     bearing: 192.8334901395799,
+    //     target: LatLng(locationController.currentPosition.value.latitude,
+    //         locationController.currentPosition.value.longitude),
+    //     tilt: 9.0,
+    //     zoom: cameraZoom);
 
     ///💥💥💥💥💥💥💥 SET Icon 💥💥💥💥💥💥💥
 

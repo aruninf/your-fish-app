@@ -45,7 +45,9 @@ class PostDetailScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Text(
-                          "${postModel.userHandle}",
+                          postModel.userHandle!.contains("@")
+                              ? "${postModel.userHandle}"
+                              : "@${postModel.userHandle}",
                           style: const TextStyle(
                               fontFamily: "Rodetta",
                               fontWeight: FontWeight.w700,
@@ -106,10 +108,9 @@ class PostDetailScreen extends StatelessWidget {
                                       : Colors.white,
                                 )),
                           ),
-                          InkWell(
+                          controller.userData.value.id!=postModel.userId ? InkWell(
                             borderRadius: BorderRadius.circular(8),
-                            onTap: () =>
-                                controller.openChat("${postModel.userId}"),
+                            onTap: () => controller.openChat("${postModel.userId}"),
                             child: const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Icon(
@@ -117,7 +118,7 @@ class PostDetailScreen extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-                          ),
+                          ): const SizedBox.shrink(),
                           InkWell(
                             borderRadius: BorderRadius.circular(8),
                             onTap: () => controller.sharePost(postModel),

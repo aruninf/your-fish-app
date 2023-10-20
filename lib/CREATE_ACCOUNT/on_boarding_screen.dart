@@ -176,6 +176,9 @@ class SliderWidget extends StatelessWidget {
                 const TextStyle(color: Colors.white, height: 1.4, fontSize: 15),
           ),
         ),
+        const SizedBox(
+          height: 16,
+        ),
       ],
     );
   }

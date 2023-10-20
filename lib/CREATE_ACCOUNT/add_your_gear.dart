@@ -14,22 +14,9 @@ class AddYourGear extends StatelessWidget {
   final userController = Get.find<UserController>();
   final fishingGearController = TextEditingController();
 
-  void callApi() async {
-    var data={
-      "sortBy": "asc",
-      "sortOn": "id",
-      "page": 1,
-      "limit": "20"
-    };
-    Future.delayed(
-      Duration.zero,
-      () => userController.getFishGear(data),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    //callApi();
+
     return Scaffold(
       extendBody: false,
       backgroundColor: primaryColor,

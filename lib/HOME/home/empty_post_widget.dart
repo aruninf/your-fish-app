@@ -21,8 +21,9 @@ class EmptyPostWidget extends StatelessWidget {
           Center(
             child: Lottie.asset(
               "images/animation_fish.json",
-              height: 150,
-              width: 200,
+              height: 180,
+              width: 250,
+              fit:BoxFit.fill
             ),
           ),
           const SizedBox(

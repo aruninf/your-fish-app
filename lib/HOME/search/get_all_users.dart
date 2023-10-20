@@ -152,8 +152,7 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
                                               ? 1
                                               : 2
                                         };
-                                        if (controller.allUsers[index]
-                                                .followingStatus !=
+                                        if (controller.allUsers[index].followingStatus !=
                                             3) {
                                           controller.sendRequest(data, 1);
                                         }

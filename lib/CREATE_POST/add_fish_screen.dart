@@ -55,7 +55,7 @@ class AddFishScreen extends StatelessWidget {
                         children: [
                           CustomText(
                             text:
-                                '${(controller.userData.value.address ?? '').isNotEmpty ? controller.userData.value.address : controller.currentAddress.value}',
+                                '${(controller.userData.value.address ?? '').isNotEmpty ? controller.userData.value.address : controller.currentAddress.value.replaceAll(",", "")}',
                             color: secondaryColor,
                             maxLin: 1,
                           ),
@@ -221,6 +221,8 @@ class AddFishScreen extends StatelessWidget {
                           ),
                           TextFormField(
                             controller: captionsController,
+                            textInputAction: TextInputAction.done,
+
                             style: const TextStyle(color: Colors.white),
                             maxLines: 3,
                             validator: (text) {

@@ -44,6 +44,7 @@ class PostData {
   String? createdAt;
   String? updatedAt;
   String? userName;
+  String? userProfilePic;
   String? userHandle;
   List<TagFish>? tagFish;
   bool? isLiked;
@@ -66,6 +67,7 @@ class PostData {
         this.updatedAt,
         this.userName,
         this.userHandle,
+        this.userProfilePic,
         this.isLiked,
         this.isFavourite,
         this.totalLikes
@@ -91,6 +93,7 @@ class PostData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     userName = json['user_name'];
+    userProfilePic=json['user_profile_pic'];
     userHandle = json['user_handle'];
     isLiked = json['isLiked'];
     isFavourite = json['isfavourite'];
@@ -116,7 +119,7 @@ class PostData {
     data['updated_at'] = this.updatedAt;
     data['user_name'] = this.userName;
     data['user_handle'] = this.userHandle;
-
+    data['user_profile_pic']=this.userProfilePic;
     data['isLiked'] = this.isLiked;
     data['isfavourite'] = this.isFavourite;
     data['total_likes'] = this.totalLikes;

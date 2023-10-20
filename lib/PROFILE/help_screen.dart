@@ -93,6 +93,8 @@ class HelpSupportScreen extends StatelessWidget {
                     ),
                     TextFormField(
                       controller: commentCo,
+                      textInputAction: TextInputAction.done,
+
                       style: const TextStyle(color: Colors.white),
                       maxLines: 10,
                       decoration: InputDecoration(

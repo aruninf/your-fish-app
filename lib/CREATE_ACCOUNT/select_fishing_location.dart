@@ -1,14 +1,16 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_app_bar.dart';
+
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
-import '../CUSTOM_WIDGETS/custom_search_field.dart';
-import '../CUSTOM_WIDGETS/custom_text_style.dart';
+import '../NETWORKS/network_strings.dart';
 import '../UTILS/app_color.dart';
 import '../UTILS/dialog_helper.dart';
 
@@ -19,36 +21,23 @@ class SelectFishingLocation extends StatelessWidget {
 
   final searchController = TextEditingController();
 
-  void callApi() async {
-    var data = {
-      "sortBy": "asc",
-      "sortOn": "created_at",
-      "page": "1",
-      "limit": "20"
-    };
-    Future.delayed(
-      Duration.zero,
-      () => userController.getFishLocation(data),
-    );
-  }
-
   void onError(PlacesAutocompleteResponse response) {
-    DialogHelper.showErrorDialog(description: response.errorMessage );
+    DialogHelper.showErrorDialog(description: response.errorMessage);
     print(response.errorMessage);
   }
-  _handlePressButton(BuildContext context) async {
+
+  handlePressButton(BuildContext context) async {
     // show input autocomplete with selected mode
     // then get the Prediction selected
     Prediction? p = await PlacesAutocomplete.show(
       context: context,
-      //apiKey: '',
-      apiKey: '',
+      apiKey: a + b + c + d,
       onError: onError,
       radius: 10000000,
-      types: [],
-      strictbounds: false,
       mode: Mode.overlay,
       language: "en",
+      types: [],
+      strictbounds: false,
       decoration: InputDecoration(
         hintText: 'Search',
         focusedBorder: OutlineInputBorder(
@@ -58,7 +47,7 @@ class SelectFishingLocation extends StatelessWidget {
           ),
         ),
       ),
-      components: [Component(Component.country, "in")],
+      components: [Component(Component.country, "au")],
     );
 
     displayPrediction(p ?? Prediction());
@@ -66,26 +55,25 @@ class SelectFishingLocation extends StatelessWidget {
 
 
 Future<void> displayPrediction(Prediction p) async {
-  GoogleMapsPlaces _places = GoogleMapsPlaces(
-    apiKey: '',
-    apiHeaders: await const GoogleApiHeaders().getHeaders(),
-  );
-  PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId ?? '');
-  final lat = detail.result.geometry?.location.lat;
-  final lng = detail.result.geometry?.location.lng;
-  DialogHelper.showErrorDialog(description: "${p.description} - $lat/$lng" );
-
-
-}
+    GoogleMapsPlaces places = GoogleMapsPlaces(
+      apiKey: a + b + c + d,
+      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    );
+    PlacesDetailsResponse detail =
+        await places.getDetailsByPlaceId(p.placeId ?? '');
+    final lat = detail.result.geometry?.location.lat;
+    final lng = detail.result.geometry?.location.lng;
+    userController.selectedFishingLocation.add(p.description?.split(",").first);
+    //DialogHelper.showErrorDialog(description: "${p.description}");
+  }
 
   @override
   Widget build(BuildContext context) {
-    callApi();
     return Scaffold(
       extendBody: false,
       backgroundColor: primaryColor,
       body: SafeArea(
-        child: Column(
+        child: Obx(() => Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -94,84 +82,115 @@ Future<void> displayPrediction(Prediction p) async {
               textColor: fishColor,
             ),
 
-            //TextButton(onPressed: () => _handlePressButton(context), child: const Text("Search Places")),
-
-            const SizedBox(
-              height: 16,
-            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: CustomSearchField(
-                hintText: 'Search Location',
-                controller: searchController,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextButton.icon(
+                label: const Text("Search from google map",style: TextStyle(color:primaryColor),),
+                onPressed: () => handlePressButton(context),
+                icon: const Icon(Icons.search,color: primaryColor,),
+                style: TextButton.styleFrom(
+                  backgroundColor: secondaryColor
+                ),
+
               ),
             ),
             const SizedBox(
-              height: 16,
+              height: 8,
             ),
-            Obx(() => Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: userController.isDataLoading.value
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : userController.fishingLocation.isEmpty
-                          ? const Center(
-                              child: Text(
-                                "No Record Found!",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            )
-                          : ListView.builder(
-                              itemCount: userController.fishingLocation.length,
-                              itemBuilder: (context, index) => Obx(() =>
-                                  Container(
-                                    width: Get.width,
-                                    margin: const EdgeInsets.only(top: 16),
-                                    decoration: BoxDecoration(
-                                      color: userController
-                                              .selectedFishingLocation
-                                              .contains(userController
-                                                  .fishingLocation[index].name)
-                                          ? fishColor
-                                          : btnColor,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.circular(12),
-                                      onTap: () {
-                                        if (userController
-                                            .selectedFishingLocation
-                                            .contains(userController
-                                                .fishingLocation[index].name)) {
-                                          userController.selectedFishingLocation
-                                              .remove(userController
-                                                  .fishingLocation[index].name);
-                                        } else {
-                                          userController.selectedFishingLocation
-                                              .add(userController
-                                                  .fishingLocation[index].name);
-                                        }
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(16),
-                                        child: CustomText(
-                                          text: userController
-                                                  .fishingLocation[index]
-                                                  .name ??
-                                              '',
-                                          sizeOfFont: 16,
-                                          weight: FontWeight.w800,
-                                        ),
-                                      ),
-                                    ),
-                                  )),
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                      blurRadius: 3.0,
+                      color: Colors.black26,
+                    ),
+                  ]
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 14),
+
+              child: TextFormField(
+                  //onTap: () => handlePressButton(context),
+                  controller: searchController,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 13),
+                  decoration:  InputDecoration(
+                      border: InputBorder.none,
+                      suffixIcon: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 2,horizontal: 8),
+                        width: 70,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            backgroundColor: secondaryColor,
+                          ),
+                          onPressed: () {
+                            if (searchController.text.trim().isNotEmpty) {
+                              userController.selectedFishingLocation
+                                  .add(searchController.text.trim());
+                              searchController.text="";
+                            }
+                          },
+                          child: const Text('Save',style: TextStyle(color: primaryColor),),
+                        ),
+                      ),
+                      prefixIcon: const Icon(PhosphorIcons.magnifying_glass),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 14, horizontal: 16),
+                      hintStyle:
+                      const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                      hintText: 'Add manually')),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Wrap(
+                children: List.generate(
+                    userController.selectedFishingLocation.length,
+                        (index) => InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () {
+                        if (userController.selectedFishingLocation.contains(
+                            userController
+                                .selectedFishingLocation[index])) {
+                          userController.selectedFishingLocation.remove(
+                              userController
+                                  .selectedFishingLocation[index]);
+                        }
+                      },
+                      child: Container(
+                        width: Get.width,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 14),
+                        margin: const EdgeInsets.only(top: 16),
+                        decoration: BoxDecoration(
+                            color: secondaryColor,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              userController.selectedFishingLocation[index],
+                              style: const TextStyle(
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.w700),
                             ),
-                ))
-            )
+                            const Spacer(),
+                            const Icon(
+                              Icons.close,
+                              color: primaryColor,
+
+                            )
+                          ],
+                        ),
+                      ),
+                    )),
+              ),
+            ),
           ],
-        ),
+        )),
       ),
       bottomNavigationBar: Container(
         width: Get.width,
@@ -183,7 +202,7 @@ Future<void> displayPrediction(Prediction p) async {
           btnText: "NEXT",
           onClick: () {
             if (userController.selectedFishingLocation.isEmpty) {
-              Get.snackbar('Required!', 'Select at-least one',
+              Get.snackbar('Required!', 'Select at least one',
                   colorText: Colors.orange, snackPosition: SnackPosition.TOP);
               return;
             }

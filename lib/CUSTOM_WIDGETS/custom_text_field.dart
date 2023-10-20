@@ -31,6 +31,7 @@ class CommonTextField extends StatelessWidget {
         child:TextFormField(
             controller: controller,
             keyboardType: textInputType ?? TextInputType.text,
+            textInputAction: TextInputAction.done,
             maxLines: maxLine ?? 1,
             readOnly: isReadOnly ?? false,
             maxLength: maxLength ?? TextField.noMaxLength,

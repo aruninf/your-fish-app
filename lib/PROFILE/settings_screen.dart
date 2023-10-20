@@ -30,12 +30,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void callPrivacyPolicyApi() async {
-    Future.delayed(
-      Duration.zero,
-      () => controller.getContent(),
-    );
-  }
+
 
   callBlogArticleApi() async {
     var data = {
@@ -101,6 +96,7 @@ class SettingsScreen extends StatelessWidget {
                         activeColor: Colors.redAccent,
                         inactiveColor: btnColor,
                         value: controller.currentValues.value,
+                        thumbColor: secondaryColor,
                         label: '${controller.currentValues.value.toInt()}',
                         onChanged: (double value) {
                           controller.currentValues.value = value;
@@ -173,14 +169,14 @@ class SettingsScreen extends StatelessWidget {
                       } else if (index == 2) {
                         controller.shareApp();
                       } else if (index == 3) {
-                        callPrivacyPolicyApi();
+                        //callPrivacyPolicyApi();
                         Get.to(
                             PrivacyAndTermsScreen(
                               title: "Terms & Conditions",
                             ),
                             transition: Transition.rightToLeft);
                       } else if (index == 4) {
-                        callPrivacyPolicyApi();
+                        //callPrivacyPolicyApi();
                         Get.to(
                             PrivacyAndTermsScreen(
                               title: "Privacy Policy",
