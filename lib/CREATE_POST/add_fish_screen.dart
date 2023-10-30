@@ -3,7 +3,7 @@ import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/fish_dropdown.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:yourfish/MODELS/post_response.dart';
 
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
@@ -14,19 +14,28 @@ import '../UTILS/app_color.dart';
 import '../UTILS/dialog_helper.dart';
 
 class AddFishScreen extends StatelessWidget {
-  AddFishScreen({super.key});
+  AddFishScreen({super.key, this.postData});
 
   final userController = Get.find<UserController>();
   final controller = Get.put(PostController());
   final imageUrl = ''.obs;
   final _formKey = GlobalKey<FormState>();
   final captionsController = TextEditingController();
+  final PostData? postData;
 
   void getTags() {
     var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "100"};
     Future.delayed(
       Duration.zero,
-      () => Get.find<UserController>().getFish(data),
+      () {
+        Get.find<UserController>().getFish(data);
+        if ((postData?.caption ?? "").isNotEmpty) {
+          imageUrl.value = postData?.image ?? "";
+          captionsController.text = postData?.caption ?? "";
+          controller.isLocationOn.value = postData?.isPublic == 1;
+          //userController.selectedFishTag.addAll(postData?.tagFish ?? []);
+        }
+      },
     );
   }
 
@@ -222,7 +231,6 @@ class AddFishScreen extends StatelessWidget {
                           TextFormField(
                             controller: captionsController,
                             textInputAction: TextInputAction.done,
-
                             style: const TextStyle(color: Colors.white),
                             maxLines: 3,
                             validator: (text) {
@@ -282,6 +290,7 @@ class AddFishScreen extends StatelessWidget {
               if (controller.currentPosition.value.latitude != 0 &&
                   controller.currentPosition.value.longitude != 0) {
                 var data = {
+                  "id": postData?.id,
                   "isPublic": controller.isLocationOn.value,
                   "type": 1,
                   "latitude": controller.currentPosition.value.latitude,
@@ -290,7 +299,7 @@ class AddFishScreen extends StatelessWidget {
                       (controller.userData.value.address ?? '').isNotEmpty
                           ? controller.userData.value.address
                           : controller.currentAddress.value,
-                  "zip_code":controller.addressPinCode.value,
+                  "zip_code": controller.addressPinCode.value,
                   "tag_fish": userController.selectedFishTag
                       .map((element) => element.id)
                       .toList(),

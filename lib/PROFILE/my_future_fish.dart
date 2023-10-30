@@ -143,7 +143,11 @@ class MyFutureFishWidget extends StatelessWidget {
                           btnBgColor: secondaryColor,
                           btnTextColor: primaryColor,
                           btnText: "Add to List",
-                          onClick: () => Get.back(),
+                          onClick: () {
+                            Get.snackbar("Congratulation! you have new fish on your list!", '',
+                                colorText: Colors.green, snackPosition: SnackPosition.TOP);
+                            Get.back();
+                          },
                         ),
                       ),
                     ],

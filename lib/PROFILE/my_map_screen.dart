@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,7 +24,7 @@ class MyProfileMapWidget extends StatelessWidget {
   void getTopSpots() async {
     Future.delayed(
       Duration.zero,
-      () {
+      () async {
         /// type for top spots my and all 1 for all and 2 for me
         mapController.getTopSpots({"type": (isTopSpots ?? false) ? 1 : 2});
       },
@@ -129,6 +130,7 @@ class MyProfileMapWidget extends StatelessWidget {
                         mapController.initialCameraPosition.value,
                     onMapCreated: (GoogleMapController controller) async {
                       mapController.googleMapController.complete(controller);
+
                     },
                   )),
             ),

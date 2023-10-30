@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,8 +41,6 @@ class CreateAccountScreen extends StatelessWidget {
     emailController.text = email ?? '';
     nameController.text = name ?? '';
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      //extendBody: true,
       backgroundColor: primaryColor,
       body: SafeArea(
         child: Stack(
@@ -53,121 +53,123 @@ class CreateAccountScreen extends StatelessWidget {
                 children: [
                   const CustomAppBar(
                       heading: 'Create\nYour Account', logoColor: btnColor),
-                  SingleChildScrollView(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        CommonTextField(
-                          hintText: name ?? 'Name',
-                          controller: nameController,
-                          maxLength: 16,
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        CommonTextField(
-                          hintText: 'Handle',
-                          controller: handleController,
-                          maxLength: 20,
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        CommonTextField(
-                          hintText: email ?? 'Email',
-                          isReadOnly:
-                              (socialType == 'google' && socialId.isNotEmpty)
-                                  ? true
-                                  : false,
-                          controller: emailController,
-                          maxLength: 30,
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Obx(() {
-                          dobController.text = userController.selectDob.value;
-                          return Wrap(
-                            direction: Axis.horizontal,
-                            children: [
-                              SizedBox(
-                                width: Get.width * 0.44,
-                                child: Container(
-                                    decoration: BoxDecoration(
-                                      color: btnColor,
-                                      borderRadius: BorderRadius.circular(16.0),
-                                    ),
-                                    child: TextFormField(
-                                        onTap: () => userController.selectDate(context),
-                                        controller: dobController,
-                                        readOnly: true,
-                                        textInputAction: TextInputAction.done,
-                                        keyboardType: TextInputType.text,
-                                        maxLines: 1,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w800,
-                                            fontSize: 16),
-                                        decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    horizontal: 16,
-                                                    vertical: 16),
-                                            hintStyle: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w800),
-                                            hintText: 'Select DOB'))),
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.03,
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.44,
-                                child: GenderDropdown(
-                                    dropdownValue: userController.gender,
-                                    callback: (val) =>
-                                        userController.gender = val),
-                              ),
-                            ],
-                          );
-                        }),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: btnColor,
-                            borderRadius: BorderRadius.circular(16.0),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 16,
                           ),
-                          child: TextFormField(
-                              controller: numberController,
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                      signed: true, decimal: true),
-                              textInputAction: TextInputAction.done,
-                              //obscureText:(isPassword ?? false) ? uController.isPasswordVisible.value : false,
-                              maxLines: 1,
-                              maxLength: 10,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w800, fontSize: 16),
-                              decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  counterText: '',
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 16),
-                                  hintStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w800),
-                                  hintText: 'Phone Number')),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                      ],
+                          CommonTextField(
+                            hintText: name ?? 'Name',
+                            controller: nameController,
+                            maxLength: 16,
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          CommonTextField(
+                            hintText: 'Handle',
+                            controller: handleController,
+                            maxLength: 20,
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          CommonTextField(
+                            hintText: email ?? 'Email',
+                            isReadOnly:
+                                (socialType == 'google' && socialId.isNotEmpty)
+                                    ? true
+                                    : false,
+                            controller: emailController,
+                            maxLength: 30,
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Obx(() {
+                            dobController.text = userController.selectDob.value;
+                            return Wrap(
+                              direction: Axis.horizontal,
+                              children: [
+                                SizedBox(
+                                  width: Get.width * 0.44,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        color: btnColor,
+                                        borderRadius: BorderRadius.circular(16.0),
+                                      ),
+                                      child: TextFormField(
+                                          onTap: () => userController.selectDate(context),
+                                          controller: dobController,
+                                          readOnly: true,
+                                          textInputAction: TextInputAction.done,
+                                          keyboardType: TextInputType.text,
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 16),
+                                          decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 16),
+                                              hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w800),
+                                              hintText: 'Select DOB'))),
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.03,
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.44,
+                                  child: GenderDropdown(
+                                      dropdownValue: userController.gender,
+                                      callback: (val) =>
+                                          userController.gender = val),
+                                ),
+                              ],
+                            );
+                          }),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: btnColor,
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            child: TextFormField(
+                                controller: numberController,
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                        signed: true, decimal: true),
+                                textInputAction: TextInputAction.done,
+                                //obscureText:(isPassword ?? false) ? uController.isPasswordVisible.value : false,
+                                maxLines: 1,
+                                maxLength: 10,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w800, fontSize: 16),
+                                decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    counterText: '',
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 16),
+                                    hintStyle: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w800),
+                                    hintText: 'Phone Number ( Optional ) ')),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -223,12 +225,6 @@ class CreateAccountScreen extends StatelessWidget {
               return;
             }
 
-            if ((numberController.text ?? '').length < 10) {
-              Get.snackbar('Required!', 'Please enter the correct phone number',
-                  colorText: Colors.orange, snackPosition: SnackPosition.TOP);
-
-              return;
-            }
             dynamic data = {
               "user_type": "user",
               "social_type": socialType,

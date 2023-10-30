@@ -8,12 +8,13 @@ import '../../MODELS/post_response.dart';
 import '../../UTILS/app_color.dart';
 
 class FindABuddyPostItem extends StatelessWidget {
-  FindABuddyPostItem({super.key, required this.postModel});
+  FindABuddyPostItem({super.key, required this.postModel, required this.index});
 
   final controller = Get.find<PostController>();
 
   final PostData postModel;
 
+  final int index;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -75,7 +76,15 @@ class FindABuddyPostItem extends StatelessWidget {
                         color: Colors.white),
                   ),
                 ),
-              ) : const SizedBox.shrink(),
+              ) :  GestureDetector(
+                onTapDown: (de) {
+                  controller.showPopupMenuForEditPost(context, de, postModel, index,1);
+                },
+                child: const Icon(
+                  Icons.more_vert_rounded,
+                  color: fishColor,
+                ),
+              ),
             ],
           ),
           const SizedBox(

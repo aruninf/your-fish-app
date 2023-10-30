@@ -15,9 +15,18 @@ class PostDetailScreen extends StatelessWidget {
 
   final PostData postModel;
   final controller = Get.find<PostController>();
+  var isLiked=false.obs;
+  var isFav=false.obs;
 
+  void getData(){
+    Future.delayed(Duration.zero,() {
+      isLiked.value = postModel.isLiked ?? false;
+      isFav.value = postModel.isFavourite ?? false;
+    },);
+  }
   @override
   Widget build(BuildContext context) {
+    getData();
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
@@ -96,17 +105,24 @@ class PostDetailScreen extends StatelessWidget {
                         children: [
                           InkWell(
                             borderRadius: BorderRadius.circular(8),
-                            onTap: () => controller.addLiked(postModel),
+                            onTap: () {
+                              isLiked.value=!isLiked.value;
+
+                              controller.addLiked(postModel,isLiked.value);
+                            },
                             child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  controller.isLiked.value
-                                      ? PhosphorIcons.thumbs_up_fill
-                                      : PhosphorIcons.thumbs_up,
-                                  color: controller.isLiked.value
+                                child:  Image.asset(
+                                  isLiked.value
+                                      ? fishIcon
+                                      : fishIcon,
+                                  color: isLiked.value
                                       ? fishColor
                                       : Colors.white,
-                                )),
+                                  width: 32,height: 32,
+
+                                ),
+                            ),
                           ),
                           controller.userData.value.id!=postModel.userId ? InkWell(
                             borderRadius: BorderRadius.circular(8),
@@ -133,14 +149,17 @@ class PostDetailScreen extends StatelessWidget {
                           const Spacer(),
                           InkWell(
                             borderRadius: BorderRadius.circular(8),
-                            onTap: () => controller.addFavourite(postModel),
+                            onTap: () {
+                              isFav.value=!isFav.value;
+                              controller.addFavourite(postModel,isFav.value);
+                            },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Icon(
-                                controller.isFav.value
+                                isFav.value
                                     ? PhosphorIcons.bookmark_simple_fill
                                     : PhosphorIcons.bookmark_simple,
-                                color: controller.isFav.value
+                                color: isFav.value
                                     ? fishColor
                                     : Colors.white,
                               ),

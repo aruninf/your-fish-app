@@ -5,6 +5,7 @@ import 'package:yourfish/CONTROLLERS/user_controller.dart';
 import 'package:yourfish/UTILS/app_color.dart';
 
 import '../CONTROLLERS/database.dart';
+import '../CONTROLLERS/post_controller.dart';
 
 class CustomChatAppBar extends StatelessWidget {
   const CustomChatAppBar(
@@ -113,8 +114,53 @@ class CustomChatAppBar extends StatelessWidget {
                   ],
                 ),
               ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: GestureDetector(
+                    onTapDown: (de) {
+                      showPopupMenu(context, de,
+                          chatRoomId);
+                    },
+                    child: const Icon(
+                      Icons.more_vert_rounded,
+                      color: fishColor,
+                      size: 24,
+                    )),
+              )
             ],
           ),
         ),);
+  }
+
+  showPopupMenu(BuildContext context, TapDownDetails details, String? matchId) {
+    showMenu<String>(
+      context: context,
+      color: fishColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+      ),
+      position: RelativeRect.fromLTRB(
+        details.globalPosition.dx,
+        details.globalPosition.dy,
+        details.globalPosition.dx,
+        details.globalPosition.dy,
+      ),
+      items: [
+        PopupMenuItem<String>(
+            value: '1',
+            height: 30,
+            onTap: () {
+              Get.find<PostController>().deleteChat(matchId ?? "");
+              Get.back();
+            },
+            padding: const EdgeInsets.only(left: 13),
+            child: const Text(
+              'Report and Block',
+              style: TextStyle(color: secondaryColor),
+            )),
+      ],
+      elevation: 8.0,
+    );
   }
 }

@@ -99,9 +99,9 @@ class _HomeSectionState extends State<HomeSection> {
                           if (index < postController.postData.length) {
                             return postController.postData[index].type != 2
                                 ? SingleFishPostWidget(
-                                    postModel: postController.postData[index])
+                                    postModel: postController.postData[index],index: index,)
                                 : FindABuddyPostItem(
-                                    postModel: postController.postData[index],
+                                    postModel: postController.postData[index],index: index,
                                   );
                           } else if (index == postController.postData.length &&
                               index > 0) {

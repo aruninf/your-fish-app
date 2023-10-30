@@ -50,6 +50,7 @@ class MapController extends GetxController {
   @override
   void onReady() async {
     await initializeMap();
+
     super.onReady();
   }
 

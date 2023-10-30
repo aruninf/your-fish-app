@@ -148,7 +148,8 @@ class GetStartScreen extends StatelessWidget {
                   height: 16,
                 ),
                 InkWell(
-                  onTap: () => Get.to(PrivacyAndTermsScreen(title: "Privacy Policy")),
+                  onTap: () =>
+                      Get.to(PrivacyAndTermsScreen(title: "Privacy Policy")),
                   child: RichText(
                       textAlign: TextAlign.center,
                       text: const TextSpan(children: [
@@ -159,7 +160,17 @@ class GetStartScreen extends StatelessWidget {
                             text: " Privacy Policy",
                             style: TextStyle(
                                 color: fishColor, fontWeight: FontWeight.w600)),
-                        TextSpan(text: " and ", style: TextStyle(color: btnColor)),
+                      ])),
+                ),
+                InkWell(
+                  onTap: () => Get.to(PrivacyAndTermsScreen(
+                    title: "Terms & Conditions",
+                  )),
+                  child: RichText(
+                      textAlign: TextAlign.center,
+                      text: const TextSpan(children: [
+                        TextSpan(
+                            text: " and ", style: TextStyle(color: btnColor)),
                         TextSpan(
                             text: "Terms and Conditions.",
                             style: TextStyle(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
@@ -11,10 +13,6 @@ import '../MODELS/content_response.dart';
 import '../MODELS/setting_response.dart';
 import '../NETWORKS/network.dart';
 import '../UTILS/dialog_helper.dart';
-
-
-
-
 
 class SettingController extends GetxController {
   final selectedCategories = [].obs;
@@ -74,8 +72,11 @@ class SettingController extends GetxController {
   }
 
   shareApp() async {
-    Share.share('check out my App https://appifanydevelopers.github.io/#/',
-        subject: 'Look what I made!');
+    Platform.isIOS
+        ? Share.share('Download the Your Fish App and enjoy ultimate fishing /n https://apps.apple.com/us/app/your-fish/id6468571957',
+            subject: 'Your Fish - Your Ultimate Fishing Companion')
+        : Share.share('Download the Your Fish App and enjoy ultimate fishing /n https://play.google.com/store/apps/details?id=com.yourfish',
+            subject: 'Your Fish - Your Ultimate Fishing Companion');
   }
 
   /// 💥💥💥💥💥💥💥 Get Articles 💥💥💥💥💥💥💥
@@ -149,12 +150,12 @@ class SettingController extends GetxController {
   getSettingData() async {
     listOfOn.clear();
     final response = await Network().getRequest(endPoint: getSettingDataApi);
-    if (response?.data != null ) {
+    if (response?.data != null) {
       final settingResponse = SettingResponse.fromJson(response?.data);
 
       settings.value = settingResponse.data ?? Settings();
 
-      currentValues.value=double.parse(settings.value.publicFeed ?? '0');
+      currentValues.value = double.parse(settings.value.publicFeed ?? '0');
       if ((settings.value.newMessage ?? 0) == 1) {
         listOfOn.add(listOfNotification[0]);
       }

@@ -40,26 +40,28 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
             ),
             Image.asset(
               fishTextImage,
-              height: Get.width * 0.4,
-              width: Get.width * 0.6,
+              height: Get.height * 0.17,
+              width: Get.width * 0.5,
             ),
-            SizedBox(
-              height: Get.height * 0.04,
+            const SizedBox(
+              height: 8,
             ),
             Container(
+              height: Get.height*0.51,
+              width: double.infinity,
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                   //color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(width: 1, color: Colors.white)),
-              child: Column(children: [
-                SizedBox(
-                  height: Get.height * 0.01,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                  children: [
+                const SizedBox(
+                  height: 8,
                 ),
-                SizedBox(
-                  height: Get.height * 0.32,
-                  width: Get.width,
+                Flexible(
                   child: PageIndicatorContainer(
                     align: IndicatorAlign.bottom,
                     length: 3,
@@ -120,8 +122,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                     },
                   ),
                 ),
-                SizedBox(
-                  height: Get.height * 0.01,
+                const SizedBox(
+                  height: 8,
                 ),
               ]),
             ),
@@ -130,7 +132,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
               alignment: Alignment.bottomLeft,
               child: Image.asset(
                 fishLeftImage,
-                height: Get.width * 0.3,
+                height: Get.width * 0.25,
                 width: Get.width * 0.65,
                 fit: BoxFit.fill,
                 color: index == 1 ? secondaryColor : fishColor,
@@ -157,6 +159,7 @@ class SliderWidget extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           title,
@@ -167,7 +170,7 @@ class SliderWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 16,
+          height: 8,
         ),
         SingleChildScrollView(
           child: Text(

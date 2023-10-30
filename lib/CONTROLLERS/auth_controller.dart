@@ -27,6 +27,7 @@ class AuthController extends GetxController {
   late String? currentTimeZone;
   final isPasswordVisible = true.obs;
   final isPasswordVisible1 = true.obs;
+  final name="buddy".obs;
 
   @override
   void onReady() async {
@@ -85,6 +86,7 @@ class AuthController extends GetxController {
             await firebaseUser.updateDisplayName(displayName);
           }
 
+          name.value=fullName?.givenName ?? "";
           userSocialLogin(userCredential.user, 'apple');
         } on FirebaseAuthException catch (error) {
           //print(error.message);
@@ -191,7 +193,7 @@ class AuthController extends GetxController {
           Get.off(() => CreateAccountScreen(
                 socialType: socialType,
                 socialId: user.uid,
-                name: user.displayName,
+                name: user.displayName ?? name.value,
                 email: user.email,
               ));
         }

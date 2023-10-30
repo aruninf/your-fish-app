@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/fish_dropdown.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:yourfish/MODELS/post_response.dart';
 
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
@@ -15,16 +16,27 @@ import '../UTILS/dialog_helper.dart';
 
 
 class FindABuddyPostScreen extends StatelessWidget {
-  FindABuddyPostScreen({super.key});
+  FindABuddyPostScreen({super.key, this.postData});
   final userController = Get.find<UserController>();
   final controller = Get.put(PostController());
   final imageUrl = ''.obs;
   final _formKey = GlobalKey<FormState>();
   final captionsController = TextEditingController();
+  final PostData? postData;
 
   void getTags() {
     var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "100"};
-    Future.delayed(Duration.zero,()=> Get.find<UserController>().getFish(data),);
+    Future.delayed(Duration.zero,(){
+
+      Get.find<UserController>().getFish(data);
+
+      if ((postData?.caption ?? "").isNotEmpty) {
+        //imageUrl.value = postData?.image ?? "";
+        captionsController.text = postData?.caption ?? "";
+        controller.isLocationOn.value = postData?.isPublic == 1;
+        //userController.selectedFishTag.addAll(postData?.tagFish ?? []);
+      }
+    },);
   }
 
   @override
@@ -289,6 +301,7 @@ class FindABuddyPostScreen extends StatelessWidget {
                 return;
               }
               var data = {
+                "id":postData?.id,
                 "isPublic": controller.isLocationOn.value,
                 "type": 2,
                 "latitude": controller.currentPosition.value.latitude,
