@@ -5,12 +5,17 @@ import 'package:yourfish/CONTROLLERS/post_controller.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/fish_dropdown.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:yourfish/MODELS/post_response.dart';
-
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:get/get.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../NETWORKS/network.dart';
+import '../NETWORKS/network_strings.dart';
 import '../UTILS/app_color.dart';
 import '../UTILS/dialog_helper.dart';
 
@@ -39,6 +44,67 @@ class FindABuddyPostScreen extends StatelessWidget {
     },);
   }
 
+  final searchController = TextEditingController();
+
+  void onError(PlacesAutocompleteResponse response) {
+    DialogHelper.showErrorDialog(description: response.errorMessage);
+    print(response.errorMessage);
+  }
+
+  handlePressButton(BuildContext context) async {
+    // show input autocomplete with selected mode
+    // then get the Prediction selected
+    Prediction? p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: a + b + c + d,
+      onError: onError,
+      radius: 10000000,
+      mode: Mode.overlay,
+      language: "en",
+      types: [],
+      strictbounds: false,
+      decoration: InputDecoration(
+        hintText: 'Search',
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+            color: Colors.white,
+          ),
+        ),
+      ),
+      components: [Component(Component.country, "au")],
+    );
+
+    displayPrediction(p ?? Prediction());
+  }
+
+  Future<void> displayPrediction(Prediction p) async {
+    GoogleMapsPlaces places = GoogleMapsPlaces(
+      apiKey: a + b + c + d,
+      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    );
+    PlacesDetailsResponse detail =
+    await places.getDetailsByPlaceId(p.placeId ?? '');
+    final lat = detail.result.geometry?.location.lat;
+    final lng = detail.result.geometry?.location.lng;
+    //userController.selectedFishingLocation.add(p.description?.split(",").first);
+    controller.currentAddress.value = p.description!.split(",").first;
+    // Extracting the zip code
+    for (var component in detail.result.addressComponents) {
+      for (var type in component.types) {
+        if (type == "postal_code") {
+          //zipCode = component.longName;
+          controller.addressPinCode.value=component.longName;
+          break;
+        }
+      }
+
+    }
+
+    //DialogHelper.showErrorDialog(description: "${p.description}");
+  }
+
+
   @override
   Widget build(BuildContext context) {
     getTags();
@@ -63,14 +129,27 @@ class FindABuddyPostScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomText(
-                            text:
-                                '${(controller.userData.value.address ?? '').isNotEmpty ? controller.userData.value.address : controller.currentAddress.value.replaceAll(",", "")}',
-                            color: secondaryColor,
-                            maxLin: 1,
-                          ),
-                          const SizedBox(
-                            height: 8,
+                          ListTile(
+                            dense: true,
+                            title: TextButton.icon(
+                              label: const Text(
+                                "Add a specific location",
+                                style: TextStyle(color: primaryColor),
+                              ),
+                              onPressed: () => handlePressButton(context),
+                              icon: const Icon(
+                                Icons.search,
+                                color: primaryColor,
+                              ),
+                              style: TextButton.styleFrom(
+                                  backgroundColor: secondaryColor),
+                            ),
+                            subtitle: CustomText(
+                              text:
+                              (controller.currentAddress.value.replaceAll(",", "")),
+                              color: secondaryColor,
+                              maxLin: 1,
+                            ),
                           ),
                           Container(
                             decoration: BoxDecoration(
@@ -306,9 +385,7 @@ class FindABuddyPostScreen extends StatelessWidget {
                 "type": 2,
                 "latitude": controller.currentPosition.value.latitude,
                 "longitude": controller.currentPosition.value.longitude,
-                "address": (controller.userData.value.address ?? '').isNotEmpty
-                    ? controller.userData.value.address
-                    : controller.currentAddress.value,
+                "address": controller.currentAddress.value,
                 "zip_code":controller.addressPinCode.value,
 
                 "tag_fish": userController.selectedFishTag

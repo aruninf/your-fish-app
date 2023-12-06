@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/CUSTOM_WIDGETS/image_place_holder_widget.dart';
 
 import '../../CONTROLLERS/user_controller.dart';
+import '../../CUSTOM_WIDGETS/cached_image_view.dart';
 import '../../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../../CUSTOM_WIDGETS/custom_text_style.dart';
+import '../../PROFILE/view_profile_screen.dart';
 import '../../UTILS/app_color.dart';
-import '../../UTILS/app_images.dart';
-
 
 class FriendRequestScreen extends StatelessWidget {
   FriendRequestScreen({super.key});
@@ -23,7 +22,7 @@ class FriendRequestScreen extends StatelessWidget {
     };
     Future.delayed(
       Duration.zero,
-          () => controller.getFriendRequest(data),
+      () => controller.getFriendRequest(data),
     );
   }
 
@@ -42,103 +41,104 @@ class FriendRequestScreen extends StatelessWidget {
             Expanded(
               child: Obx(() => controller.isDataLoading.value
                   ? const Center(
-                child: CircularProgressIndicator(),
-              )
+                      child: CircularProgressIndicator(),
+                    )
                   : controller.friendRequest.isNotEmpty
-                  ? ListView.builder(
-                itemCount: controller.friendRequest.length,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(
-                    top: 8, bottom: 8, left: 8, right: 8),
-                itemBuilder: (context, index) => ListTile(
-                  dense: true,
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 8),
-                  leading: ClipOval(
-                    child: Image.network(
-                      controller.friendRequest[index].profilePic ??
-                          '',
-                      height: 48,
-                      width: 48,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const ImagePlaceHolderWidget(
-                            height: 48,
-                            width: 48,
+                      ? ListView.builder(
+                          itemCount: controller.friendRequest.length,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.only(
+                              top: 8, bottom: 8, left: 8, right: 8),
+                          itemBuilder: (context, index) => ListTile(
+                            dense: true,
+                            onTap: () => Get.to(
+                                    () => ViewProfileScreen(
+                                    user: controller.allUsers[index]),
+                                transition: Transition.rightToLeft),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            leading: ClipOval(
+                              child: CustomCachedImage(
+                                imageUrl: controller
+                                        .friendRequest[index].profilePic ??
+                                    '',
+                                height: 48,
+                                width: 48,
+                              ),
+                            ),
+                            title: CustomText(
+                              text: controller.friendRequest[index].name ?? '',
+                              color: Colors.white,
+                            ),
+                            //subtitle: const CustomText(text: '@a.brown',color: Colors.white,),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                  child: TextButton(
+                                      onPressed: () {
+                                        var data = {
+                                          "request_to": controller
+                                              .friendRequest[index].id,
+                                          "request_status": 3
+                                        };
+                                        controller.sendRequest(data, 2);
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: fishColor,
+                                          padding: EdgeInsets.zero,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8))),
+                                      child: const Text(
+                                        'Accept',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: primaryColor,
+                                            fontWeight: FontWeight.w700),
+                                      )),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                  child: TextButton(
+                                      onPressed: () {
+                                        var data = {
+                                          "request_to": controller
+                                              .friendRequest[index].id,
+                                          "request_status": 4
+                                        };
+                                        controller.sendRequest(data, 2);
+                                      },
+                                      style: TextButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              side: const BorderSide(
+                                                  width: 1,
+                                                  color: Colors.white))),
+                                      child: const Text(
+                                        'Deny',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      )),
+                                ),
+                              ],
+                            ),
                           ),
-                    ),
-                  ),
-                  title: CustomText(
-                    text: controller.friendRequest[index].name ?? '',
-                    color: Colors.white,
-                  ),
-                  //subtitle: const CustomText(text: '@a.brown',color: Colors.white,),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 30,
-                        child: TextButton(
-                            onPressed: () {
-                              var data = {
-                                "request_to":  controller.friendRequest[index].id,
-                                "request_status": 3
-                              };
-                              controller.sendRequest(data,2);
-                            },
-                            style: TextButton.styleFrom(
-                                backgroundColor: fishColor,
-                                padding: EdgeInsets.zero,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(8))),
-                            child: const Text(
-                              'Accept',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.w700),
-                            )),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      SizedBox(
-                        height: 30,
-                        child: TextButton(
-                            onPressed: () {
-                              var data = {
-                                "request_to":  controller.friendRequest[index].id,
-                                "request_status": 4
-                              };
-                              controller.sendRequest(data,2);
-                            },
-                            style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(8),
-                                    side: const BorderSide(
-                                        width: 1,
-                                        color: Colors.white))),
-                            child: const Text(
-                              'Deny',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-                  : const Center(
-                child: Text(
-                  "No Friend Request!",
-                  style: TextStyle(color: secondaryColor),
-                ),
-              )),
+                        )
+                      : const Center(
+                          child: Text(
+                            "No Friend Request!",
+                            style: TextStyle(color: secondaryColor),
+                          ),
+                        )),
             ),
           ],
         ),

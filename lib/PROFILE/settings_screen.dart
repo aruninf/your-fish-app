@@ -161,28 +161,25 @@ class SettingsScreen extends StatelessWidget {
                   child: ListTile(
                     onTap: () {
                       if (index == 0) {
-                        Get.to(SavedPostWidget(),
-                            transition: Transition.rightToLeft);
-                      } else if (index == 1) {
                         Get.to(NotificationScreen(),
                             transition: Transition.rightToLeft);
-                      } else if (index == 2) {
+                      } else if (index == 1) {
                         controller.shareApp();
-                      } else if (index == 3) {
+                      } else if (index == 2) {
                         //callPrivacyPolicyApi();
                         Get.to(
                             PrivacyAndTermsScreen(
                               title: "Terms & Conditions",
                             ),
                             transition: Transition.rightToLeft);
-                      } else if (index == 4) {
+                      } else if (index == 3) {
                         //callPrivacyPolicyApi();
                         Get.to(
                             PrivacyAndTermsScreen(
                               title: "Privacy Policy",
                             ),
                             transition: Transition.rightToLeft);
-                      } else if (index == 5) {
+                      } else if (index == 4) {
                         callFaqApi();
                         Get.to(FAQScreen(), transition: Transition.rightToLeft);
                       } else {

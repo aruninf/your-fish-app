@@ -1,15 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/CREATE_POST/add_fish_screen.dart';
-import 'package:yourfish/UTILS/app_color.dart';
-import 'package:yourfish/UTILS/app_images.dart';
 
 import '../../CONTROLLERS/post_controller.dart';
-import '../../CUSTOM_WIDGETS/image_place_holder_widget.dart';
+import '../../CUSTOM_WIDGETS/cached_image_view.dart';
+import '../../PROFILE/post_detail_screen.dart';
 import '../home/empty_post_widget.dart';
-import '../home/find_a_buddy_post_item.dart';
-import '../home/single_post_item.dart';
 
 class MyPostWidget extends StatefulWidget {
   MyPostWidget({super.key, required this.myPost});
@@ -57,62 +52,46 @@ class _MyPostWidgetState extends State<MyPostWidget> {
   Widget build(BuildContext context) {
     return Obx(() => controller.myPostData.isNotEmpty
         ? RefreshIndicator(
-        onRefresh: () async {
-          page = 1;
-          var data = {
-            "sortBy": "desc",
-            "sortOn": "created_at",
-            "page": page,
-            "limit": "10",
-          };
-          controller.getMyPost(data);
-        },
-        child: ListView.builder(
-          controller: scrollController,
-          shrinkWrap: true,
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: controller.myPostData.length + 1,
-          padding: const EdgeInsets.symmetric(
-              horizontal: 12, vertical: 0),
-          itemBuilder: (context, index) {
-            if (index < controller.myPostData.length) {
-              return controller.myPostData[index].type != 2
-                  ? SingleFishPostWidget(
-                  postModel: controller.myPostData[index],index: index,)
-                  : FindABuddyPostItem(
-                postModel: controller.myPostData[index],index: index,
-              );
-            } else if (index == controller.myPostData.length &&
-                index > 0) {
-              return FutureBuilder(
-                future:
-                Future.delayed(const Duration(seconds: 5)),
-                builder: (context, snapshot) =>
-                snapshot.connectionState ==
-                    ConnectionState.done
-                    ? const SizedBox.shrink()
-                    : const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
-        ))
+            onRefresh: () async {
+              page = 1;
+              var data = {
+                "sortBy": "desc",
+                "sortOn": "created_at",
+                "page": page,
+                "limit": "10",
+              };
+              controller.getMyPost(data);
+            },
+            child: GridView.builder(
+              controller: scrollController,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              itemCount: controller.myPostData.length,
+              itemBuilder: (context, index) => InkWell(
+                onTap: () => Get.to(() =>
+                    PostDetailScreen(postModel: controller.myPostData[index])),
+                borderRadius: BorderRadius.circular(16),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: CustomCachedImage(
+                      imageUrl: controller.myPostData[index].image ?? '',
+                      height: Get.width * 0.32,
+                      width: Get.width * 0.32,
+                      fit: BoxFit.cover,
+                    )),
+              ),
+            ))
         : EmptyPostWidget(
-      onClick: () async {
-        var data = {
-          "sortBy": "desc",
-          "sortOn": "created_at",
-          "page": 1,
-          "limit": "10",
-        };
-        await controller.getMyPost(data);
-      },
-    ));
+            onClick: () async {
+              var data = {
+                "sortBy": "desc",
+                "sortOn": "created_at",
+                "page": 1,
+                "limit": "10",
+              };
+              await controller.getMyPost(data);
+            },
+          ));
   }
 }
-
-
-

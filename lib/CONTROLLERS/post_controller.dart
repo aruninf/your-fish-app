@@ -25,12 +25,15 @@ class PostController extends GetxController {
   final selectedCategories = [].obs;
   final isLoading = false.obs;
   final postData = <PostData>[].obs;
+  final userPostData = <PostData>[].obs;
+  final findBuddyPost = <PostData>[].obs;
   final chatsUser = <ChatUserData>[].obs;
   final myPostData = <PostData>[].obs;
   final comments = <Comments>[].obs;
   final userData = LoginData().obs;
   final currentAddress = ''.obs;
   final addressPinCode = ''.obs;
+  final isFollow=false.obs;
 
   final comment = TextEditingController().obs;
   final currentPosition = Position(
@@ -72,6 +75,35 @@ class PostController extends GetxController {
       postData.addAll(post.data ?? []);
     }
   }
+
+
+  ///🧨🧨🧨🧨🧨🧨 Get User Post data and Search post 🧨🧨🧨🧨🧨
+
+  Future<void> getUserPosts(dynamic data) async {
+    if (data['page'] == 1) {
+      userPostData.clear();
+    }
+    final response = await Network()
+        .postRequest(endPoint: getPostsApi, formData: data, isLoader: false);
+    if (response?.data != null) {
+      PostResponse post = PostResponse.fromJson(response?.data);
+      userPostData.addAll(post.data ?? []);
+    }
+  }
+
+
+  ///🧨🧨🧨🧨🧨🧨 Get Post data and Search post 🧨🧨🧨🧨🧨
+
+  Future<void> getPostsBuddy(dynamic data) async {
+    findBuddyPost.clear();
+    final response = await Network()
+        .postRequest(endPoint: getPostsApi, formData: data, isLoader: false);
+    if (response?.data != null) {
+      var post = PostResponse.fromJson(response?.data);
+      findBuddyPost.addAll(post.data ?? []);
+    }
+  }
+
 
   ///🧨🧨🧨🧨🧨🧨 Get Chat user 🧨🧨🧨🧨🧨
 
@@ -117,7 +149,8 @@ class PostController extends GetxController {
         "sortBy": "desc",
         "sortOn": "created_at",
         "page": 1,
-        "limit": 20
+        "limit": 20,
+        "type":1
       };
       getPosts(data);
     }
@@ -197,24 +230,30 @@ class PostController extends GetxController {
 
   ///🧨🧨🧨🧨🧨🧨 Create New Post 🧨🧨🧨🧨🧨
 
-  Future<void> createPost(dynamic data) async {
+  Future<void> createPost(dynamic param) async {
     final response = await Network().postRequest(
-        endPoint: data['id'] == null ? addPostApi : updatePostApi,
-        formData: data,
+        endPoint: param['id'] == null ? addPostApi : updatePostApi,
+        formData: param,
         isLoader: true);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
         Get.find<UserController>().selectedFishTag.clear();
         Get.back();
+        if(param['id'] == null){
+          Get.back();
+        }
         Get.snackbar(response?.data['message'], '',
             colorText: Colors.green, snackPosition: SnackPosition.TOP);
         final data = {
           "sortBy": "desc",
           "sortOn": "created_at",
           "page": 1,
-          "limit": 20
+          "limit": 20,
+          "type":1
         };
+
         getPosts(data);
+
       } else {
         DialogHelper.showErrorDialog(
             title: "Error", description: response?.data['message']);
@@ -338,8 +377,12 @@ class PostController extends GetxController {
     };
     final response = await Network()
         .postRequest(endPoint: startChatApi, formData: data, isLoader: true);
+    //print(response);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
+        if (response?.data['data']==null) {
+          return;
+        }
         Get.to(
             () => SingleChatPage(
                   receiver: ReceiverModel(
@@ -374,16 +417,17 @@ class PostController extends GetxController {
     showModalBottomSheet(
         context: context,
         backgroundColor: primaryColor,
+        isScrollControlled: true,
+
         builder: (builder) {
-          return SafeArea(
-              child: Container(
+          return Padding(
             padding:
-                const EdgeInsets.only(top: 4, right: 16, left: 16, bottom: 16),
-            height: Get.height * 0.55,
-            width: Get.width,
-            color: Colors.transparent,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom,top: 50,left: 12,right: 12),
+            child: SafeArea(
+              child: Container(
+                width: Get.width,
+                color: Colors.transparent,
+                child: Column(
               children: [
                 Row(
                   children: [
@@ -399,105 +443,102 @@ class PostController extends GetxController {
                         icon: const Icon(
                           Icons.close,
                           color: secondaryColor,
+                          size: 30,
                         ))
                   ],
                 ),
-                Obx(() => SizedBox(
-                      height: Get.height * 0.36,
-                      width: Get.width,
-                      child: comments.isNotEmpty
-                          ? ListView.builder(
-                              padding: EdgeInsets.symmetric(vertical: 0),
-                              itemCount: comments.length,
-                              itemBuilder: (context, index) => ListTile(
-                                  dense: true,
-                                  contentPadding:
-                                      EdgeInsets.symmetric(vertical: 0),
-                                  title: Text(
-                                    "${comments[index].username}",
-                                    style: const TextStyle(
-                                        color: fishColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  subtitle: Text(
-                                    "${comments[index].comment}",
-                                    style: TextStyle(
-                                        fontSize: 10, color: Colors.white),
-                                  ),
-                                  trailing: Text(
-                                    Consts.formatDateTimeToMMM(
-                                        "${comments[index].createdAt}"),
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.white),
-                                  )),
-                            )
-                          : const Center(
-                              child: Text(
-                                "No Comments",
-                                style: TextStyle(color: secondaryColor),
+                Expanded(
+                  child : Obx(() => comments.isNotEmpty
+                      ? ListView.builder(
+                          padding: const EdgeInsets.symmetric(vertical: 0),
+                          itemCount: comments.length,
+                          itemBuilder: (context, index) => ListTile(
+                              dense: true,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 0),
+                              title: Text(
+                                "${comments[index].username}",
+                                style: const TextStyle(
+                                    color: fishColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ),
-                    )),
-                SafeArea(
-                  child: Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: TextFormField(
-                      controller: comment.value,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        suffixIcon: Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 8),
-                          child: SizedBox(
-                            height: 20,
-                            child: TextButton(
-                              onPressed: () {
-                                if (comment.value.text.isNotEmpty) {
-                                  var data = {
-                                    "post_id": s,
-                                    "comment": comment.value.text
-                                  };
-                                  addCommentOnPost(data);
-                                  comment.value.text = "";
-                                }
-                              },
-                              style: TextButton.styleFrom(
-                                  backgroundColor: fishColor,
-                                  padding: EdgeInsets.zero,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8))),
-                              child: const Text(
-                                "Send",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 12),
+                              subtitle: Text(
+                                "${comments[index].comment}",
+                                style: const TextStyle(
+                                    fontSize: 10, color: Colors.white),
                               ),
+                              trailing: Text(
+                                Consts.formatDateTimeToMMM(
+                                    "${comments[index].createdAt}"),
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                              )),
+                        )
+                      : const Center(
+                          child: Text(
+                            "No Comments",
+                            style: TextStyle(color: secondaryColor),
+                          ),
+                        )),
+                ),
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                  child: TextFormField(
+                    controller: comment.value,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      suffixIcon: Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 8),
+                        child: SizedBox(
+                          height: 20,
+                          child: TextButton(
+                            onPressed: () {
+                              if (comment.value.text.isNotEmpty) {
+                                var data = {
+                                  "post_id": s,
+                                  "comment": comment.value.text
+                                };
+                                addCommentOnPost(data);
+                                comment.value.text = "";
+                              }
+                            },
+                            style: TextButton.styleFrom(
+                                backgroundColor: fishColor,
+                                padding: EdgeInsets.zero,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8))),
+                            child: const Text(
+                              "Send",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 12),
                             ),
                           ),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 14, horizontal: 16),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                          borderSide: const BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                          borderSide: const BorderSide(color: Colors.white),
-                        ),
-                        hintText: "Type a comment...",
-                        hintStyle: const TextStyle(color: Colors.white54),
-                        labelStyle: const TextStyle(color: Colors.white),
                       ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 14, horizontal: 16),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      hintText: "Type a comment...",
+                      hintStyle: const TextStyle(color: Colors.white54),
+                      labelStyle: const TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
               ],
+                ),
+              ),
             ),
-          ));
+          );
         });
   }
 
@@ -571,6 +612,7 @@ class PostController extends GetxController {
                                   Get.back();
                                 }
                                 myPostData.removeAt(index);
+                                Get.back();
                               },
                               child: const Text(
                                 'Delete',

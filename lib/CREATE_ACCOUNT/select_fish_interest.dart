@@ -5,18 +5,19 @@ import 'package:yourfish/CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
-import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../CUSTOM_WIDGETS/fish_selection_widget.dart';
-import '../MODELS/fish_response.dart';
 import '../UTILS/app_color.dart';
 
 class SelectFishInterest extends StatelessWidget {
-  SelectFishInterest({super.key});
+  final bool? isEdit;
+
+  SelectFishInterest({super.key, this.isEdit});
 
   final userController = Get.find<UserController>();
-  final search=TextEditingController();
+  final search = TextEditingController();
+
   void callApi() async {
-    var data={
+    var data = {
       "sortBy": "asc",
       "sortOn": "id",
       "page": 1,
@@ -24,7 +25,7 @@ class SelectFishInterest extends StatelessWidget {
     };
     Future.delayed(
       Duration.zero,
-          () => userController.getFishCategory(data),
+      () => userController.getFishCategory(data),
     );
     Future.delayed(
       Duration.zero,
@@ -41,117 +42,117 @@ class SelectFishInterest extends StatelessWidget {
       backgroundColor: primaryColor,
       body: SafeArea(
         child: Obx(() => Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CustomAppBar(
-              heading: 'Select Fish you are\ninterested in catching',
-              textColor: fishColor,
-              isMenu: false ,
-
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: CustomSearchField(
-                hintText: 'Search',
-                controller: search,
-                onChanges: (p0) async {
-                  var data={
-                    "sortBy": "asc",
-                    "sortOn": "id",
-                    "page": 1,
-                    "limit": "20",
-                    "filter":p0
-                  };
-                  Future.delayed(
-                    Duration.zero,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CustomAppBar(
+                  heading: 'Select Fish you are\ninterested in catching',
+                  textColor: fishColor,
+                  isMenu: false,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: CustomSearchField(
+                    hintText: 'Search',
+                    controller: search,
+                    onChanges: (p0) async {
+                      var data = {
+                        "sortBy": "asc",
+                        "sortOn": "id",
+                        "page": 1,
+                        "limit": "20",
+                        "filter": p0
+                      };
+                      Future.delayed(
+                        Duration.zero,
                         () => userController.getFish(data),
-                  );
-                },
-                clear: callApi,
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-
-            // SingleChildScrollView(
-            //   scrollDirection: Axis.horizontal,
-            //   child: Row(
-            //     children: List.generate(userController.fishCategory.length, (index) => Container(
-            //       margin: const EdgeInsets.only(top: 0, left: 16,right: 8,bottom: 6),
-            //       decoration: BoxDecoration(
-            //         color: userController.fishCategory[index].id ==userController.selectedCategory.value
-            //             ? secondaryColor
-            //             : btnColor,
-            //         borderRadius: BorderRadius.circular(16),
-            //       ),
-            //       child: InkWell(
-            //         borderRadius: BorderRadius.circular(16),
-            //         onTap: () async {
-            //            userController.selectedCategory.value=userController.fishCategory[index].id ?? 0;
-            //            var data={
-            //              "sortBy": "asc",
-            //              "sortOn": "id",
-            //              "page": 1,
-            //              "limit": "20",
-            //              "filter":userController.fishCategory[index].name ?? ""
-            //            };
-            //            Future.delayed(
-            //              Duration.zero,
-            //                  () => userController.getFish(data),
-            //            );
-            //         },
-            //         child: Padding(
-            //           padding: const EdgeInsets.symmetric(
-            //               horizontal: 14, vertical: 12),
-            //           child: CustomText(
-            //             text: userController.fishCategory[index].name ?? '',
-            //             sizeOfFont: 16,
-            //             weight: FontWeight.bold,
-            //             color: userController.fishCategory[index].id ==userController.selectedCategory.value
-            //                 ? fishColor
-            //                 : primaryColor,
-            //           ),
-            //         ),
-            //       ),
-            //     )),
-            //   ),
-            // ),
-
-            Expanded(
-                child: userController.isDataLoading.value
-                    ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-                    : userController.fishData.isEmpty
-                    ? const Center(
-                  child: Text(
-                    "No Record Found!",
-                    style: TextStyle(color: Colors.white),
+                      );
+                    },
+                    clear: callApi,
                   ),
-                )
-                    : GridView.builder(
-                  itemCount: userController.fishData.length,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 8),
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 16,
-                      crossAxisSpacing: 16,
-                      childAspectRatio: 5 / 4),
-                  itemBuilder: (context, index) =>
-                      FishItemSelectWidget(
-                          fishData: userController.fishData[index],
-                          selectedFishInterest:
-                          userController.selectedFishInterest),
-                ))
-          ],
-        )),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+
+                // SingleChildScrollView(
+                //   scrollDirection: Axis.horizontal,
+                //   child: Row(
+                //     children: List.generate(userController.fishCategory.length, (index) => Container(
+                //       margin: const EdgeInsets.only(top: 0, left: 16,right: 8,bottom: 6),
+                //       decoration: BoxDecoration(
+                //         color: userController.fishCategory[index].id ==userController.selectedCategory.value
+                //             ? secondaryColor
+                //             : btnColor,
+                //         borderRadius: BorderRadius.circular(16),
+                //       ),
+                //       child: InkWell(
+                //         borderRadius: BorderRadius.circular(16),
+                //         onTap: () async {
+                //            userController.selectedCategory.value=userController.fishCategory[index].id ?? 0;
+                //            var data={
+                //              "sortBy": "asc",
+                //              "sortOn": "id",
+                //              "page": 1,
+                //              "limit": "20",
+                //              "filter":userController.fishCategory[index].name ?? ""
+                //            };
+                //            Future.delayed(
+                //              Duration.zero,
+                //                  () => userController.getFish(data),
+                //            );
+                //         },
+                //         child: Padding(
+                //           padding: const EdgeInsets.symmetric(
+                //               horizontal: 14, vertical: 12),
+                //           child: CustomText(
+                //             text: userController.fishCategory[index].name ?? '',
+                //             sizeOfFont: 16,
+                //             weight: FontWeight.bold,
+                //             color: userController.fishCategory[index].id ==userController.selectedCategory.value
+                //                 ? fishColor
+                //                 : primaryColor,
+                //           ),
+                //         ),
+                //       ),
+                //     )),
+                //   ),
+                // ),
+
+                Expanded(
+                    child: userController.isDataLoading.value
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : userController.fishData.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  "No Record Found!",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
+                            : GridView.builder(
+                                itemCount: userController.fishData.length,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 16,
+                                        crossAxisSpacing: 16,
+                                        childAspectRatio: 5 / 4),
+                                itemBuilder: (context, index) =>
+                                    FishItemSelectWidget(
+                                        fishData:
+                                            userController.fishData[index],
+                                        selectedFishInterest: userController
+                                            .selectedFishInterest),
+                              ))
+              ],
+            )),
       ),
       bottomNavigationBar: Container(
         width: Get.width,
@@ -160,7 +161,7 @@ class SelectFishInterest extends StatelessWidget {
         child: CommonButton(
           btnBgColor: fishColor,
           btnTextColor: primaryColor,
-          btnText: "NEXT",
+          btnText: (isEdit ?? false) ? "UPDATE" : "NEXT",
           onClick: () async {
             if (userController.selectedFishInterest.isEmpty) {
               Get.snackbar('Required!', 'Select at least one',
@@ -171,7 +172,7 @@ class SelectFishInterest extends StatelessWidget {
               "interested_fish_id":
                   userController.selectedFishInterest.join(",").toString(),
             };
-            userController.updateOnBoarding(data, 1);
+            userController.updateOnBoarding(data, (isEdit ?? false) ? 5 : 1);
           },
         ),
       ),

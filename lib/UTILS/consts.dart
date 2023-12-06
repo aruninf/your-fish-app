@@ -12,21 +12,16 @@ class Consts {
   static Future<File?> imageFromGallery() async {
     XFile? pickedFile = await ImagePicker().pickImage(
         source: ImageSource.gallery,
-        maxHeight: 600,
-        maxWidth: 800,
-        imageQuality: 50);
+        imageQuality: 75);
     if (pickedFile != null) {
       return cropFile(pickedFile);
     }
     return null;
   }
-
   static Future<File?> imageFromCamera() async {
     XFile? pickedFile = await ImagePicker().pickImage(
         source: ImageSource.camera,
-        maxHeight: 600,
-        maxWidth: 800,
-        imageQuality: 50);
+        imageQuality: 75);
     if (pickedFile != null) {
       return cropFile(pickedFile);
     }
@@ -37,7 +32,6 @@ class Consts {
     final croppedFile = await ImageCropper().cropImage(
       sourcePath: file!.path,
       compressFormat: ImageCompressFormat.jpg,
-      compressQuality: 70,
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Image Cropper',

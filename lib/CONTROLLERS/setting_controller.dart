@@ -17,7 +17,7 @@ import '../UTILS/dialog_helper.dart';
 class SettingController extends GetxController {
   final selectedCategories = [].obs;
   final listOfSettings = [
-    "Saved Posts",
+    //"Saved Posts",
     "Notifications",
     "Invite Friends",
     "Terms & Conditions",

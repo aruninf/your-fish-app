@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/CHATS/single_chat_page.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/cached_image_view.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_search_field.dart';
 import 'package:yourfish/UTILS/app_color.dart';
 import 'package:yourfish/UTILS/consts.dart';
@@ -8,10 +8,6 @@ import 'package:yourfish/UTILS/consts.dart';
 import '../CONTROLLERS/post_controller.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
-import '../CUSTOM_WIDGETS/image_place_holder_widget.dart';
-import '../UTILS/app_images.dart';
-import 'chat_model.dart';
-import 'one_to_one_chat_screen.dart';
 
 class ChatsScreen extends StatefulWidget {
   const ChatsScreen({super.key});
@@ -21,8 +17,7 @@ class ChatsScreen extends StatefulWidget {
 }
 
 class _ChatsScreenState extends State<ChatsScreen> {
-  final controller=Get.find<PostController>();
-
+  final controller = Get.find<PostController>();
 
   final scrollController = ScrollController();
   var page = 1;
@@ -30,7 +25,6 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
   @override
   void initState() {
-
     scrollController.addListener(() {
       if ((scrollController.position.pixels ==
           scrollController.position.maxScrollExtent)) {
@@ -44,15 +38,13 @@ class _ChatsScreenState extends State<ChatsScreen> {
     super.initState();
   }
 
-  void getChats()async {
-    page=1;
-    var data = {
-      "sortBy": "desc",
-      "sortOn": "id",
-      "page": page,
-      "limit": "20"
-    };
-    Future.delayed(Duration.zero, () => controller.getChatsUser(data),);
+  void getChats() async {
+    page = 1;
+    var data = {"sortBy": "desc", "sortOn": "id", "page": page, "limit": "20"};
+    Future.delayed(
+      Duration.zero,
+      () => controller.getChatsUser(data),
+    );
   }
 
   @override
@@ -70,13 +62,13 @@ class _ChatsScreenState extends State<ChatsScreen> {
               heading: "Chats",
               textColor: secondaryColor,
             ),
-
             const SizedBox(
               height: 8,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-              child: CustomSearchField(hintText: 'Search',
+              child: CustomSearchField(
+                hintText: 'Search',
                 controller: TextEditingController(),
                 onChanges: (p0) {
                   var data = {
@@ -84,77 +76,85 @@ class _ChatsScreenState extends State<ChatsScreen> {
                     "sortOn": "id",
                     "page": 1,
                     "limit": "20",
-                    "filter":p0
+                    "filter": p0
                   };
-                  Future.delayed(Duration.zero, () => controller.getChatsUser(data),);
+                  Future.delayed(
+                    Duration.zero,
+                    () => controller.getChatsUser(data),
+                  );
                 },
-
               ),
             ),
             Expanded(
-              child:  Obx(() =>
-              controller.chatsUser.isNotEmpty ?
-              ListView.builder(
-                itemCount: controller.chatsUser.length,
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(
-                    top: 8, bottom: 8, left: 12, right: 12),
-                itemBuilder: (context, index) => ListTile(
-                  onTap: () => controller.openChat("${controller.chatsUser[index].receiverId}"),
-                  dense: true,
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                  leading: ClipOval(
-                    child: Image.network(
-                      "${controller.chatsUser[index].receiverProfile}",
-                      height: 45,
-                      width: 45,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                      const ImagePlaceHolderWidget(
-                        height: 45,
-                        width: 45,
+              child: Obx(() => controller.chatsUser.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: controller.chatsUser.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.only(
+                          top: 8, bottom: 8, left: 12, right: 12),
+                      itemBuilder: (context, index) => ListTile(
+                        onTap: () => controller.openChat(
+                            "${controller.chatsUser[index].receiverId}"),
+                        dense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 1),
+                        leading: ClipOval(
+                          child: CustomCachedImage(
+                            imageUrl:
+                                "${controller.chatsUser[index].receiverProfile}",
+                            height: 45,
+                            width: 45,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        title: CustomText(
+                          text: controller.chatsUser[index].receiverName ?? '',
+                          color: btnColor,
+                          sizeOfFont: 14,
+                          weight: FontWeight.w700,
+                        ),
+                        subtitle: CustomText(
+                          text: controller.chatsUser[index].lastMessage ?? '',
+                          color: Colors.white70,
+                          sizeOfFont: 13,
+                        ),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CustomText(
+                              text: Consts.formatDateTimeToHHMM(
+                                      controller.chatsUser[index].updatedAt ??
+                                          "")
+                                  .toLowerCase(),
+                              color: Colors.white54,
+                              sizeOfFont: 11,
+                            ),
+                            GestureDetector(
+                                onTapDown: (de) {
+                                  showPopupMenu(
+                                      context,
+                                      de,
+                                      controller.chatsUser[index].matchId ??
+                                          "");
+                                },
+                                child: Icon(
+                                  Icons.more_horiz_rounded,
+                                  color: secondaryColor.withOpacity(0.6),
+                                  size: 16,
+                                ))
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  title: CustomText(
-                    text: controller.chatsUser[index].receiverName ?? '',
-                    color: btnColor,
-                    sizeOfFont: 14,
-                    weight: FontWeight.w700,
-                  ),
-                  subtitle: CustomText(
-                    text: controller.chatsUser[index].lastMessage ?? '',
-                    color: Colors.white70,
-                    sizeOfFont: 13,
-                  ),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                       CustomText(
-                        text:  Consts.formatDateTimeToHHMM(
-                            controller.chatsUser[index].updatedAt ?? "").toLowerCase(),
-                        color: Colors.white54,
-                        sizeOfFont: 11,
+                    )
+                  : const Center(
+                      child: Text(
+                        "No record found!",
+                        style: TextStyle(color: secondaryColor),
                       ),
-                      GestureDetector(
-                          onTapDown: (de) {
-                            showPopupMenu(context, de,controller.chatsUser[index].matchId ?? "");
-                          },
-                          child: Icon(
-                            Icons.more_horiz_rounded,
-                            color: secondaryColor.withOpacity(0.6),
-                            size: 16,
-                          ))
-                    ],
-                  ),
-                ),
-              ):const Center(child: Text("No record found!",
-                style: TextStyle(color: secondaryColor),),)
-              ),
+                    )),
             ),
           ],
         ),
@@ -363,7 +363,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
         details.globalPosition.dy,
       ),
       items: [
-         PopupMenuItem<String>(
+        PopupMenuItem<String>(
             value: '1',
             height: 30,
             onTap: () => controller.deleteChat(matchId),

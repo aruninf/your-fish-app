@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/UTILS/app_images.dart';
-import 'package:yourfish/UTILS/consts.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/cached_image_view.dart';
+import 'package:yourfish/MODELS/fish_response.dart';
 
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
-import '../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../UTILS/app_color.dart';
 
 class MyFutureFishWidget extends StatelessWidget {
@@ -14,81 +13,82 @@ class MyFutureFishWidget extends StatelessWidget {
 
   final controller = Get.find<UserController>();
 
-  void getMyFutureFish(){
-    var data={
+  void getMyFutureFish() {
+    var data = {
       "sortBy": "asc",
       "sortOn": "created_at",
       "page": 1,
-      "limit": "20"
+      "limit": 10
     };
-    Future.delayed(Duration.zero,() => controller.getFutureFish(data),);
+    Future.delayed(
+      Duration.zero,
+      () => controller.getFutureFish(data),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     getMyFutureFish();
     return Obx(() => GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 5 / 4
-      ),
-      itemCount: controller.futureFishData.length,
-      itemBuilder: (context, index) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 0.67, color: Colors.white),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: InkWell(
-          onTap: openDialog,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Stack(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              childAspectRatio: 5 / 4),
+          itemCount: controller.futureFishData.length,
+          itemBuilder: (context, index) => Container(
+            decoration: BoxDecoration(
+              border: Border.all(width: 0.67, color: Colors.white),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: InkWell(
+              onTap: () => openDialog(controller.fishData[index]),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.network(
-                        controller.futureFishData[index].fishImage ?? '',
-                        height: Get.width * 0.25,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        errorBuilder: (context, error, stackTrace) => ImagePlaceHolderWidget(
-                          height: Get.width * 0.25,
-                          width: double.infinity,
-                        ),
-                      )),
-                  const Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(
-                          PhosphorIcons.lock_bold,
-                          color: secondaryColor,
-                        ),
-                      ))
+                  Stack(
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: CustomCachedImage(
+                            imageUrl:
+                                controller.futureFishData[index].fishImage ??
+                                    '',
+                            height: Get.width * 0.25,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          )),
+                      const Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              PhosphorIcons.lock_bold,
+                              color: secondaryColor,
+                            ),
+                          ))
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      controller.futureFishData[index].localName ??
+                          'Your fish name',
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w700),
+                    ),
+                  )
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  controller.futureFishData[index].localName ?? 'Your fish name',
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w700),
-                ),
-              )
-            ],
+            ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 
-  void openDialog() {
+  void openDialog(FishData fish) {
     Get.dialog(
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -130,8 +130,7 @@ class MyFutureFishWidget extends StatelessWidget {
                       const Text(
                         "Congratulation! you have new fish on your list!",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 16),
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                       const SizedBox(height: 20),
                       //Buttons
@@ -144,8 +143,7 @@ class MyFutureFishWidget extends StatelessWidget {
                           btnTextColor: primaryColor,
                           btnText: "Add to List",
                           onClick: () {
-                            Get.snackbar("Congratulation! you have new fish on your list!", '',
-                                colorText: Colors.green, snackPosition: SnackPosition.TOP);
+                            controller.fishUnlocked(fish);
                             Get.back();
                           },
                         ),

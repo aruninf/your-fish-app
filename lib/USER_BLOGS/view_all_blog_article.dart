@@ -24,6 +24,7 @@ class _ViewAllScreenState extends State<ViewAllScreen>
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
+    callApi();
     super.initState();
   }
 
@@ -54,7 +55,7 @@ class _ViewAllScreenState extends State<ViewAllScreen>
 
   @override
   Widget build(BuildContext context) {
-    callApi();
+
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
@@ -62,11 +63,54 @@ class _ViewAllScreenState extends State<ViewAllScreen>
           children: [
             const CustomAppBar(
               textColor: secondaryColor,
+              heading: "Articles",
             ),
             const SizedBox(
               height: 6,
             ),
-            Container(
+
+           Expanded(child:  ListView.builder(
+             itemCount: controller.articleData.length,
+             physics: const BouncingScrollPhysics(),
+             padding: const EdgeInsets.only(
+                 top: 8, bottom: 8, left: 8, right: 8),
+             itemBuilder: (context, index) => ListTile(
+               onTap: () => Get.to(
+                       () => ArticlesDetailScreen(
+                       articleData: controller.articleData[index]),
+                   transition: Transition.rightToLeft),
+               dense: true,
+               contentPadding: const EdgeInsets.symmetric(
+                   horizontal: 8, vertical: 1),
+               leading: ClipRRect(
+                 borderRadius: BorderRadius.circular(8),
+                 child: Image.network(
+                   '${controller.articleData[index].image}',
+                   height: 55,
+                   width: 55,
+                   fit: BoxFit.cover,
+                   errorBuilder: (context, error, stackTrace) =>
+                   const ImagePlaceHolderWidget(
+                     height: 55,
+                     width: 55,
+                   ),
+                 ),
+               ),
+               title: CustomText(
+                 text: '${controller.articleData[index].title}',
+                 color: secondaryColor,
+                 sizeOfFont: 16,
+               ),
+               subtitle: CustomText(
+                 text: '${controller.articleData[index].article}',
+                 color: btnColor,
+                 maxLin: 3,
+               ),
+             ),
+           ),)
+
+
+           /* Container(
               height: 40,
               decoration: BoxDecoration(
                 color: Colors.white38,
@@ -106,92 +150,92 @@ class _ViewAllScreenState extends State<ViewAllScreen>
                   ),
                 ],
               ),
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  ListView.builder(
-                    itemCount: controller.articleData.length,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                        top: 8, bottom: 8, left: 8, right: 8),
-                    itemBuilder: (context, index) => ListTile(
-                      onTap: () => Get.to(
-                          () => ArticlesDetailScreen(
-                              articleData: controller.articleData[index]),
-                          transition: Transition.rightToLeft),
-                      dense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 1),
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          '${controller.articleData[index].image}',
-                          height: 55,
-                          width: 55,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const ImagePlaceHolderWidget(
-                            height: 55,
-                            width: 55,
-                          ),
-                        ),
-                      ),
-                      title: CustomText(
-                        text: '${controller.articleData[index].title}',
-                        color: secondaryColor,
-                        sizeOfFont: 16,
-                      ),
-                      subtitle: CustomText(
-                        text: '${controller.articleData[index].article}',
-                        color: btnColor,
-                        maxLin: 3,
-                      ),
-                    ),
-                  ),
-                  ListView.builder(
-                    itemCount: controller.blogData.length,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                        top: 8, bottom: 8, left: 8, right: 8),
-                    itemBuilder: (context, index) => ListTile(
-                      onTap: () => Get.to(
-                          () => BlogDetailScreen(
-                              blogData: controller.blogData[index]),
-                          transition: Transition.rightToLeft),
-                      dense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 8),
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          '${controller.blogData[index].image}',
-                          height: 55,
-                          width: 55,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                          const ImagePlaceHolderWidget(
-                            height: 55,
-                            width: 55,
-                          ),
-                        ),
-                      ),
-                      title: CustomText(
-                        text: controller.blogData[index].heading ?? '',
-                        color: secondaryColor,
-                        sizeOfFont: 16,
-                      ),
-                      subtitle: CustomText(
-                        text: controller.blogData[index].description ?? '',
-                        color: btnColor,
-                        maxLin: 3,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            ),*/
+            // Expanded(
+            //   child: TabBarView(
+            //     controller: _tabController,
+            //     children: [
+            //       ListView.builder(
+            //         itemCount: controller.articleData.length,
+            //         physics: const BouncingScrollPhysics(),
+            //         padding: const EdgeInsets.only(
+            //             top: 8, bottom: 8, left: 8, right: 8),
+            //         itemBuilder: (context, index) => ListTile(
+            //           onTap: () => Get.to(
+            //               () => ArticlesDetailScreen(
+            //                   articleData: controller.articleData[index]),
+            //               transition: Transition.rightToLeft),
+            //           dense: true,
+            //           contentPadding: const EdgeInsets.symmetric(
+            //               horizontal: 8, vertical: 1),
+            //           leading: ClipRRect(
+            //             borderRadius: BorderRadius.circular(8),
+            //             child: Image.network(
+            //               '${controller.articleData[index].image}',
+            //               height: 55,
+            //               width: 55,
+            //               fit: BoxFit.cover,
+            //               errorBuilder: (context, error, stackTrace) =>
+            //                   const ImagePlaceHolderWidget(
+            //                 height: 55,
+            //                 width: 55,
+            //               ),
+            //             ),
+            //           ),
+            //           title: CustomText(
+            //             text: '${controller.articleData[index].title}',
+            //             color: secondaryColor,
+            //             sizeOfFont: 16,
+            //           ),
+            //           subtitle: CustomText(
+            //             text: '${controller.articleData[index].article}',
+            //             color: btnColor,
+            //             maxLin: 3,
+            //           ),
+            //         ),
+            //       ),
+            //       ListView.builder(
+            //         itemCount: controller.blogData.length,
+            //         physics: const BouncingScrollPhysics(),
+            //         padding: const EdgeInsets.only(
+            //             top: 8, bottom: 8, left: 8, right: 8),
+            //         itemBuilder: (context, index) => ListTile(
+            //           // onTap: () => Get.to(
+            //           //     () => BlogDetailScreen(
+            //           //         blogData: controller.blogData[index]),
+            //           //     transition: Transition.rightToLeft),
+            //           dense: true,
+            //           contentPadding: const EdgeInsets.symmetric(
+            //               horizontal: 8, vertical: 8),
+            //           leading: ClipRRect(
+            //             borderRadius: BorderRadius.circular(8),
+            //             child: Image.network(
+            //               '${controller.blogData[index].image}',
+            //               height: 55,
+            //               width: 55,
+            //               fit: BoxFit.cover,
+            //               errorBuilder: (context, error, stackTrace) =>
+            //               const ImagePlaceHolderWidget(
+            //                 height: 55,
+            //                 width: 55,
+            //               ),
+            //             ),
+            //           ),
+            //           title: CustomText(
+            //             text: controller.blogData[index].heading ?? '',
+            //             color: secondaryColor,
+            //             sizeOfFont: 16,
+            //           ),
+            //           subtitle: CustomText(
+            //             text: controller.blogData[index].description ?? '',
+            //             color: btnColor,
+            //             maxLin: 3,
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

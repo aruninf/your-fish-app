@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/UTILS/app_images.dart';
+import 'package:yourfish/MODELS/user_response.dart';
 
 import '../../CONTROLLERS/post_controller.dart';
+import '../../CUSTOM_WIDGETS/cached_image_view.dart';
 import '../../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../../MODELS/post_response.dart';
+import '../../PROFILE/view_profile_screen.dart';
 import '../../UTILS/app_color.dart';
 
 class FindABuddyPostItem extends StatelessWidget {
@@ -15,90 +17,86 @@ class FindABuddyPostItem extends StatelessWidget {
   final PostData postModel;
 
   final int index;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(top: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white70, width: .67)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              ClipOval(
-                child: Image.network(
-                  postModel.userProfilePic ?? '',
-                  height: 35,
-                  width: 35,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Image.asset(
-                    fishPlaceHolder,
-                    height: 35,
-                    width: 35,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                postModel.userHandle!.contains("@")
-                    ? "${postModel.userHandle}"
-                    : "@${postModel.userHandle}",
-                style: const TextStyle(
-                    fontFamily: "Rodetta",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: secondaryColor),
-              ),
-              const Spacer(),
-              controller.userData.value.id!=postModel.userId ? SizedBox(
-                height: 30,
-                child: TextButton(
-                  onPressed: () => controller.openChat("${postModel.userId}"),
-                  style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          side: const BorderSide(width: 1, color: fishColor))),
-                  child: const Text(
-                    "CHAT",
-                    style: TextStyle(
-                        fontFamily: "Rodetta",
-                        fontWeight: FontWeight.w500,
-                        fontSize: 10,
-                        color: Colors.white),
-                  ),
-                ),
-              ) :  GestureDetector(
-                onTapDown: (de) {
-                  controller.showPopupMenuForEditPost(context, de, postModel, index,1);
-                },
-                child: const Icon(
-                  Icons.more_vert_rounded,
-                  color: fishColor,
-                ),
-              ),
-            ],
+        width: Get.width * 0.935,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.white70, width: .67)),
+        child: ListTile(
+          onTap: () => Get.to(ViewProfileScreen(
+            user: UserData(
+                name: postModel.userName,
+                id: postModel.userId,
+                handle: postModel.userHandle,
+                profilePic: postModel.userProfilePic),
+          )),
+          leading: ClipOval(
+            child: CustomCachedImage(
+              imageUrl: postModel.userProfilePic ?? '',
+              height: 35,
+              width: 35,
+              fit: BoxFit.cover,
+            ),
           ),
-          const SizedBox(
-            height: 8,
+          title: GestureDetector(
+            onTap: () => Get.to(ViewProfileScreen(
+              user: UserData(
+                  name: postModel.userName,
+                  id: postModel.userId,
+                  handle: postModel.userHandle,
+                  profilePic: postModel.userProfilePic),
+            )),
+            child: Text(
+              postModel.userHandle!.contains("@")
+                  ? "${postModel.userHandle}"
+                  : "@${postModel.userHandle}",
+              style: const TextStyle(
+                  fontFamily: "Rodetta",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: secondaryColor),
+            ),
           ),
-          CustomText(
+          subtitle: CustomText(
             text: postModel.caption ?? '',
             weight: FontWeight.w600,
             sizeOfFont: 12,
-            maxLin: 2,
             color: Colors.white,
           ),
-        ],
-      ),
-    );
+          trailing: controller.userData.value.id != postModel.userId
+              ? SizedBox(
+                  height: 30,
+                  child: TextButton(
+                    onPressed: () => controller.openChat("${postModel.userId}"),
+                    style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            side:
+                                const BorderSide(width: 1, color: fishColor))),
+                    child: const Text(
+                      "CHAT",
+                      style: TextStyle(
+                          fontFamily: "Rodetta",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10,
+                          color: Colors.white),
+                    ),
+                  ),
+                )
+              : GestureDetector(
+                  onTapDown: (de) {
+                    controller.showPopupMenuForEditPost(
+                        context, de, postModel, index, 1);
+                  },
+                  child: const Icon(
+                    Icons.more_vert_rounded,
+                    color: fishColor,
+                  ),
+                ),
+        ));
   }
 }

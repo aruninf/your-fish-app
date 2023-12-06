@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/cached_image_view.dart';
 import 'package:yourfish/MODELS/article_response.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
-import '../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../UTILS/app_color.dart';
 
 class ArticlesDetailScreen extends StatelessWidget {
@@ -45,15 +45,11 @@ class ArticlesDetailScreen extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.network(
-                  articleData.title ?? '',
+                child: CustomCachedImage(
+                  imageUrl: articleData.title ?? '',
                   height: Get.height * 0.25,
                   width: Get.width,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => ImagePlaceHolderWidget(
-                    height: Get.height * 0.25,
-                    width: Get.width,
-                  ),
                 ),
               ),
               ListTile(
@@ -84,8 +80,8 @@ class ArticlesDetailScreen extends StatelessWidget {
               Text(
                 articleData.article ?? '',
                 textAlign: TextAlign.justify,
-                style:
-                    const TextStyle(color: Colors.white, height: 1.5, fontSize: 14),
+                style: const TextStyle(
+                    color: Colors.white, height: 1.5, fontSize: 14),
               )
             ],
           ),

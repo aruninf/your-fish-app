@@ -16,7 +16,6 @@ import '../CREATE_ACCOUNT/create_password.dart';
 import '../CREATE_ACCOUNT/select_fish_interest.dart';
 import '../CREATE_ACCOUNT/select_fishing_category.dart';
 import '../CREATE_ACCOUNT/select_fishing_location.dart';
-import '../CREATE_ACCOUNT/upload_profile_picture.dart';
 import '../MODELS/fishing_location_response.dart';
 import '../MODELS/gear_response.dart';
 import '../MODELS/login_response.dart';
@@ -26,7 +25,7 @@ import '../UTILS/utils.dart';
 
 class UserController extends GetxController {
   final selectedCategories = [].obs;
-  final selectedCategory= 0.obs;
+  final selectedCategory = 0.obs;
   final selectedFishInterest = [].obs;
   final selectedFishingLocation = [].obs;
   final selectedFishExp = [].obs;
@@ -47,54 +46,56 @@ class UserController extends GetxController {
   final fishingGear = <GearData>[].obs;
 
   Future<void> selectDate(BuildContext context) async {
-
     showCupertinoModalPopup(
         context: context,
         builder: (_) => Container(
-          height: Get.height*0.3,
-          decoration: BoxDecoration(
-              borderRadius:BorderRadius.circular(16),
-              color: Colors.white
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  TextButton(
-                    child: const Text(
-                      "Cancel",
-                    ),
-                    onPressed: () => Get.back(),
+              height: Get.height * 0.3,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16), color: Colors.white),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      TextButton(
+                        child: const Text(
+                          "Cancel",
+                        ),
+                        onPressed: () => Get.back(),
+                      ),
+                      TextButton(
+                        child: const Text(
+                          "Done",
+                          style: TextStyle(
+                              color: Colors.blueAccent,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () => Get.back(),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    child: const Text(
-                      "Done",style: TextStyle(color: Colors.blueAccent,fontWeight: FontWeight.w600),
+                  Flexible(
+                    child: SizedBox(
+                      height: Get.height * 0.29,
+                      child: CupertinoDatePicker(
+                          mode: CupertinoDatePickerMode.date,
+                          dateOrder: DatePickerDateOrder.dmy,
+                          initialDateTime: DateTime.now(),
+                          onDateTimeChanged: (val) {
+                            if (val != selectedDate) {
+                              selectedDate = val;
+                              final DateFormat format =
+                                  DateFormat('yyyy-MM-dd');
+                              final String formatted =
+                                  format.format(selectedDate);
+                              selectDob.value = formatted;
+                            }
+                          }),
                     ),
-                    onPressed: () => Get.back(),
                   ),
                 ],
               ),
-              Flexible(
-                child: SizedBox(
-                  height: Get.height*0.29,
-                  child: CupertinoDatePicker(
-                      mode: CupertinoDatePickerMode.date,
-                      dateOrder: DatePickerDateOrder.dmy,
-                      initialDateTime: DateTime.now(),
-                      onDateTimeChanged: (val) {
-                        if (val != selectedDate) {
-                          selectedDate = val;
-                          final DateFormat format = DateFormat('yyyy-MM-dd');
-                          final String formatted = format.format(selectedDate);
-                          selectDob.value = formatted;
-                        }
-                      }),
-                ),
-              ),
-            ],
-          ),
-        ));
+            ));
   }
 
   /// 🍔🍔🍔🍔🍔Login Function 🍔🍔🍔🍔🍔🍔
@@ -163,46 +164,41 @@ class UserController extends GetxController {
 
   Future<void> getFish(dynamic data) async {
     isDataLoading.value = true;
-    if(data['page']==1){
+    if (data['page'] == 1) {
       fishData.clear();
     }
     final response =
         await Network().postRequest(endPoint: getFishApi, formData: data);
     if (response?.data != null) {
       isDataLoading.value = false;
-      FishResponse fish = FishResponse.fromJson(response?.data);
+      var fish = FishResponse.fromJson(response?.data);
       fishData.addAll(fish.data ?? []);
     }
   }
-
-
 
   /// 💥💥💥💥💥💥💥 Get Future Fish 💥💥💥💥💥💥💥
 
   Future<void> getFutureFish(dynamic data) async {
     isDataLoading.value = true;
-    if(data['page']==1){
+    if (data['page'] == 1) {
       futureFishData.clear();
     }
-    final response =
-    await Network().getRequest(endPoint: getMyFutureFishApi);
+    final response = await Network().getRequest(endPoint: getMyFutureFishApi);
     if (response?.data != null) {
       isDataLoading.value = false;
-      FishResponse fish = FishResponse.fromJson(response?.data);
+      var fish = FishResponse.fromJson(response?.data);
       futureFishData.addAll(fish.data ?? []);
     }
   }
-
 
   /// 💥💥💥💥💥💥💥 Get Unlock Fish 💥💥💥💥💥💥💥
 
   Future<void> getUnlockFish(dynamic data) async {
     isDataLoading.value = true;
-    if(data['page']==1){
+    if (data['page'] == 1) {
       fishUnlockData.clear();
     }
-    final response =
-    await Network().getRequest(endPoint: getUnlockFishApi);
+    final response = await Network().getRequest(endPoint: getUnlockFishApi);
     if (response?.data != null) {
       isDataLoading.value = false;
       FishResponse fish = FishResponse.fromJson(response?.data);
@@ -214,7 +210,7 @@ class UserController extends GetxController {
 
   Future<void> getAllUsers(dynamic data) async {
     isDataLoading.value = true;
-    if(data['page']==1){
+    if (data['page'] == 1) {
       allUsers.clear();
     }
     final response =
@@ -230,7 +226,7 @@ class UserController extends GetxController {
 
   Future<void> getFriendRequest(dynamic data) async {
     isDataLoading.value = true;
-    if(data['page']==1){
+    if (data['page'] == 1) {
       friendRequest.clear();
     }
     final response = await Network().postRequest(
@@ -248,7 +244,7 @@ class UserController extends GetxController {
     //isDataLoading.value = true;
 
     final response = await Network()
-        .postRequest(endPoint: sendRequestApi, formData: data,isLoader: true);
+        .postRequest(endPoint: sendRequestApi, formData: data, isLoader: true);
     if (response?.data != null) {
       Get.closeAllSnackbars();
       Get.snackbar(response?.data['message'], '',
@@ -271,8 +267,12 @@ class UserController extends GetxController {
     };
     final response = await Network()
         .postRequest(endPoint: startChatApi, formData: data, isLoader: true);
+    //print(response);
     if (response?.data != null) {
       if (response?.data['status_code'] == 200) {
+        if (response?.data['data'] == null) {
+          return;
+        }
         Get.to(
             () => SingleChatPage(
                   receiver: ReceiverModel(
@@ -306,8 +306,7 @@ class UserController extends GetxController {
 
   Future<void> getFishGear(dynamic data) async {
     isDataLoading.value = true;
-    final response = await Network()
-        .getRequest(endPoint: getFishingGearApi);
+    final response = await Network().getRequest(endPoint: getFishingGearApi);
     if (response?.data != null) {
       isDataLoading.value = false;
       GearResponse fish = GearResponse.fromJson(response?.data);
@@ -320,7 +319,7 @@ class UserController extends GetxController {
   Future<void> getFishCategory(dynamic data) async {
     isDataLoading.value = true;
     final response = await Network()
-        .postRequest(endPoint: getFishCategoryApi, formData: data);
+        .postRequest(endPoint: getFishCategoryApi, formData: data,isLoader: false);
     if (response?.data != null) {
       isDataLoading.value = false;
       CategoryResponse fish = CategoryResponse.fromJson(response?.data);
@@ -347,6 +346,10 @@ class UserController extends GetxController {
             transition: Transition.rightToLeft);
       } else if (step == 4) {
         Get.to(() => AddYourGear(), transition: Transition.rightToLeft);
+      } else if (step == 5) {
+        Get.back();
+        Get.snackbar('Update Successfully', '',
+            colorText: Colors.green, snackPosition: SnackPosition.TOP);
       } else {
         Utility().saveBoolValue(isLoginKey, true);
         Get.offAll(() => const MainHome());
@@ -366,5 +369,25 @@ class UserController extends GetxController {
 
   userLogout() async {
     await Network().postRequest(endPoint: logoutApi, formData: {});
+  }
+
+  void fishUnlocked(FishData fish) async {
+    final response = await Network().postRequest(
+        endPoint: unlockFishApi, formData: {"id": fish.id}, isLoader: true);
+    if (response?.data != null) {
+      Get.closeAllSnackbars();
+      Get.snackbar(response?.data['message'], '',
+          colorText: Colors.green, snackPosition: SnackPosition.TOP);
+      var data={
+        "sortBy": "asc",
+        "sortOn": "created_at",
+        "page": 1,
+        "limit": "20"
+      };
+
+      getFutureFish(data);
+      getUnlockFish(data);
+
+    }
   }
 }

@@ -11,10 +11,10 @@ import '../UTILS/dialog_helper.dart';
 import 'add_your_gear.dart';
 
 class SelectFishingCategory extends StatelessWidget {
-  SelectFishingCategory({super.key});
+  SelectFishingCategory({super.key, this.isEdit});
 
   final controller =Get.put(UserController());
-
+  final bool? isEdit;
 
   void callApi() async {
     var data={
@@ -121,7 +121,7 @@ class SelectFishingCategory extends StatelessWidget {
         child: CommonButton(
           btnBgColor: fishColor,
           btnTextColor: primaryColor,
-          btnText: "NEXT",
+          btnText: (isEdit ?? false) ? "UPDATE": "NEXT",
           onClick: () {
             if (controller.selectedCategories.isEmpty) {
               Get.snackbar('Required!', 'Select at least one',
@@ -131,7 +131,7 @@ class SelectFishingCategory extends StatelessWidget {
             var data={
               "fish_cat_id": controller.selectedCategories.join(",").toString(),
             };
-            controller.updateOnBoarding(data,4);
+            controller.updateOnBoarding(data,(isEdit ?? false) ? 5 : 4);
           },
         ),
       ),

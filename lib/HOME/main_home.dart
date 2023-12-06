@@ -7,6 +7,7 @@ import 'package:yourfish/CREATE_POST/find_a_buddy_post_screen.dart';
 import 'package:yourfish/CUSTOM_WIDGETS/custom_text_style.dart';
 import 'package:yourfish/HOME/chats_section.dart';
 import 'package:yourfish/HOME/home_section.dart';
+import 'package:yourfish/HOME/profile/get_saved_post.dart';
 import 'package:yourfish/HOME/profile_section.dart';
 import 'package:yourfish/HOME/search_section.dart';
 import 'package:yourfish/PROFILE/settings_screen.dart';
@@ -39,7 +40,13 @@ class _MainHomeState extends State<MainHome> {
         _page = index;
       });
     }
-    var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "20"};
+    var data = {
+      "sortBy": "desc",
+      "sortOn": "id",
+      "page": 1,
+      "limit": "20",
+      "type": 1
+    };
     if (index == 2) {
       modalBottomSheetMenu();
     } else if (index == 3) {
@@ -56,7 +63,13 @@ class _MainHomeState extends State<MainHome> {
   }
 
   void getMyPost() {
-    var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "20"};
+    var data = {
+      "sortBy": "desc",
+      "sortOn": "id",
+      "page": 1,
+      "limit": "20",
+      "type": 1
+    };
     Future.delayed(Duration.zero, () {
       postController.getMyPost(data);
     });
@@ -64,7 +77,13 @@ class _MainHomeState extends State<MainHome> {
 
   @override
   void initState() {
-    var data = {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "10"};
+    var data = {
+      "sortBy": "desc",
+      "sortOn": "id",
+      "page": 1,
+      "limit": "10",
+      "type": 1
+    };
     Future.delayed(
       Duration.zero,
       () async {
@@ -205,7 +224,7 @@ class _MainHomeState extends State<MainHome> {
                         fishImage,
                         height: 40,
                         width: 40,
-                        color: Colors.white,
+                        color: _page == 0 ? secondaryColor : Colors.white,
                       ),
                       onPressed: () {
                         _onItemTapped(0);
@@ -214,10 +233,10 @@ class _MainHomeState extends State<MainHome> {
                   ),
                   Expanded(
                     child: IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         PhosphorIcons.chats,
                         size: 35,
-                        color: Colors.white,
+                        color: _page == 1 ? secondaryColor : Colors.white,
                       ),
                       onPressed: () {
                         _onItemTapped(1);
@@ -230,7 +249,7 @@ class _MainHomeState extends State<MainHome> {
                         'images/add_post.png',
                         height: 40,
                         width: 40,
-                        color: secondaryColor,
+                        color: _page == 2 ? secondaryColor : Colors.white,
                       ),
                       onPressed: () {
                         _onItemTapped(2);
@@ -243,7 +262,7 @@ class _MainHomeState extends State<MainHome> {
                         'images/search_icon.png',
                         height: 30,
                         width: 30,
-                        color: Colors.white,
+                        color: _page == 3 ? secondaryColor : Colors.white,
                       ),
                       onPressed: () {
                         _onItemTapped(3);
@@ -256,7 +275,7 @@ class _MainHomeState extends State<MainHome> {
                         'images/user_icon.png',
                         height: 28,
                         width: 28,
-                        color: Colors.white,
+                        color: _page == 4 ? secondaryColor : Colors.white,
                       ),
                       onPressed: () {
                         _onItemTapped(4);
@@ -339,6 +358,7 @@ class RightDrawerMenuWidget extends StatelessWidget {
   final listOfItems = [
     "Home",
     "My Profile",
+    "Saved Posts",
     "Top Spots",
     "Blog",
     "Chat",
@@ -378,20 +398,20 @@ class RightDrawerMenuWidget extends StatelessWidget {
                     //onTap: onClick(index),
                     onTap: () {
                       Get.back();
-                      if (index1 == 2) {
-                        Get.to(()=> MyProfileMapWidget(isTopSpots: true));
+                      if (index1 == 3) {
+                        Get.to(() => MyProfileMapWidget(isTopSpots: true));
                       } else if (index1 == 0) {
                         onClick(0);
                       } else if (index1 == 1) {
                         onClick(1);
-                      } else if (index1 == 3) {
-                        Get.to(()=> BlogsScreen());
-
+                      } else if (index1 == 2) {
+                        Get.to(() => SavedPostWidget());
                       } else if (index1 == 4) {
-                        Get.to(()=> const ChatsScreen());
-
+                        Get.to(() => BlogsScreen());
                       } else if (index1 == 5) {
-                        Get.to(()=> SettingsScreen());
+                        Get.to(() => const ChatsScreen());
+                      } else if (index1 == 6) {
+                        Get.to(() => SettingsScreen());
                       }
                     },
                     dense: true,

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/CHATS/chat_model.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
-import 'package:yourfish/CUSTOM_WIDGETS/image_place_holder_widget.dart';
-import 'package:yourfish/UTILS/app_images.dart';
 
-import '../CHATS/single_chat_page.dart';
+import '../CUSTOM_WIDGETS/cached_image_view.dart';
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
@@ -129,16 +126,12 @@ class _ChatsSectionState extends State<ChatsSection>
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 1),
                             leading: ClipOval(
-                              child: Image.network(
-                                "${controller.chatsUser[index].receiverProfile}",
+                              child: CustomCachedImage(
+                                imageUrl:
+                                    "${controller.chatsUser[index].receiverProfile}",
                                 height: 45,
                                 width: 45,
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    const ImagePlaceHolderWidget(
-                                  height: 45,
-                                  width: 45,
-                                ),
                               ),
                             ),
                             title: CustomText(

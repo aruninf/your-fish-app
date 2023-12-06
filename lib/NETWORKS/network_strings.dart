@@ -46,6 +46,7 @@ const String getFaqApi = "get-faq";
 const String getArticlesApi = "get-article";
 const String getFishApi = "get-fish";
 const String getUnlockFishApi = "my-unlocked-fish";
+const String unlockFishApi = "unlocked-fish";
 const String getMyFutureFishApi = "my-future-fish";
 const String getAllUserApi="get-user";
 const String getChatUserApi="get-chat-history";

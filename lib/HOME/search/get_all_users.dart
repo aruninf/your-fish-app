@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:yourfish/CUSTOM_WIDGETS/image_place_holder_widget.dart';
-
-import '../../CHATS/one_to_one_chat_screen.dart';
-import '../../CONTROLLERS/user_controller.dart';
 import 'package:get/get.dart';
+import 'package:yourfish/PROFILE/view_profile_screen.dart';
 
+import '../../CONTROLLERS/user_controller.dart';
+import '../../CUSTOM_WIDGETS/cached_image_view.dart';
 import '../../CUSTOM_WIDGETS/custom_search_field.dart';
 import '../../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../../UTILS/app_color.dart';
-import '../../UTILS/app_images.dart';
 
 class GetAllUserWidget extends StatefulWidget {
   const GetAllUserWidget({super.key});
@@ -102,23 +100,18 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
                     padding: const EdgeInsets.only(
                         top: 0, bottom: 8, left: 8, right: 8),
                     itemBuilder: (context, index) => ListTile(
-                      // onTap: () =>
-                      //     Get.to(() => const OneToOneChatScreen(),
-                      //         transition: Transition.rightToLeft),
+                      onTap: () => Get.to(
+                          () => ViewProfileScreen(
+                              user: controller.allUsers[index]),
+                          transition: Transition.rightToLeft),
                       dense: true,
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 1),
                       leading: ClipOval(
-                        child: Image.network(
-                          '${controller.allUsers[index].profilePic}',
+                        child: CustomCachedImage(
+                          imageUrl: '${controller.allUsers[index].profilePic}',
                           height: 48,
                           width: 48,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const ImagePlaceHolderWidget(
-                            height: 48,
-                            width: 48,
-                          ),
                         ),
                       ),
                       title: CustomText(
@@ -152,7 +145,8 @@ class _GetAllUserWidgetState extends State<GetAllUserWidget> {
                                               ? 1
                                               : 2
                                         };
-                                        if (controller.allUsers[index].followingStatus !=
+                                        if (controller.allUsers[index]
+                                                .followingStatus !=
                                             3) {
                                           controller.sendRequest(data, 1);
                                         }

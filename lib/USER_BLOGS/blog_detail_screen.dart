@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yourfish/MODELS/blog_response.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/cached_image_view.dart';
+import 'package:yourfish/MODELS/fish_response.dart';
 import 'package:yourfish/UTILS/app_images.dart';
-import 'package:yourfish/UTILS/app_strings.dart';
 
 import '../CUSTOM_WIDGETS/image_place_holder_widget.dart';
 import '../UTILS/app_color.dart';
 
-
 class BlogDetailScreen extends StatelessWidget {
-  const BlogDetailScreen({super.key,required this.blogData});
-  final BlogData blogData;
+  const BlogDetailScreen({super.key, required this.fishData});
+
+  final FishData fishData;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class BlogDetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            blogData.heading ?? '',
+                            '${fishData.localName} ( ${fishData.scientificName})',
                             maxLines: 1,
                             style: const TextStyle(
                               fontSize: 18,
@@ -70,7 +70,7 @@ class BlogDetailScreen extends StatelessWidget {
                             height: 8,
                           ),
                           Text(
-                            blogData.subHeading ?? '',
+                            fishData.categoryName ?? '',
                             maxLines: 3,
                             style: const TextStyle(
                               fontSize: 15,
@@ -84,15 +84,11 @@ class BlogDetailScreen extends StatelessWidget {
                     Expanded(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        child: Image.network(
-                          blogData.image ?? '',
+                        child: CustomCachedImage(
+                         imageUrl: fishData.fishImage ?? '',
                           height: Get.height * 0.12,
                           width: Get.width * 0.45,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => ImagePlaceHolderWidget(
-                            height: Get.height * 0.12,
-                            width: Get.width * 0.45,
-                          ),
                         ),
                       ),
                     ),
@@ -101,11 +97,11 @@ class BlogDetailScreen extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                 Text(
-                    blogData.description ?? '',
+                Text(
+                  fishData.info ?? '',
                   textAlign: TextAlign.justify,
-                  style:
-                      const TextStyle(color: Colors.white, height: 1.5, fontSize: 14),
+                  style: const TextStyle(
+                      color: Colors.white, height: 1.5, fontSize: 14),
                 )
               ],
             ),

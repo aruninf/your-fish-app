@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
-import 'package:yourfish/CUSTOM_WIDGETS/custom_search_field.dart';
+import 'package:yourfish/CREATE_ACCOUNT/add_your_gear.dart';
+import 'package:yourfish/CREATE_ACCOUNT/select_fish_interest.dart';
+import 'package:yourfish/CREATE_ACCOUNT/select_fishing_category.dart';
 import 'package:yourfish/MODELS/login_response.dart';
+import 'package:yourfish/PROFILE/my_future_fish.dart';
 import 'package:yourfish/UTILS/app_images.dart';
 
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/common_button.dart';
 import '../CUSTOM_WIDGETS/custom_app_bar.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
+import '../HOME/profile/my_gear.dart';
 import '../NETWORKS/network.dart';
 import '../UTILS/app_color.dart';
 import '../UTILS/dialog_helper.dart';
@@ -88,7 +92,9 @@ class EditProfileScreen extends StatelessWidget {
                                 children: [
                                   imageUrl.value.isEmpty
                                       ? Image.network(
-                                          controller.userData.value.profilePic ?? '',
+                                          controller
+                                                  .userData.value.profilePic ??
+                                              '',
                                           fit: BoxFit.cover,
                                           height: 55,
                                           width: 55,
@@ -129,7 +135,6 @@ class EditProfileScreen extends StatelessWidget {
                           title: TextFormField(
                             controller: nameController,
                             textInputAction: TextInputAction.done,
-
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(
@@ -156,7 +161,6 @@ class EditProfileScreen extends StatelessWidget {
                         TextFormField(
                           controller: locationController,
                           textInputAction: TextInputAction.done,
-
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
@@ -248,20 +252,82 @@ class EditProfileScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 16,
+                          height: 8,
                         ),
-                        const Text(
-                          'Categories',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Rodetta',
-                              color: secondaryColor,
-                              fontWeight: FontWeight.bold),
+
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'Your Future Fish',
+                              style: TextStyle(
+                                  color: btnColor, fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            TextButton(
+                                onPressed: () =>
+                                    Get.to(SelectFishInterest(isEdit: true,)),
+                                child: const Text(
+                                  "Edit",
+                                  style: TextStyle(
+                                      color: secondaryColor,
+                                      fontWeight: FontWeight.w700),
+                                ))
+                          ],
+                        ),
+                        const Divider(
+                          color: secondaryColor,
                         ),
                         const SizedBox(
-                          height: 16,
+                          height: 8,
                         ),
-                        const CustomSearchField(hintText: 'Search'),
+
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'Your Gear',
+                              style: TextStyle(
+                                  color: btnColor, fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            TextButton(
+                                onPressed: () =>
+                                    Get.to(AddYourGear(isEdit: true,)),
+                                child: const Text(
+                                  "Edit",
+                                  style: TextStyle(
+                                      color: secondaryColor,
+                                      fontWeight: FontWeight.w700),
+                                ))
+                          ],
+                        ),
+                        const Divider(
+                          color: secondaryColor,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'Your Categories',
+                              style: TextStyle(
+                                  color: btnColor, fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            TextButton(
+                                onPressed: () =>
+                                    Get.to(SelectFishingCategory(isEdit: true,)),
+                                child: const Text(
+                                  "Edit",
+                                  style: TextStyle(
+                                      color: secondaryColor,
+                                      fontWeight: FontWeight.w700),
+                                ))
+                          ],
+                        ),
+                        const Divider(
+                          color: secondaryColor,
+                        ),
                         const SizedBox(
                           height: 8,
                         ),
@@ -271,7 +337,7 @@ class EditProfileScreen extends StatelessWidget {
                                     userController.fishCategory.length,
                                     (index) => Container(
                                           margin: const EdgeInsets.only(
-                                              top: 8, left: 5),
+                                              bottom: 8, right: 8),
                                           decoration: BoxDecoration(
                                             color: controller.selectedCategories
                                                     .contains(userController
@@ -283,26 +349,26 @@ class EditProfileScreen extends StatelessWidget {
                                           ),
                                           child: InkWell(
                                             onTap: () {
-                                              if (controller.selectedCategories
-                                                  .contains(userController
-                                                      .fishCategory[index]
-                                                      .id)) {
-                                                controller.selectedCategories
-                                                    .remove(userController
-                                                        .fishCategory[index]
-                                                        .id);
-                                              } else {
-                                                controller.selectedCategories
-                                                    .add(userController
-                                                        .fishCategory[index]
-                                                        .id);
-                                              }
+                                              // if (controller.selectedCategories
+                                              //     .contains(userController
+                                              //         .fishCategory[index]
+                                              //         .id)) {
+                                              //   controller.selectedCategories
+                                              //       .remove(userController
+                                              //           .fishCategory[index]
+                                              //           .id);
+                                              // } else {
+                                              //   controller.selectedCategories
+                                              //       .add(userController
+                                              //           .fishCategory[index]
+                                              //           .id);
+                                              // }
                                             },
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 14,
-                                                      vertical: 12),
+                                                      vertical: 10),
                                               child: CustomText(
                                                 text: userController
                                                         .fishCategory[index]
@@ -322,7 +388,11 @@ class EditProfileScreen extends StatelessWidget {
                                           ),
                                         )),
                               )
-                            : const SizedBox.shrink()
+                            : const SizedBox.shrink(),
+
+
+
+                        //MyGearWidget(),
                       ],
                     )),
               ),

@@ -43,6 +43,8 @@ class MyGearWidget extends StatelessWidget {
                 )
               : ListView.builder(
                   itemCount: controller.fishingGear.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => Obx(() => Container(
                         width: Get.width,
                         margin:
@@ -68,7 +70,7 @@ class MyGearWidget extends StatelessWidget {
                             // }
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.symmetric(horizontal:16,vertical: 10 ),
                             child: CustomText(
                               text: controller.fishingGear[index].title ?? '',
                               sizeOfFont: 16,

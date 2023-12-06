@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
-import 'package:yourfish/PROFILE/my_fish_unlock.dart';
+import 'package:yourfish/CUSTOM_WIDGETS/cached_image_view.dart';
 import 'package:yourfish/HOME/profile/my_gear.dart';
 import 'package:yourfish/HOME/profile/my_post.dart';
 import 'package:yourfish/PROFILE/edit_profile_screen.dart';
+import 'package:yourfish/PROFILE/my_fish_unlock.dart';
 
 import '../CONTROLLERS/user_controller.dart';
 import '../CUSTOM_WIDGETS/custom_text_style.dart';
@@ -42,16 +43,12 @@ class ProfileSection extends StatelessWidget {
                     leading: ClipOval(
                       child: (controller.userData.value.profilePic ?? '')
                               .isNotEmpty
-                          ? Image.network(
-                              controller.userData.value.profilePic ?? '',
+                          ? CustomCachedImage(
+                              imageUrl:
+                                  controller.userData.value.profilePic ?? '',
                               fit: BoxFit.cover,
                               height: 50,
                               width: 50,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const ImagePlaceHolderWidget(
-                                height: 50,
-                                width: 50,
-                              ),
                             )
                           : const ImagePlaceHolderWidget(
                               height: 50,
@@ -140,19 +137,14 @@ class ProfileSection extends StatelessWidget {
                                         child: Column(
                                           children: [
                                             ClipOval(
-                                              child: Image.network(
-                                                userController.allUsers[index]
+                                              child: CustomCachedImage(
+                                                imageUrl: userController
+                                                        .allUsers[index]
                                                         .profilePic ??
                                                     "",
                                                 height: 40,
                                                 width: 40,
                                                 fit: BoxFit.cover,
-                                                errorBuilder: (context, error,
-                                                        stackTrace) =>
-                                                    const ImagePlaceHolderWidget(
-                                                  height: 40,
-                                                  width: 40,
-                                                ),
                                               ),
                                             ),
                                             const SizedBox(

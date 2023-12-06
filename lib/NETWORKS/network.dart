@@ -60,7 +60,7 @@ class Network {
               sendTimeout: Duration(milliseconds: receivingTimeOut),
               receiveTimeout: Duration(milliseconds: receivingTimeOut),
             ));
-        ////print(response);
+        //print(response);
       } on DioException catch (e) {
         log("Error 💥💥💥💥💥💥💥💥 :${e.response.toString()}");
         if (e.response?.statusCode == 403) {
@@ -187,7 +187,7 @@ class Network {
                 },
                 sendTimeout: Duration(milliseconds: receivingTimeOut),
                 receiveTimeout: Duration(milliseconds: receivingTimeOut)));
-        ////print(response);
+        //print(response);
       } on DioException catch (e) {
         //print("$endPoint Dio: 💥💥💥💥💥💥💥💥💥💥💥💥 ${e.message}");
         if (e.response?.statusCode == 403) {

@@ -9,11 +9,11 @@ import '../CUSTOM_WIDGETS/custom_text_style.dart';
 import '../UTILS/app_color.dart';
 
 class AddYourGear extends StatelessWidget {
-  AddYourGear({super.key});
+  AddYourGear({super.key, this.isEdit});
 
   final userController = Get.find<UserController>();
   final fishingGearController = TextEditingController();
-
+  final bool? isEdit;
   @override
   Widget build(BuildContext context) {
 
@@ -134,7 +134,7 @@ class AddYourGear extends StatelessWidget {
         child: CommonButton(
           btnBgColor: fishColor,
           btnTextColor: primaryColor,
-          btnText: "NEXT",
+          btnText: (isEdit ?? false) ? "UPDATE": "NEXT",
           onClick: () async {
             if (userController.selectedFishGear.isEmpty) {
               Get.snackbar('Required!', 'Please add at-least one',
@@ -144,7 +144,7 @@ class AddYourGear extends StatelessWidget {
             var data = {
               "gear_id": userController.selectedFishGear.join(",").toString(),
             };
-            userController.updateOnBoarding(data, 5);
+            userController.updateOnBoarding(data, (isEdit ?? false) ? 5 : 6);
           },
         ),
       ),

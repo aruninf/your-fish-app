@@ -46,88 +46,90 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
             const SizedBox(
               height: 8,
             ),
-            Container(
-              height: Get.height*0.51,
-              width: double.infinity,
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                  //color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(width: 1, color: Colors.white)),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                  children: [
-                const SizedBox(
-                  height: 8,
-                ),
-                Flexible(
-                  child: PageIndicatorContainer(
-                    align: IndicatorAlign.bottom,
-                    length: 3,
-                    indicatorSpace: 3.0,
-                    padding: const EdgeInsets.all(10),
-                    indicatorColor: Colors.white30,
-                    indicatorSelectorColor: btnColor,
-                    shape: IndicatorShape.circle(size: 12),
-                    child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: 3,
-                        onPageChanged: (value) {
-                          setState(() {
-                            index = value;
-                          });
-                        },
-                        itemBuilder: (context, position) {
-                          return index == 0
-                              ? const SliderWidget(
-                                  title: textTitle1,
-                                  description: textText1,
-                                  headingColor: fishColor,
-                                )
-                              : index == 1
-                                  ? SliderWidget(
-                                      title: textTitle2,
-                                      description: textText2,
-                                      headingColor: index == 1
-                                          ? secondaryColor
-                                          : fishColor,
-                                    )
-                                  : const SliderWidget(
-                                      title: textTitle3,
-                                      description: textText3,
-                                      headingColor: fishColor,
-                                    );
-                        }),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                    //color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(width: 1, color: Colors.white)),
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  const SizedBox(
+                    height: 8,
                   ),
-                ),
-                SizedBox(
-                  width: Get.width,
-                  height: 55,
-                  child: CommonButton(
-                    btnBgColor: index == 1 ? fishColor : secondaryColor,
-                    btnTextColor: primaryColor,
-                    btnText: next,
-                    onClick: () {
-                      if (index < 2) {
-                        _pageController.animateToPage(
-                          (_pageController.page ?? 0).toInt() + 1,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.linear,
-                        );
-                      } else {
-                        Get.to(() =>  GetStartScreen(),
-                            transition: Transition.rightToLeft);
-                      }
-                    },
+                  Flexible(
+                    child: PageIndicatorContainer(
+                      align: IndicatorAlign.bottom,
+                      length: 3,
+                      indicatorSpace: 3.0,
+                      padding: const EdgeInsets.all(10),
+                      indicatorColor: Colors.white30,
+                      indicatorSelectorColor: btnColor,
+                      shape: IndicatorShape.circle(size: 12),
+                      child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: 3,
+                          onPageChanged: (value) {
+                            setState(() {
+                              index = value;
+                            });
+                          },
+                          itemBuilder: (context, position) {
+                            return index == 0
+                                ? const SliderWidget(
+                                    title: textTitle1,
+                                    description: textText1,
+                                    headingColor: fishColor,
+                                  )
+                                : index == 1
+                                    ? SliderWidget(
+                                        title: textTitle2,
+                                        description: textText2,
+                                        headingColor: index == 1
+                                            ? secondaryColor
+                                            : fishColor,
+                                      )
+                                    : const SliderWidget(
+                                        title: textTitle3,
+                                        description: textText3,
+                                        headingColor: fishColor,
+                                      );
+                          }),
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-              ]),
+                  SizedBox(
+                    width: Get.width,
+                    height: 55,
+                    child: CommonButton(
+                      btnBgColor: index == 1 ? fishColor : secondaryColor,
+                      btnTextColor: primaryColor,
+                      btnText: next,
+                      onClick: () {
+                        if (index < 2) {
+                          _pageController.animateToPage(
+                            (_pageController.page ?? 0).toInt() + 1,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.linear,
+                          );
+                        } else {
+                          Get.to(() => GetStartScreen(),
+                              transition: Transition.rightToLeft);
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                ]),
+              ),
             ),
-            const Spacer(),
+            SizedBox(
+              height: Get.height * 0.05,
+            ),
             Align(
               alignment: Alignment.bottomLeft,
               child: Image.asset(
@@ -159,7 +161,6 @@ class SliderWidget extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           title,
@@ -172,7 +173,7 @@ class SliderWidget extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        SingleChildScrollView(
+        Flexible(
           child: Text(
             description,
             style:

@@ -47,8 +47,7 @@ class UploadProfilePicture extends StatelessWidget {
                       onTap: () {
                         DialogHelper.selectImageFrom(
                             onClick: (uri) async {
-                              imageUrl.value =
-                                  await Network().uploadFile(uri!, 'profile') ?? '';
+                              imageUrl.value = await Network().uploadFile(uri!, 'profile') ?? '';
                               //Get.find<UserController>().uploadFile.value = uri;
                               //Get.back();
                             },
@@ -60,7 +59,6 @@ class UploadProfilePicture extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                               child: Image.network(
                                 imageUrl.value,
-                                fit: BoxFit.fill,
                               ))
                           : const Column(
                               mainAxisSize: MainAxisSize.min,

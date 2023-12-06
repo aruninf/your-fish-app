@@ -386,38 +386,42 @@ class ChatPageState extends State<SingleChatPage> with WidgetsBindingObserver {
       ),
       context: context,
       builder: (context) {
-        return SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: FloatingActionButton(
-                    mini: true,
-                    backgroundColor: Colors.grey,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Icon(Icons.close_sharp),
+        return Padding(
+          padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: FloatingActionButton(
+                      mini: true,
+                      backgroundColor: Colors.grey,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Icon(Icons.close_sharp),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: imageFromCamera,
-                    child: const Text('Open Camera'),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: imageFromCamera,
+                      child: const Text('Open Camera'),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: imageFromGallery,
-                    child: const Text('Open Gallery'),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: imageFromGallery,
+                      child: const Text('Open Gallery'),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
