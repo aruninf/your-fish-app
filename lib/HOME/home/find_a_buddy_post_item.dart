@@ -31,6 +31,7 @@ class FindABuddyPostItem extends StatelessWidget {
                 name: postModel.userName,
                 id: postModel.userId,
                 handle: postModel.userHandle,
+                followingStatus: postModel.followingStatus,
                 profilePic: postModel.userProfilePic),
           )),
           leading: ClipOval(
@@ -47,6 +48,7 @@ class FindABuddyPostItem extends StatelessWidget {
                   name: postModel.userName,
                   id: postModel.userId,
                   handle: postModel.userHandle,
+                  followingStatus: postModel.followingStatus,
                   profilePic: postModel.userProfilePic),
             )),
             child: Text(

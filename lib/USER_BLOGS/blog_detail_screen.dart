@@ -58,7 +58,7 @@ class BlogDetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${fishData.localName} ( ${fishData.scientificName})',
+                            '${fishData.localName}, ${fishData.scientificName}',
                             maxLines: 1,
                             style: const TextStyle(
                               fontSize: 18,

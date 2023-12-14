@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yourfish/CONTROLLERS/post_controller.dart';
+import 'package:yourfish/HOME/home/empty_post_widget.dart';
 import 'package:yourfish/HOME/home/find_a_buddy_post_item.dart';
 
 import '../CUSTOM_WIDGETS/custom_search_field.dart';
@@ -68,7 +69,6 @@ class _HomeSectionState extends State<HomeSection> {
       backgroundColor: primaryColor,
       resizeToAvoidBottomInset: false,
       extendBody: true,
-
       body: RefreshIndicator(
         onRefresh: () async {
           // Handle refresh logic here
@@ -83,79 +83,108 @@ class _HomeSectionState extends State<HomeSection> {
           };
           postController.getPosts(data);
         },
-        child: Obx(() => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: CustomScrollView(
-                controller: scrollController,
-                slivers: <Widget>[
-                  SliverToBoxAdapter(
-                    child: CustomSearchField(
-                      hintText: 'Search',
-                      controller: searchController,
-                      onChanges: (p0) {
-                        page = 1;
-                        var data = {
-                          "sortBy": "desc",
-                          "sortOn": "created_at",
-                          "page": page,
-                          "limit": "10",
-                          "type": 1,
-                          "filter": p0
-                        };
-                        postController.getPosts(data);
-                        searchController.text = "";
-                      },
+        child: Obx(() => postController.postData.isNotEmpty
+            ? Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: CustomScrollView(
+                  controller: scrollController,
+                  slivers: <Widget>[
+                    SliverToBoxAdapter(
+                      child: CustomSearchField(
+                        hintText: 'Search',
+                        controller: searchController,
+                        onChanges: (p0) {
+                          page = 1;
+                          var data = {
+                            "sortBy": "desc",
+                            "sortOn": "created_at",
+                            "page": page,
+                            "limit": "10",
+                            "type": 1,
+                            "filter": p0
+                          };
+                          postController.getPosts(data);
+                          searchController.text = "";
+                        },
+                      ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Obx(() => Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: List.generate(
-                              postController.findBuddyPost.length,
-                              (index) => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 2, vertical: 8),
-                                child: FindABuddyPostItem(
-                                  postModel:
-                                      postController.findBuddyPost[index],
-                                  index: index,
+                    SliverToBoxAdapter(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Obx(() => Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: List.generate(
+                                postController.findBuddyPost.length,
+                                (index) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 2, vertical: 8),
+                                  child: FindABuddyPostItem(
+                                    postModel:
+                                        postController.findBuddyPost[index],
+                                    index: index,
+                                  ),
                                 ),
                               ),
-                            ),
-                          )),
+                            )),
+                      ),
                     ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        if (index < postController.postData.length) {
-                          return SingleFishPostWidget(
-                            postModel: postController.postData[index],
-                            index: index,
-                          );
-                        } else if (index == postController.postData.length &&
-                            index > 0) {
-                          return FutureBuilder(
-                            future: Future.delayed(const Duration(seconds: 5)),
-                            builder: (context, snapshot) =>
-                                snapshot.connectionState == ConnectionState.done
-                                    ? const SizedBox.shrink()
-                                    : const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      },
-                      childCount: postController.postData.length + 1,
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          if (index < postController.postData.length) {
+                            return SingleFishPostWidget(
+                              postModel: postController.postData[index],
+                              index: index,
+                            );
+                          } else if (index == postController.postData.length &&
+                              index > 0) {
+                            return FutureBuilder(
+                              future:
+                                  Future.delayed(const Duration(seconds: 5)),
+                              builder: (context, snapshot) =>
+                                  snapshot.connectionState ==
+                                          ConnectionState.done
+                                      ? const SizedBox.shrink()
+                                      : const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                            );
+                          } else {
+                            return EmptyPostWidget(
+                              onClick: () {
+                                page = 1;
+                                var data = {
+                                  "sortBy": "desc",
+                                  "sortOn": "created_at",
+                                  "page": page,
+                                  "limit": 10,
+                                  "type": 1,
+                                };
+                                postController.getPosts(data);
+                              },
+                            );
+                          }
+                        },
+                        childCount: postController.postData.length + 1,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            )),
+                  ],
+                ),
+              )
+            : EmptyPostWidget(
+                onClick: () {
+                  page = 1;
+                  var data = {
+                    "sortBy": "desc",
+                    "sortOn": "created_at",
+                    "page": page,
+                    "limit": 10,
+                    "type": 1,
+                  };
+                  postController.getPosts(data);
+                },
+              )),
       ),
     );
   }

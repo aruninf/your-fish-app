@@ -252,6 +252,8 @@ class UserController extends GetxController {
       if (type == 1) {
         getAllUsers(
             {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "20"});
+      }else if (type == 2) {
+
       } else {
         getFriendRequest(
             {"sortBy": "desc", "sortOn": "id", "page": 1, "limit": "20"});
@@ -389,5 +391,9 @@ class UserController extends GetxController {
       getUnlockFish(data);
 
     }
+  }
+
+  void deleteGear(dynamic data) async {
+    await Network().postRequest(endPoint: deleteGearApi, formData: data);
   }
 }

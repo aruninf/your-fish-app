@@ -5,7 +5,7 @@
 ///🏆🏆🏆🏆🏆🏆🏆 Frontend Route 🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆
 
 //const String API_BASE_URL = "https://appfish.infinitysoftsystems.in/api/";// staging url
-const String API_BASE_URL = 'http://13.51.249.143/api/';// Live url
+const String API_BASE_URL = 'http://13.50.224.176/api/';// Live url
 //
 const String e = "AIzaSy";
 const String f = "AiGUD";
@@ -75,6 +75,7 @@ const String getCommentApi="get-comment";
 const String addCommentApi="add-comment";
 const String logoutApi="logout";
 const String deleteAccountApi="delete-account";
+const String deleteGearApi="delete-gear";
 const String getContentApi="get-combined-data";
 const String getTopSpotsApi="get-top-spots";
 

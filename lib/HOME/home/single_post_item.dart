@@ -58,6 +58,7 @@ class SingleFishPostWidget extends StatelessWidget {
                         name: postModel.userName,
                         id: postModel.userId,
                         handle: postModel.userHandle,
+                        followingStatus: postModel.followingStatus,
                         profilePic: postModel.userProfilePic),
                   )),
                   child: Padding(
@@ -68,7 +69,6 @@ class SingleFishPostWidget extends StatelessWidget {
                           : "@${postModel.userHandle}",
                       style: const TextStyle(
                           fontFamily: "Rodetta",
-                          fontWeight: FontWeight.w700,
                           fontSize: 17,
                           color: secondaryColor),
                     ),
@@ -93,20 +93,20 @@ class SingleFishPostWidget extends StatelessWidget {
                           color: Colors.white,
                         ))
                     : const SizedBox.shrink(),
-                GestureDetector(
-                  onTapDown: (de) {
-                    if (controller.userData.value.id != postModel.userId) {
-                      modalBottomSheetMenu(context);
-                    } else {
-                      controller.showPopupMenuForEditPost(
-                          context, de, postModel, index, 2);
-                    }
-                  },
-                  child: const Icon(
-                    Icons.more_vert_rounded,
-                    color: fishColor,
-                  ),
-                )
+                controller.userData.value.id != postModel.userId
+                    ? GestureDetector(
+                        onTapDown: (de) {
+                          if (controller.userData.value.id !=
+                              postModel.userId) {
+                            modalBottomSheetMenu(context);
+                          }
+                        },
+                        child: const Icon(
+                          Icons.more_vert_rounded,
+                          color: fishColor,
+                        ),
+                      )
+                    : const SizedBox.shrink()
               ],
             ),
             ClipRRect(

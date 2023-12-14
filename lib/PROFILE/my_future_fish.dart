@@ -43,7 +43,74 @@ class MyFutureFishWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: InkWell(
-              onTap: () => openDialog(controller.fishData[index]),
+              onTap: () async {
+                Get.dialog(Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: primaryColor,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Material(
+                            color: primaryColor,
+                            child: Column(
+                              children: [
+                                IconButton(
+                                    style: IconButton.styleFrom(
+                                        backgroundColor: Colors.white30),
+                                    onPressed: () => Get.back(),
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    )),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  "New fish unlocked!",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: secondaryColor,
+                                      fontFamily: 'Rodetta',
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18),
+                                ),
+                                const SizedBox(height: 15),
+                                const Text(
+                                  "Congratulation! you have new fish on your list!",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white, fontSize: 16),
+                                ),
+                                const SizedBox(height: 20),
+                                //Buttons
+                                Container(
+                                  width: Get.width,
+                                  height: 55,
+                                  margin: const EdgeInsets.all(16),
+                                  child: CommonButton(
+                                    btnBgColor: secondaryColor,
+                                    btnTextColor: primaryColor,
+                                    btnText: "Add to List",
+                                    onClick: () {
+                                      controller.fishUnlocked(controller.futureFishData[index]);
+                                      Get.back();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),);
+              },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -88,74 +155,5 @@ class MyFutureFishWidget extends StatelessWidget {
         ));
   }
 
-  void openDialog(FishData fish) {
-    Get.dialog(
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Material(
-                  color: primaryColor,
-                  child: Column(
-                    children: [
-                      IconButton(
-                          style: IconButton.styleFrom(
-                              backgroundColor: Colors.white30),
-                          onPressed: () => Get.back(),
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          )),
-                      const SizedBox(height: 10),
-                      const Text(
-                        "New fish unlocked!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: secondaryColor,
-                            fontFamily: 'Rodetta',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18),
-                      ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        "Congratulation! you have new fish on your list!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                      const SizedBox(height: 20),
-                      //Buttons
-                      Container(
-                        width: Get.width,
-                        height: 55,
-                        margin: const EdgeInsets.all(16),
-                        child: CommonButton(
-                          btnBgColor: secondaryColor,
-                          btnTextColor: primaryColor,
-                          btnText: "Add to List",
-                          onClick: () {
-                            controller.fishUnlocked(fish);
-                            Get.back();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 }

@@ -18,11 +18,11 @@ class MapController extends GetxController {
   final markers = <Marker>[].obs;
   final topSpot = <TopSpot>[].obs;
   late BitmapDescriptor myIcon;
-  double cameraZoom = 14.0;
+  double cameraZoom = 15.0;
 
   final initialCameraPosition = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 13.47,
+    zoom: 14.47,
   ).obs;
 
   // final cameraPosition = const CameraPosition(
@@ -43,7 +43,7 @@ class MapController extends GetxController {
     await controller
         .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
       target: LatLng(lat, long),
-      zoom: 13.47,
+      zoom: 14.47,
     )));
   }
 

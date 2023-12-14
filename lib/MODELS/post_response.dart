@@ -49,6 +49,7 @@ class PostData {
   List<TagFish>? tagFish;
   bool? isLiked;
   bool? isFavourite;
+  int? followingStatus;
   int? totalLikes;
 
   PostData(
@@ -70,7 +71,8 @@ class PostData {
         this.userProfilePic,
         this.isLiked,
         this.isFavourite,
-        this.totalLikes
+        this.totalLikes,
+        this.followingStatus
       });
 
   PostData.fromJson(Map<String, dynamic> json) {
@@ -97,6 +99,7 @@ class PostData {
     userHandle = json['user_handle'];
     isLiked = json['isLiked'];
     isFavourite = json['isfavourite'];
+    followingStatus=json['following_status'];
     totalLikes = json['total_likes'];
   }
 
@@ -122,6 +125,7 @@ class PostData {
     data['user_profile_pic']=this.userProfilePic;
     data['isLiked'] = this.isLiked;
     data['isfavourite'] = this.isFavourite;
+    data['following_status']=this.followingStatus;
     data['total_likes'] = this.totalLikes;
     return data;
   }

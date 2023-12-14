@@ -79,6 +79,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.user.toJson().toString());
     return Scaffold(
       backgroundColor: primaryColor,
       body: SafeArea(
@@ -128,46 +129,51 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                     /// When user deny your friend request Status = 4 Follow button will hide
                     widget.user.followingStatus == 4
                         ? const SizedBox.shrink()
-                        : Obx(() => SizedBox(
-                              height: 30,
-                              child: TextButton(
-                                  onPressed: () async {
-                                    controller.isFollow.value =
-                                        !controller.isFollow.value;
-
-                                    /// Follow 0, unfollow 1 following 2
-                                    var data = {
-                                      "request_to": widget.user.id,
-                                      "request_status":
-                                          (widget.user.followingStatus == 0 ||
-                                                  widget.user.followingStatus ==
-                                                      2)
-                                              ? 1
-                                              : 2
-                                    };
-                                    if (widget.user.followingStatus != 3) {
-                                      userController.sendRequest(data, 1);
-                                    }
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: fishColor,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8))),
-                                  child: Text(
-                                    controller.isFollow.value
-                                        ? widget.user.followingStatus != 0
-                                            ? "Unfollow"
-                                            : 'Following'
-                                        : "Follow",
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        color: primaryColor,
-                                        fontWeight: FontWeight.w600),
-                                  )),
-                            )),
+                        : SizedBox(
+                            height: 30,
+                            child: TextButton(
+                                onPressed: () async {
+                                  /// Follow 0, unfollow 1 following 2
+                                  var data = {
+                                    "request_to": widget.user.id,
+                                    "request_status":
+                                        (widget.user.followingStatus == 0 ||
+                                                widget.user.followingStatus ==
+                                                    2)
+                                            ? 1
+                                            : 2
+                                  };
+                                  if (widget.user.followingStatus != 3) {
+                                    userController.sendRequest(data, 2);
+                                  }
+                                  setState(() {
+                                    widget.user.followingStatus = (widget.user.followingStatus == 0 ||
+                                        widget.user.followingStatus ==
+                                            2)
+                                        ? 1
+                                        : 2;
+                                  });
+                                },
+                                style: TextButton.styleFrom(
+                                    backgroundColor: fishColor,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8))),
+                                child: Text(
+                                  (widget.user.followingStatus == 0 ||
+                                          widget.user.followingStatus == 2)
+                                      ? 'Follow'
+                                      : widget.user.followingStatus == 1
+                                          ? "Unfollow"
+                                          : "Following",
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.w600),
+                                )),
+                          ),
                     const SizedBox(
                       width: 8,
                     ),
